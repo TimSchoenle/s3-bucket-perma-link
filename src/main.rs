@@ -5,10 +5,10 @@ use std::env;
 use std::str::FromStr;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
-use tracing_subscriber::{filter, Layer};
+use tracing_subscriber::{Layer, filter};
 
-use s3_bucket_perma_link::server::Server;
 use s3_bucket_perma_link::Result;
+use s3_bucket_perma_link::server::Server;
 
 #[macro_use]
 extern crate tracing;

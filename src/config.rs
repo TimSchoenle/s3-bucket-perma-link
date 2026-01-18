@@ -1,6 +1,6 @@
 use derive_new::new;
-use minio_rsc::provider::StaticProvider;
 use minio_rsc::Minio;
+use minio_rsc::provider::StaticProvider;
 use secrecy::{ExposeSecret, Secret};
 use serde::{Deserialize, Deserializer};
 use std::collections::HashMap;

@@ -1,7 +1,7 @@
+use crate::Result;
 use crate::data::DownloadData;
 use crate::routes::{download, health_check};
-use crate::Result;
-use actix_web::{web, App, HttpServer};
+use actix_web::{App, HttpServer, web};
 use derive_new::new;
 use tracing_actix_web::TracingLogger;
 
