@@ -1,5 +1,5 @@
 use crate::data::DownloadData;
-use actix_web::{web, HttpResponse};
+use actix_web::{HttpResponse, web};
 pub fn get_config(cfg: &mut web::ServiceConfig) {
     cfg.service(web::resource("{tail:.*}").route(web::get().to(download)));
 }
