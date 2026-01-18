@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.2.3](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.2.2...v0.2.3) (2026-01-18)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([620bac9](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/620bac99e7048522e2f1382995ac0650509d74bd))
+* **deps:** update rust crate config to 0.15.0 ([#78](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/78)) ([59a9ec0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/59a9ec04c18ed38c1a730297c404d09fb3a3b01b))
+* docker build ([#81](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/81)) ([72572a9](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/72572a9eb9c8c6c020dd52ce2ee2025bab4b0059))
+
+
+### Build System
+
+* redo/upgrade CI to match standards ([#63](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/63)) ([b70bd04](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b70bd040d6015e1f7e7fe0ab8c712c423aa1f7bc))
+
+
+### Miscellaneous
+
+* **deps:** update codecov/codecov-action action to v5 ([0e4dd93](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0e4dd93d4ffc9cf6bd37b7d303333f4fd87c2710))
+* **deps:** update codecov/codecov-action action to v5 ([#41](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/41)) ([dbbf1c9](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/dbbf1c9c312ba1562927637f7caa3b3281486027))
+* **deps:** update docker/metadata-action digest to 44d81d6 ([5bf087a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5bf087a0aad61726e794dcc2291776608ed33434))
+* **deps:** update docker/metadata-action digest to 44d81d6 ([#39](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/39)) ([2c7e85f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2c7e85f3d6233f4fd867c350736f0069dc47c790))
+* **deps:** update docker/metadata-action digest to 70b2cdc ([817e590](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/817e590e66226658969efeb843987abc85999244))
+* **deps:** update docker/metadata-action digest to 70b2cdc ([#34](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/34)) ([0f523a3](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0f523a3de73aa2d77301632ba20a3db63fe6d762))
+* **deps:** update rust crate anyhow to v1.0.100 ([#65](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/65)) ([29257a8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/29257a849ed8b08731497a9b02198b37bf451045))
+* **deps:** update rust crate backtrace to v0.3.76 ([#66](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/66)) ([39612cf](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/39612cf580ad34bbc8937e5a7fee8c5228d36931))
+* **deps:** update rust crate getset to v0.1.6 ([#67](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/67)) ([7b7df3c](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7b7df3c1b356bd09637f5e6460877a4b059b6bc6))
+* **deps:** update rustsec/audit-check action to v2 ([6a10070](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/6a1007059a7631d1de65ae31aa04dfdbc4e8bc18))
+* **deps:** update rustsec/audit-check action to v2 ([#38](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/38)) ([ed036b2](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ed036b2134ee1d184b26123b7260ed7c87e28a50))
+
 ## [0.2.2](https://github.com/Timmi6790/s3-bucket-perma-link/compare/0.2.1...v0.2.2) (2024-09-06)
 
 
