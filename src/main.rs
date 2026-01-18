@@ -64,7 +64,7 @@ fn setup_sentry() -> Option<ClientInitGuard> {
         ))),
         Err(_) => {
             info!("{ENV_SENTRY_DSN} not set, skipping Sentry setup");
-            return None;
+            None
         }
     }
 }

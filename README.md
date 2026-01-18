@@ -3,20 +3,20 @@
   <h3 align="center">S3 Bucket Permanent Permanent Link</h3>
 
   <p align="center">
-    <a href="https://github.com/Timmi6790/s3-bucket-perma-link/issues">Report Bug</a>
+    <a href="https://github.com/TimSchoenle/s3-bucket-perma-link/issues">Report Bug</a>
     .
-    <a href="https://github.com/Timmi6790/s3-bucket-perma-link/issues">Request Feature</a>
+    <a href="https://github.com/TimSchoenle/s3-bucket-perma-link/issues">Request Feature</a>
   </p>
 </p>
 
 <div align="center">
 
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/timmi6790/s3-bucket-perma-link)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Timmi6790/s3-bucket-perma-link/build.yml)
-![Issues](https://img.shields.io/github/issues/Timmi6790/s3-bucket-perma-link)
-[![codecov](https://codecov.io/gh/Timmi6790/s3-bucket-perma-link/branch/master/graph/badge.svg?token=dDUZjsYmh2)](https://codecov.io/gh/Timmi6790/s3-bucket-perma-link)
-![License](https://img.shields.io/github/license/Timmi6790/s3-bucket-perma-link)
-[![wakatime](https://wakatime.com/badge/github/Timmi6790/s3-bucket-perma-link.svg)](https://wakatime.com/badge/github/Timmi6790/s3-bucket-perma-link)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/TimSchoenle/s3-bucket-perma-link/build.yml)
+![Issues](https://img.shields.io/github/issues/TimSchoenle/s3-bucket-perma-link)
+[![codecov](https://codecov.io/gh/TimSchoenle/s3-bucket-perma-link/branch/master/graph/badge.svg?token=dDUZjsYmh2)](https://codecov.io/gh/TimSchoenle/s3-bucket-perma-link)
+![License](https://img.shields.io/github/license/TimSchoenle/s3-bucket-perma-link)
+[![wakatime](https://wakatime.com/badge/github/TimSchoenle/s3-bucket-perma-link.svg)](https://wakatime.com/badge/github/TimSchoenle/s3-bucket-perma-link)
 
 </div>
 
@@ -26,8 +26,7 @@ A simple web server to allow pre-defined urls to always access specific S3 bucke
 
 ### Installation - Helm chart
 
-- [Helm chart](https://github.com/Timmi6790/helm-charts/tree/main/charts/s3-bucket-perma-link)
-
+- [Helm chart](https://github.com/TimSchoenle/helm-charts/tree/main/charts/s3-bucket-perma-link)
 
 ### Environment variables
 
@@ -45,5 +44,5 @@ A simple web server to allow pre-defined urls to always access specific S3 bucke
 
 ## License
 
-See [LICENSE](https://github.com/Timmi6790/s3-bucket-perma-link/blob/main/LICENSE.md) for
+See [LICENSE](https://github.com/TimSchoenle/s3-bucket-perma-link/blob/main/LICENSE.md) for
 more information.
