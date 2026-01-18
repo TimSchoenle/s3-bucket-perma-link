@@ -96,7 +96,7 @@ jobs:
           context: .
           push: false
           load: true
-          tags: cloudflare-access-webhook-redirect:test
+          tags: image:test
           build-args: |
             version=test
             release=test
@@ -107,13 +107,13 @@ jobs:
 
       - name: Test Docker image runs
         run: |
-          docker run --rm cloudflare-access-webhook-redirect:test --version || true
-          docker run --rm cloudflare-access-webhook-redirect:test --help || true
+          docker run --rm image:test --version || true
+          docker run --rm image:test --help || true
 
       - name: Check image size
         id: size-check
         run: |
-          SIZE=$(docker image inspect cloudflare-access-webhook-redirect:test --format='{{.Size}}' | awk '{print int($1/1024/1024)}')
+          SIZE=$(docker image inspect image:test --format='{{.Size}}' | awk '{print int($1/1024/1024)}')
           echo "size=${SIZE}" >> $GITHUB_OUTPUT
           echo "Image size: ${SIZE}MB"
           if [ $SIZE -gt 150 ]; then
@@ -123,7 +123,7 @@ jobs:
       - name: Scan Docker image for vulnerabilities
         uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
         with:
-          image-ref: cloudflare-access-webhook-redirect:test
+          image-ref: image:test
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
