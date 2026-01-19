@@ -1,4 +1,4 @@
-FROM clux/muslrust:stable AS chef
+FROM clux/muslrust:stable@sha256:ea9aa580e20a9c1472081ab56a7af918a9ffebe2ccf51552a1b28567ce78f76c AS chef
 USER root
 RUN cargo install cargo-chef
 WORKDIR /app
@@ -13,7 +13,7 @@ RUN cargo chef cook --release --target x86_64-unknown-linux-musl --recipe-path r
 COPY . .
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
-FROM alpine AS env
+FROM alpine@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62 AS env
 RUN apk add --no-cache ca-certificates
 RUN adduser \
     --disabled-password \
