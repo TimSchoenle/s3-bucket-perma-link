@@ -12,7 +12,7 @@ pub enum Error {
     #[error("Config error")]
     Config(#[from] config::ConfigError),
     #[error("Bukkit error")]
-    Minio(#[from] minio_rsc::error::ValueError),
+    S3(#[from] s3::error::S3Error),
     #[error("{0}")]
     Custom(String),
 }

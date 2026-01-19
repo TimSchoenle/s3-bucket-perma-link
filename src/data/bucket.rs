@@ -1,12 +1,12 @@
 use crate::config::BucketEntry;
 use derive_new::new;
-use minio_rsc::Minio;
+use s3::Bucket;
 use std::collections::HashMap;
 
 #[derive(Getters, new)]
 #[getset(get = "pub")]
 pub struct DownloadData {
-    s3: Minio,
+    buckets: HashMap<String, Bucket>,
     bucket_config: HashMap<String, BucketEntry>,
 }
 
