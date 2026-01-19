@@ -1,7 +1,7 @@
 use derive_new::new;
 use s3::creds::Credentials;
 use s3::{Bucket, Region};
-use secrecy::{ExposeSecret, Secret};
+use secrecy::{ExposeSecret, SecretString};
 use serde::{Deserialize, Deserializer};
 use std::collections::HashMap;
 
@@ -21,8 +21,8 @@ pub struct Config {
 #[derive(Debug, serde::Deserialize, Getters)]
 #[getset(get = "pub")]
 pub struct S3Config {
-    access_key: Secret<String>,
-    secret_key: Secret<String>,
+    access_key: SecretString,
+    secret_key: SecretString,
     host: String,
     region: String,
 }
