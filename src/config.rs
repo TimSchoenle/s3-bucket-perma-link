@@ -87,7 +87,7 @@ impl S3Config {
                     Error::custom(format!("Failed to create bucket {}: {e}", entry.bucket))
                 })?
                 .with_path_style();
-            buckets.insert(key.clone(), bucket);
+            buckets.insert(key.clone(), *bucket);
         }
 
         Ok(buckets)

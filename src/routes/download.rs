@@ -19,7 +19,7 @@ async fn download(
             if let Some(bucket_client) = download_data.buckets().get(path.as_str()) {
                 match bucket_client.get_object_stream(bucket.file()).await {
                     Ok(data) => {
-                        Ok(HttpResponse::Ok().streaming(data.bytes.map(Ok::<_, actix_web::Error>)))
+                        Ok(HttpResponse::Ok().streaming(data.bytes.map(|res| res.map_err(actix_web::error::ErrorInternalServerError))))
                     }
                     Err(e) => {
                         error!("Failed to download file from bucket {}", e);
