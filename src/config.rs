@@ -1,6 +1,6 @@
 use derive_new::new;
-use minio_rsc::Minio;
-use minio_rsc::provider::StaticProvider;
+use s3::creds::Credentials;
+use s3::{Bucket, Region};
 use secrecy::{ExposeSecret, Secret};
 use serde::{Deserialize, Deserializer};
 use std::collections::HashMap;
@@ -62,25 +62,35 @@ impl Config {
 }
 
 impl S3Config {
-    pub fn create_minio(&self) -> crate::Result<Minio> {
-        let provider = StaticProvider::new(
-            self.access_key.expose_secret(),
-            self.secret_key.expose_secret(),
+    pub fn create_buckets(
+        &self,
+        entries: &HashMap<String, BucketEntry>,
+    ) -> crate::Result<HashMap<String, Bucket>> {
+        let region = Region::Custom {
+            region: self.region.clone(),
+            endpoint: self.host.clone(),
+        };
+
+        let credentials = Credentials::new(
+            Some(self.access_key.expose_secret()),
+            Some(self.secret_key.expose_secret()),
             None,
-        );
+            None,
+            None,
+        )
+        .map_err(|e| Error::custom(format!("Failed to create credentials: {e}")))?;
 
-        info!(
-            "Creating s3 client for {} and region {}",
-            self.host, self.region
-        );
-        let minio = Minio::builder()
-            .endpoint(self.host.clone())
-            .region(self.region.clone())
-            .provider(provider)
-            .secure(true)
-            .build()?;
+        let mut buckets = HashMap::new();
+        for (key, entry) in entries {
+            let bucket = Bucket::new(&entry.bucket, region.clone(), credentials.clone())
+                .map_err(|e| {
+                    Error::custom(format!("Failed to create bucket {}: {e}", entry.bucket))
+                })?
+                .with_path_style();
+            buckets.insert(key.clone(), bucket);
+        }
 
-        Ok(minio)
+        Ok(buckets)
     }
 }
 pub fn deserialize_buckets_from_string<'de, D>(

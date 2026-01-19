@@ -32,8 +32,8 @@ async fn main() -> Result<()> {
 
         server = Server::new(config.server().host().to_string(), *config.server().port());
 
-        let minio = config.s3().create_minio()?;
-        download_data = DownloadData::new(minio, config.bucket().entries().clone());
+        let buckets = config.s3().create_buckets(config.bucket().entries())?;
+        download_data = DownloadData::new(buckets, config.bucket().entries().clone());
     }
 
     server.run_until_stopped(download_data).await?;
