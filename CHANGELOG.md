@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.3.0](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.2.3...v0.3.0) (2026-01-24)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate secrecy to 0.10.0 ([#79](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/79)) ([efad4e7](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/efad4e78ba3c577e8f7265a8c95cf6715a9a9922))
+* **deps:** update rust crate sentry to 0.46.0 ([#80](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/80)) ([39c79da](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/39c79da3091fccf5d8c2806167436a25e6875a95))
+* **deps:** update rust crate thiserror to v2 ([#40](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/40)) ([fe41918](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/fe41918c3eb601b2a5f67186c555afe37904baee))
+
+
+### Miscellaneous
+
+* **deps:** pin dependencies ([#64](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/64)) ([0ddbd6f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0ddbd6fe1fb9a6c85095ffa5e9edc2620c9d1cdc))
+* **deps:** update github/codeql-action action to v4.31.11 ([#87](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/87)) ([02144e5](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/02144e5df66414b6008189fb02a16f3758d4973b))
+* **deps:** update rust crate actix-web to v4.12.1 ([#76](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/76)) ([931626e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/931626e352aa04ea7307195dabfc1f22d7b3c728))
+* **deps:** update rust crate config to v0.15.19 ([#83](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/83)) ([2cc9384](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2cc9384d0ebc51474ab6118da9ddbf1fc6da5642))
+* **deps:** update rust crate minio-rsc to v0.2.6 ([#68](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/68)) ([290afb6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/290afb65b51a7ac3a9c32bf991fc9e3d6f2082e6))
+* **deps:** update rust crate openssl to v0.10.75 ([#84](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/84)) ([1bc624e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1bc624e9b886fadd1ff8a9c4c6b4d9864a176eb9))
+* **deps:** update rust crate thiserror to v1.0.69 ([#71](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/71)) ([48b73cf](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/48b73cff8d38405e8efc279c7715c4e8d154a1a5))
+* **deps:** update rust crate time to v0.3.45 ([#72](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/72)) ([3902922](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/3902922886edc9f81d9a2278aa7b9417409b21ed))
+* **deps:** update rust crate time to v0.3.46 ([#88](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/88)) ([f61a1d5](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f61a1d53f2edc9ce2b8e4e07d4bbcbd96c46e6ab))
+* **deps:** update rust crate tokio to v1.49.0 ([#77](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/77)) ([c4a80cf](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/c4a80cf0ef3a693f2fd8bcca23bf92a038053704))
+* **deps:** update rust crate tokio-stream to v0.1.18 ([#73](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/73)) ([8584975](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/85849759975bf7e66373fd747e885ab011f7b324))
+* **deps:** update rust crate tracing-actix-web to v0.7.21 ([#74](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/74)) ([174e5e8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/174e5e8762a0948628743d0b2a547f9e9f829f52))
+* **deps:** update tokio-tracing monorepo ([#75](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/75)) ([b097aa9](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b097aa921a86eced1835166e5ec3a39a3aec673e))
+
 ## [0.2.3](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.2.2...v0.2.3) (2026-01-18)
 
 
