@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.1](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.0...v0.3.1) (2026-02-02)
+
+
+### Miscellaneous
+
+* **deps:** update alpine:3.23 docker digest to 2510918 ([#94](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/94)) ([2b6fc35](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2b6fc356071b5de4e8a5c3347723cb2072eeeb89))
+* **deps:** update docker/login-action digest to c94ce9f ([#95](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/95)) ([09ab063](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/09ab063090eebfadf7a112482a6d332a104987f3))
+* **deps:** update github/codeql-action action to v4.32.0 ([#93](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/93)) ([f0d8162](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f0d816259dec9e03c667b14242e109da3139799e))
+* **deps:** update step-security/harden-runner action to v2.14.1 ([#92](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/92)) ([93a7c79](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/93a7c79a0ce9c9801d5e2880e3cba69739395962))
+* **deps:** update to vactions-helm-update-chart-version-v1.4.4 ([#89](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/89)) ([1d99978](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1d99978259dbbca36880269051e80481ce8f5116))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#90](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/90)) ([64dcbf8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/64dcbf87d2dffea3c2a30b4117d399a34722362c))
+* **deps:** lock file maintenance ([#96](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/96)) ([aff8589](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/aff8589e84fdf2b003d0b4307b1ddb0e84a2e11f))
+
 ## [0.3.0](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.2.3...v0.3.0) (2026-01-24)
 
 
