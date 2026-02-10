@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.3.2](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.1...v0.3.2) (2026-02-10)
+
+
+### Miscellaneous
+
+* **deps:** update actions/checkout digest to de0fac2 ([#98](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/98)) ([86d7074](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/86d7074752b6aaeff1f9619ab9d47397ff886f84))
+* **deps:** update all non-major action updates ([#108](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/108)) ([a77fcab](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a77fcab9fef7563024fc52b331f14e99da7f8dfd))
+* **deps:** update github/codeql-action action to v4.32.1 ([#97](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/97)) ([8cdc087](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8cdc0870c8c2acee246277a008f9ad51d39c5a58))
+* **deps:** update github/codeql-action action to v4.32.2 ([#103](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/103)) ([a6f5ab1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a6f5ab1921bad727b19f695f67fffa569344c420))
+* **deps:** update rust crate anyhow to v1.0.101 ([#104](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/104)) ([5e96259](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5e96259a28d0a8710be72ac75689ee7c912360fc))
+* **deps:** update rust crate sentry to v0.46.2 ([#100](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/100)) ([92a4b9f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/92a4b9ff2a13d6e386088b781926301a2b623401))
+* **deps:** update rust crate time to v0.3.47 ([#102](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/102)) ([360f7f0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/360f7f00596e461f77f80d331f38612a63b0581c))
+* **deps:** update step-security/harden-runner action to v2.14.2 ([#105](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/105)) ([17ef997](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/17ef99777a5e9fdae7b3dc79d1b591f794fd07e4))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#107](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/107)) ([2e53780](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2e5378053b926f330405d55e684762fd03c4b74a))
+
 ## [0.3.1](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.0...v0.3.1) (2026-02-02)
 
 
