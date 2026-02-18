@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.3.3](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.2...v0.3.3) (2026-02-18)
+
+
+### Build System
+
+* always run full CI tests for better auto merge renovate setup ([6ab396f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/6ab396f86eb2069417088304cb9c6d0e9adaa534))
+
+
+### Miscellaneous
+
+* **deps:** update all non-major action updates ([#114](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/114)) ([7cace50](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7cace501c152f12df07fec97de202ec864023d5d))
+* **deps:** update all non-major action updates ([#116](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/116)) ([1e8c603](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1e8c60310331ab35cc201b78a53719f464d4806f))
+* **deps:** update docker/build-push-action digest to 10e90e3 ([#112](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/112)) ([b2ecc73](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b2ecc731bdb7f7b34cec57c7cafc8ee56fa158ed))
+* **deps:** update docker/build-push-action digest to 601a80b ([#111](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/111)) ([8c34108](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8c34108189a0779a26d6f86b2f5dc3dc3e75dc9a))
+* **deps:** update docker/build-push-action digest to ee4ca42 ([#109](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/109)) ([37c6d26](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/37c6d26b713732b68f94a96fc78a5a159b6dd37a))
+* **deps:** update rust crate actix-web to v4.13.0 ([#118](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/118)) ([845173f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/845173f186c4d18e1853629ce689a6896477a0e3))
+* **deps:** update to vactions-helm-update-chart-version-v1.5.0 ([#113](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/113)) ([3f1c248](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/3f1c2481de359b66a30f171c9998eac937a9370f))
+* **deps:** update to vworkflows-rust-auto-format-v1.1.2 ([#115](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/115)) ([7d998d6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7d998d68abc23c2e1aaaefaab97e0c344ec24bfb))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#117](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/117)) ([1eb9510](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1eb951083fbdd773c860fa02a32ead5e62720821))
+
 ## [0.3.2](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.1...v0.3.2) (2026-02-10)
 
 
