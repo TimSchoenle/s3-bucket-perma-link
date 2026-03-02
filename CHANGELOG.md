@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.3.4](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.3...v0.3.4) (2026-03-02)
+
+
+### Build System
+
+* update trivy action to 0.34.1 ([31a1caf](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/31a1caf8d260fc9e0c72e13f62bf1eb6ecc190c5))
+
+
+### Miscellaneous
+
+* **deps:** update all non-major action updates ([#120](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/120)) ([7fa945f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7fa945f112add6bcd5cb40878a4b6c25f79b33e1))
+* **deps:** update all non-major action updates ([#124](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/124)) ([885c363](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/885c363550b5b7c6a4da004a1fbcfdd8169eefec))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#121](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/121)) ([a8d3d25](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a8d3d25a3168ae402c2a0a9030459529f1279062))
+* **deps:** lock file maintenance ([#123](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/123)) ([d1412be](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/d1412be4ce0e93aeff9bc5b8a9146dfa994f45ff))
+
 ## [0.3.3](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.2...v0.3.3) (2026-02-18)
 
 
