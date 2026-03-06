@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.5](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.4...v0.3.5) (2026-03-06)
+
+
+### Miscellaneous
+
+* **deps:** update all non-major action updates ([#128](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/128)) ([81c4425](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/81c4425b3c5544ba7a3c7066c632a68f188c93bb))
+* **deps:** update docker/build-push-action action to v7 ([#130](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/130)) ([dd0bb79](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/dd0bb79a395a1eb7e5db49461b1fcfc765a913fb))
+* **deps:** update rust crate tokio to v1.50.0 ([#129](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/129)) ([f05a7c1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f05a7c1b5cb3675815a8b52ea9e54069b37f24fe))
+
 ## [0.3.4](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.3...v0.3.4) (2026-03-02)
 
 
