@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.3.5](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.4...v0.3.5) (2026-03-13)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate sentry to 0.47.0 ([#140](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/140)) ([afda91a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/afda91ac7c547a6290dd202c15b2dcb4674c7b41))
+
+
+### Miscellaneous
+
+* **deps:** update all non-major action updates ([#128](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/128)) ([81c4425](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/81c4425b3c5544ba7a3c7066c632a68f188c93bb))
+* **deps:** update docker/build-push-action action to v7 ([#130](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/130)) ([dd0bb79](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/dd0bb79a395a1eb7e5db49461b1fcfc765a913fb))
+* **deps:** update docker/login-action action to v4 ([#132](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/132)) ([97b9d39](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/97b9d39d17326862397f536a8f48488dc85707fb))
+* **deps:** update docker/metadata-action action to v6 ([#133](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/133)) ([815d336](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/815d336c109ab16a07fbbdb2533428391e990b1a))
+* **deps:** update docker/setup-buildx-action action to v4 ([#134](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/134)) ([3dacf97](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/3dacf9707fb813e623911ba7105fdb753f74f1ad))
+* **deps:** update docker/setup-qemu-action action to v4 ([#135](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/135)) ([5fa74f8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5fa74f8c7367428138754f2f9594e4e9571f1343))
+* **deps:** update rust crate config to v0.15.21 ([#142](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/142)) ([4c0a36e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4c0a36ea8e020f2a3545f6487a57cbdfabc8255a))
+* **deps:** update rust crate tokio to v1.50.0 ([#129](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/129)) ([f05a7c1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f05a7c1b5cb3675815a8b52ea9e54069b37f24fe))
+* **deps:** update sigstore/cosign-installer action to v4.1.0 ([#139](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/139)) ([768289e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/768289e78054486e898666bbc1bb211dc3696b3f))
+* **deps:** update to vworkflows-rust-cargo-check-v1.1.6 ([#143](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/143)) ([0e17762](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0e17762e9a73fc5bb93b08122b52de0065702ec2))
+* **deps:** update to vworkflows-rust-coverage-codecov-v1.0.6 ([#141](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/141)) ([6e914e5](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/6e914e55a27c6cd63c4cb30b0b1cb488fce3ccb7))
+* **deps:** update zizmorcore/zizmor-action action to v0.5.1 ([#136](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/136)) ([d716f0f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/d716f0f1179283defe58f47a4aa9eec4b9bd8028))
+* **deps:** update zizmorcore/zizmor-action action to v0.5.2 ([#138](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/138)) ([742d48b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/742d48ba5b7339a45781fe481c0ff3fef809d167))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#137](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/137)) ([77d0c11](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/77d0c117b2cd8d07e615fbbbfb7a6357e1d9be49))
+
 ## [0.3.4](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.3...v0.3.4) (2026-03-02)
 
 
