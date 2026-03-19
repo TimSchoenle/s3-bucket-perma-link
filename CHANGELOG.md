@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.3.6](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.5...v0.3.6) (2026-03-19)
+
+
+### Build System
+
+* migrate actions to propper actions with environment isolation ([#154](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/154)) ([3fc1d3f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/3fc1d3f294c5999e54b924e0e90b45ddbfb58acf))
+
+
+### Miscellaneous
+
+* **deps:** update actions/create-github-app-token action to v2.2.2 ([#147](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/147)) ([cb53751](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/cb53751d40db9a1ffbe2f28e721903c86047c172))
+* **deps:** update actions/create-github-app-token action to v3 ([#148](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/148)) ([49139a9](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/49139a9dd528b0c40abed08192d3d5b8b1bc2170))
+* **deps:** update all non-major action updates ([#144](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/144)) ([96d78de](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/96d78dece508d0b7d858650b47f3c75c2fd57659))
+* **deps:** update all non-major action updates ([#150](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/150)) ([74a96aa](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/74a96aacb67ad490c932cd2cc1822f4635f78ae1))
+* **deps:** update rust crate config to v0.15.22 ([#151](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/151)) ([b84fe3b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b84fe3b5f1f237d7064240adf9d115cb079dd6e0))
+* **deps:** update rust crate tracing-subscriber to v0.3.23 ([#145](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/145)) ([90fbeb6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/90fbeb676769b9e4bd3bb57b48cefb6b3ec17d97))
+* **deps:** update to vactions-helm-update-chart-version-v1.5.5 ([#152](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/152)) ([2ca9d85](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2ca9d8526e7d95921fadb762a9ae99b3ba9b6add))
+* **deps:** update to vactions-helm-update-chart-version-v1.5.6 ([#153](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/153)) ([8a8a2ac](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8a8a2ac1144eb6c048b25db492a6f9c49c220932))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#149](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/149)) ([05e78aa](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/05e78aa0d10905378938f46c999f71f12635f401))
+
 ## [0.3.5](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.4...v0.3.5) (2026-03-13)
 
 
