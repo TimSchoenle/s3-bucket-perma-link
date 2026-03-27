@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.7](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.6...v0.3.7) (2026-03-27)
+
+
+### Miscellaneous
+
+* **deps:** update all non-major action updates ([#155](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/155)) ([8bf6f29](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8bf6f299c0290822d133ad1a1d1f2fdf6351b100))
+* **deps:** update github/codeql-action action to v4.34.1 ([#157](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/157)) ([5e01822](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5e018222aa423e66d22b6e48a6e02d30e11b2a6e))
+* **deps:** update github/codeql-action action to v4.35.0 ([#161](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/161)) ([74aec42](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/74aec42daccbaec1109710c4eb26f7653a7eab5b))
+* **deps:** update sigstore/cosign-installer action to v4.1.1 ([#159](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/159)) ([2fb428f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2fb428f7983421d0a4045874bc907ece1f657509))
+* **deps:** update to vactions-rust-coverage-codecov-v1.1.2 ([#160](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/160)) ([8f81028](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8f81028dfbb184f142758aabcffd8bf7576d7319))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#158](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/158)) ([f3a365e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f3a365edc075a99e018320c6f451cec7023bc835))
+
 ## [0.3.6](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.5...v0.3.6) (2026-03-19)
 
 
