@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.8](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.7...v0.3.8) (2026-04-03)
+
+
+### Miscellaneous
+
+* **deps:** update all non-major action updates ([#167](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/167)) ([36c4684](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/36c4684549b25bf11e065290fb8b05c303d5a3d1))
+* **deps:** update docker/login-action digest to 4907a6d ([#168](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/168)) ([e8ba52f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/e8ba52f581b832efcb263f18bf51dc5d57ef8add))
+* **deps:** update github/codeql-action action to v4.35.1 ([#162](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/162)) ([06124b6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/06124b6e2ad31dad98502302369b20b7462f2bce))
+* **deps:** update rust crate tokio to v1.51.0 ([#169](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/169)) ([747f3ac](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/747f3ac1223fa3e031144565c556902dd1f668b1))
+* **deps:** update to vactions-rust-coverage-codecov-v1.1.3 ([#164](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/164)) ([b6c6219](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b6c6219864226fb30c8507d4c429b040e9ff35bc))
+* **deps:** update to vactions-rust-coverage-codecov-v1.1.4 ([#166](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/166)) ([a89d4d6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a89d4d6c5d66801288ad8416f0917e3716217e87))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#165](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/165)) ([da18ac0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/da18ac01be2bceb049af8bc32ed87b9982aafea4))
+
 ## [0.3.7](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.6...v0.3.7) (2026-03-27)
 
 
