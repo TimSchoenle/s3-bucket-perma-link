@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.3.9](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.8...v0.3.9) (2026-04-12)
+
+
+### Build System
+
+* update trivy action & use none deployment environment ([#181](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/181)) ([698a9c0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/698a9c0149196f8429c69145f715aa2e32c7afa8))
+
+
+### Miscellaneous
+
+* **deps:** update actions/create-github-app-token action to v3.1.0 ([#179](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/179)) ([375e729](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/375e72953f4c210ec705a7ed1fa0e598570b6db0))
+* **deps:** update actions/create-github-app-token action to v3.1.1 ([#180](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/180)) ([1ed93e1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1ed93e1314a9eea5cc5d2d50950ee06287e25c11))
+* **deps:** update actions/github-script action to v9 ([#177](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/177)) ([7b1eedd](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7b1eedd7b1a49176f66457ca6044b43ff07adab0))
+* **deps:** update all non-major action updates ([#172](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/172)) ([fa0d929](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/fa0d929afd665fcecd74c36b0cc7dda8d7b72bab))
+* **deps:** update docker/build-push-action digest to bcafcac ([#178](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/178)) ([b538ba9](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b538ba929403fbc23649e5c5e9180e5f1ae374b4))
+* **deps:** update rust crate tokio to v1.51.1 ([#175](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/175)) ([80dfd9a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/80dfd9a493b7c3fe2d63f9477b130f17017971f8))
+* **deps:** update step-security/harden-runner action to v2.17.0 ([#176](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/176)) ([6d87415](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/6d87415e06bd83b65f0b7515c5a65ffb307bf1c1))
+* **deps:** update to vactions-rust-coverage-codecov-v1.1.5 ([#173](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/173)) ([923b046](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/923b046c84f798475419fb3494a01167cf96c0b9))
+* **deps:** update to vworkflows-maintenance-auto-approve-renovate-v1.4.2 ([#174](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/174)) ([05d5ba6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/05d5ba6774c14b64eaf6e912c166f4bf5192da78))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#170](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/170)) ([25d605a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/25d605a5b23b741f98799b4c11ff5f3ee1825fca))
+
 ## [0.3.8](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.7...v0.3.8) (2026-04-03)
 
 
