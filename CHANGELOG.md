@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.3.10](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.9...v0.3.10) (2026-04-17)
+
+
+### Documentation
+
+* add simple security policy ([10a0d29](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/10a0d29638cd28a8411ce4cc2d812e31cd5ec59d))
+
+
+### Build System
+
+* **ci:** adjust version comments for zizmor ([bab17cd](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/bab17cd6b12d01e7040d4f8d471eeadf4f07c32c))
+
+
+### Miscellaneous
+
+* **deps:** update all non-major action updates ([#186](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/186)) ([509cb9f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/509cb9f5e84c36b73bb755e48bf1751fb4255f38))
+* **deps:** update alpine:3.23 docker digest to 5b10f43 ([#189](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/189)) ([ada5357](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ada535724006afde6af558439969fbc4949a786e))
+* **deps:** update googleapis/release-please-action digest to 5c625bf ([#184](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/184)) ([a827af0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a827af0e6de3032e16edeaf07191a87faa8a0dad))
+* **deps:** update rust crate tokio to v1.52.0 ([#196](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/196)) ([5aa9b17](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5aa9b174452ec17be1170c7890d7b0200bd56f8b))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.3 ([#187](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/187)) ([688ee3a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/688ee3a594e17a855c60a36f0797a1de9752d408))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.4 ([#190](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/190)) ([a27f686](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a27f6867d8e9a89417da634ad45b3e568611ca68))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.14 ([#191](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/191)) ([6a0fdae](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/6a0fdae0b399884be04ecfc7df9739839db58a02))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.5.9 ([#188](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/188)) ([9522baf](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/9522baf7ad2c4439e0bea14fc2643f8fd92609c1))
+* **deps:** update timschoenle/actions/actions/rust/auto-format to vactions-rust-auto-format-v1.1.1 ([#192](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/192)) ([37fdbc8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/37fdbc88b5612d0c119d8e53de3d60c6bc980f72))
+* **deps:** update timschoenle/actions/actions/rust/cargo-check to vactions-rust-cargo-check-v1.1.1 ([#193](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/193)) ([f2a887b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f2a887bb0cce4ec5bdac8f4191cad1c5e459eff0))
+* **deps:** update timschoenle/actions/actions/rust/clippy to vactions-rust-clippy-v1.1.1 ([#194](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/194)) ([0054976](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/00549767ccc2279bd5bd2d1a407c61d9cdc5d9b0))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.7 ([#195](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/195)) ([b0e7f7d](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b0e7f7d688b52436bbcfd5d7ce902d11fdfecda1))
+* **deps:** update zizmorcore/zizmor-action action to v0.5.3 ([#185](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/185)) ([b0346a3](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b0346a31b99507bcb414ec9589c4075f03d4d6c7))
+* remove unused depdencies ([794a9a3](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/794a9a38683ff380fbb9228908884425c4401164))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#183](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/183)) ([f76e561](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f76e5611cde5783323cbd2eaf2701d380b376213))
+
 ## [0.3.9](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.8...v0.3.9) (2026-04-12)
 
 
