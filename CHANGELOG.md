@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.12](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.11...v0.3.12) (2026-04-29)
+
+
+### Miscellaneous
+
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.16 ([#208](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/208)) ([22b990b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/22b990b85dc2c577f98db9d0de81b7be8d6eedb9))
+
 ## [0.3.11](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.10...v0.3.11) (2026-04-27)
 
 
