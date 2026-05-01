@@ -25,7 +25,7 @@ tracing-actix-web = "0.7.12"
 config = "0.15.0"
 serde = "1.0.209"
 rust-s3 = { version = "0.37.1", default-features = false, features = ["tokio-rustls-tls"] }
-sentry = { version = "0.47.0", default-features = false, features = ["anyhow", "debug-images", "backtrace", "contexts", "panic", "rustls"] }
+sentry = { version = "0.48.0", default-features = false, features = ["anyhow", "debug-images", "backtrace", "contexts", "panic", "rustls"] }
 secrecy = { version = "0.10.3", features = ["serde"] }
 
 [profile.release]
