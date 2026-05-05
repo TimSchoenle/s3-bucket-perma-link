@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.3.12](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.11...v0.3.12) (2026-05-05)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate sentry to 0.48.0 ([#213](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/213)) ([afcc921](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/afcc92126474c976a25b111867ba3fa700959747))
+
+
+### Miscellaneous
+
+* **deps:** update github/codeql-action action to v4.35.3 ([#216](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/216)) ([4314ed4](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4314ed4bf531de2753c4f89cc3034b69d2be6c62))
+* **deps:** update step-security/harden-runner action to v2.19.1 ([#217](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/217)) ([4e3a384](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4e3a384d0566996bc0c7ee70dddb1c27b614f1b0))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.6 ([#212](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/212)) ([4bf64e1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4bf64e1324c01a27acc437639aca3d47332ed35b))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.16 ([#208](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/208)) ([22b990b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/22b990b85dc2c577f98db9d0de81b7be8d6eedb9))
+* **deps:** update timschoenle/actions/actions/rust/clippy to vactions-rust-clippy-v1.1.3 ([#210](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/210)) ([02bd831](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/02bd831924cdc29df3877bd9a27758d26686e603))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.10 ([#211](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/211)) ([db95a3f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/db95a3f8e2260d346137ca5d283bbad0f718601c))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.11 ([#214](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/214)) ([9ec9f16](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/9ec9f164e150c32f112b3e606b032f0b7b087b8d))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.12 ([#218](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/218)) ([d88578d](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/d88578d744697a4a78b922161d45a9120ce6af82))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#215](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/215)) ([0e03dcd](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0e03dcd887e0c5211dca914276954f6dedef02b5))
+
 ## [0.3.11](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.10...v0.3.11) (2026-04-27)
 
 
