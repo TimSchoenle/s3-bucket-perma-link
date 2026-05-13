@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.3.13](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.12...v0.3.13) (2026-05-11)
+
+
+### Miscellaneous
+
+* **deps:** update github/codeql-action action to v4.35.4 ([#228](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/228)) ([c2f7b32](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/c2f7b326c803890ba9d201856678f5884068fd50))
+* **deps:** update googleapis/release-please-action action to v5 ([#204](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/204)) ([7c4b027](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7c4b027a15e13645bec40f33feefb6ed69bdba58))
+* **deps:** update rust crate rust-s3 to v0.37.2 ([#224](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/224)) ([94cd9fc](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/94cd9fc4049c0ee3b18e727a3f57ba20950e184b))
+* **deps:** update rust crate sentry to v0.48.1 ([#222](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/222)) ([6a6d8ee](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/6a6d8ee9ebb9e0847f9588e94209e2d757e2d790))
+* **deps:** update rust crate tokio to v1.52.2 ([#223](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/223)) ([5c9f7b6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5c9f7b6bee6384b5eaf319bccd48290bf964c986))
+* **deps:** update sigstore/cosign-installer action to v4.1.2 ([#226](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/226)) ([8d9d26f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8d9d26f199002583dec808b818e1a348320e0a94))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.7 ([#221](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/221)) ([cb47f07](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/cb47f070cff291f25f07ed6711c0cf18fd0e79f7))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.17 ([#219](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/219)) ([ee1f8a8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ee1f8a8d792abc99e8f7df1d373461687b548ec7))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.13 ([#225](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/225)) ([7de05a9](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7de05a941921c04e979a54e22f8a882c81842240))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.14 ([#227](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/227)) ([7ed72aa](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7ed72aa606bba2fdeb9de8100350dcddcebd3190))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#229](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/229)) ([f3bea33](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f3bea3378e461b87f94487d6cbdabbf795e52321))
+
 ## [0.3.12](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.11...v0.3.12) (2026-05-05)
 
 
