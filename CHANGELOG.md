@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.3.15](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.14...v0.3.15) (2026-05-27)
+
+
+### Miscellaneous
+
+* **deps:** update docker/build-push-action digest to f9f3042 ([#248](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/248)) ([e1354d2](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/e1354d2e67c6630ac95bca9a66e0fe536c6b4ea3))
+* **deps:** update docker/login-action digest to 650006c ([#250](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/250)) ([c65d0ec](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/c65d0ecb58561f9b7630deea13b37c0bda016fa7))
+* **deps:** update docker/metadata-action digest to 80c7e94 ([#251](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/251)) ([60431ab](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/60431abe2654037b32ca4520694360c6439e1f4b))
+* **deps:** update docker/setup-buildx-action digest to d7f5e7f ([#252](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/252)) ([95d010f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/95d010f387d3fe88a61bfaf8a12464fa91af9e7d))
+* **deps:** update docker/setup-qemu-action digest to 0611638 ([#256](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/256)) ([67b1247](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/67b1247b7631425e4f57d7a1b65587851250be9c))
+* **deps:** update github/codeql-action action to v4.36.0 ([#255](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/255)) ([e25d519](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/e25d5190abda138b888156f04b15f307213417a9))
+* **deps:** update step-security/harden-runner action to v2.19.4 ([#253](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/253)) ([c2d6161](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/c2d6161bf90678b33e26d9d8f5981f0038142437))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#254](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/254)) ([8223dfa](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8223dfaa95bb0a42baed63a46504021a11d55f10))
+
 ## [0.3.14](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.13...v0.3.14) (2026-05-19)
 
 
