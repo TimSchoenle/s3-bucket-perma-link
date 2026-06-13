@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.3.17](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.16...v0.3.17) (2026-06-13)
+
+
+### Miscellaneous
+
+* **deps:** update all non-major action updates to v3.7.0 ([#277](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/277)) ([a491b46](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a491b467951144ac19c28542d6aa80b854b00826))
+* **deps:** update all non-major action updates to v4.36.2 ([#279](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/279)) ([e353a88](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/e353a8832c9bde0077c4818cf39eebc39cf24e6f))
+* **deps:** update alpine docker tag to v3.24 ([#285](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/285)) ([575ef8f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/575ef8f2c33dbc062e88df08fd1f99b6ba3b6c1b))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.10 ([#278](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/278)) ([0511a4d](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0511a4d2cb808a3f4e3e96856f8720672fa0d2ec))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.5.13 ([#270](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/270)) ([e5a55ca](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/e5a55ca71e1829ffeabcf8e096d42ebb7eb89391))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.5.14 ([#283](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/283)) ([24201b9](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/24201b958f7c48089ab3432246343fc86fdffe09))
+* **deps:** update timschoenle/actions/actions/rust/auto-format to vactions-rust-auto-format-v1.1.4 ([#271](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/271)) ([b4974e8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b4974e835a7b7c67953d205c4c9aa4442138bf61))
+* **deps:** update timschoenle/actions/actions/rust/cargo-check to vactions-rust-cargo-check-v1.1.3 ([#273](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/273)) ([42d26ae](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/42d26ae276772d3c344c4fccc8985cb7b93a1939))
+* **deps:** update timschoenle/actions/actions/rust/clippy to vactions-rust-clippy-v1.1.5 ([#274](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/274)) ([4a015ad](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4a015ade8a8e9b8e55fea0288b60bd945fb6abbc))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.19 ([#275](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/275)) ([62e3bb6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/62e3bb6b6d8352b94359c1d409d026770de49238))
+* **deps:** update timschoenle/actions/actions/rust/test to vactions-rust-test-v1.1.1 ([#276](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/276)) ([5c686f9](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5c686f91f87c8eae013d5e5a2ec3b69ae6985911))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#280](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/280)) ([191c589](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/191c589901c19e742d9bc966ee05cede8841384a))
+
 ## [0.3.16](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.15...v0.3.16) (2026-06-05)
 
 
