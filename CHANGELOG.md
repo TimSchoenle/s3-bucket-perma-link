@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.3.18](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.17...v0.3.18) (2026-06-19)
+
+
+### Miscellaneous
+
+* **deps:** update alpine:3.24 docker digest to 28bd5fe ([#290](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/290)) ([d59c9a4](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/d59c9a4d925331313508ed76b296cc3fca528d9b))
+* **deps:** update alpine:3.24 docker digest to f5064d3 ([#289](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/289)) ([210d06a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/210d06afe8dee6c9c9d07a81f68fd267d23ce3b8))
+* **deps:** update rust crate config to v0.15.24 ([#291](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/291)) ([1775c18](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1775c183213cd54db56551f910d64c9c906582ca))
+* **deps:** update rust crate getset to v0.1.7 ([#287](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/287)) ([675a598](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/675a598f75b39c02edab9a1f961c812ae2d981b2))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.11 ([#281](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/281)) ([6ad5fc0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/6ad5fc05e3addf252daf4f3bb1b80f625e3b540f))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.21 ([#282](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/282)) ([475158c](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/475158cfa351cd85c47df785609db9ebe5e06c94))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.20 ([#284](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/284)) ([2cc28d8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2cc28d8d7df3cb3c5819a4929c7c6528faf68e6e))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#288](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/288)) ([bf2855b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/bf2855bc7775d4e32d4c74d2faa88b77d127cb53))
+
 ## [0.3.17](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.16...v0.3.17) (2026-06-13)
 
 
