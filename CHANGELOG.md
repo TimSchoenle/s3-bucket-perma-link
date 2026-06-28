@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.3.19](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.18...v0.3.19) (2026-06-28)
+
+
+### Miscellaneous
+
+* **deps:** update actions/checkout action to v7 ([#292](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/292)) ([06e24e4](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/06e24e422313b2e23ca28a25bc4024dccb4c164a))
+* **deps:** update all non-major action updates ([fc479c6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/fc479c62336d9509bf90f12e20348017a2ef0c47))
+* **deps:** update all non-major action updates ([#298](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/298)) ([fc479c6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/fc479c62336d9509bf90f12e20348017a2ef0c47))
+* **deps:** update rust crate sentry to v0.48.3 ([#300](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/300)) ([009b45f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/009b45f1381992ef1d84b4dd463beee73a135a85))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.22 ([#297](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/297)) ([a4d803e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a4d803e116a1ba1625dfddc3518a1fc5a49a4570))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.5.15 ([#296](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/296)) ([cb3c0cf](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/cb3c0cfae171d4664cd85d72bcddfc09f911e8f4))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.21 ([#293](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/293)) ([80eb09b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/80eb09bfcb0b7272d269de0842f8d89c8ba6bb9e))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.22 ([#299](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/299)) ([eba2281](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/eba2281de2467c0af03cceda340b99168a99fd12))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#295](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/295)) ([a0f8443](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a0f844338e06769a6e79dbb0359edbf201bc2856))
+
 ## [0.3.18](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.17...v0.3.18) (2026-06-19)
 
 
