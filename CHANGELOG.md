@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.20](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.19...v0.3.20) (2026-07-02)
+
+
+### Miscellaneous
+
+* **deps:** update docker/build-push-action digest to 53b7df9 ([#306](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/306)) ([3a96682](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/3a9668283980483076d17b81d03eb09a790d5da4))
+* **deps:** update docker/setup-qemu-action digest to 96fe6ef ([#307](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/307)) ([9982f08](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/9982f0814743d23bd65447435123f2a1f10c1675))
+* **deps:** update timschoenle/actions/actions/rust/auto-format to vactions-rust-auto-format-v1.1.5 ([#305](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/305)) ([5592236](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5592236c83c7ac4cc38d145e5bac34623bb9c008))
+* **deps:** update timschoenle/actions/actions/rust/clippy to vactions-rust-clippy-v1.1.6 ([#304](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/304)) ([f629368](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f6293685e549f7d28f815038863beed5158e8c03))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.23 ([#308](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/308)) ([ebd0d46](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ebd0d463ff7c78195629d9693bb1112acf11725b))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#302](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/302)) ([19c535d](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/19c535d2cacd08d3cac9310d9af02494e1aa7ddd))
+
 ## [0.3.19](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.18...v0.3.19) (2026-06-28)
 
 
