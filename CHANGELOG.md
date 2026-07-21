@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.3.22](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.21...v0.3.22) (2026-07-20)
+
+
+### Miscellaneous
+
+* **deps:** update actions/checkout digest to 3d3c42e ([#350](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/350)) ([a5f2ad0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a5f2ad0212b4206f18ed1b5190585f3ec62544c7))
+* **deps:** update github/codeql-action action to v4.37.1 ([#349](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/349)) ([606e65c](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/606e65cd1ac9624c82a4875cda124f78d0b33ede))
+* **deps:** update rust crate sentry to v0.48.5 ([#342](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/342)) ([bac02aa](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/bac02aae3f8caf934a41095fc63e9638d7b2a48b))
+* **deps:** update rust crate tokio to v1.52.4 ([#347](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/347)) ([c830c24](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/c830c247409e82249a66a2e02474abab0cf4d67a))
+* **deps:** update rust crate tokio to v1.53.0 ([#351](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/351)) ([dca0ee4](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/dca0ee440a5d5a6336e0319ac6a7251382d1455b))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.15 ([#339](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/339)) ([adc4610](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/adc46105772ca27ac2d4f830f2a399b29048582e))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.16 ([#345](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/345)) ([8a7def8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8a7def88eb34fbf06693ef72a51e2a6c09b413a2))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.26 ([#340](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/340)) ([9328e0b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/9328e0b0e0686dcf078d49ff1701d540486326c6))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.27 ([#346](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/346)) ([80024c1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/80024c1da9e54731072906778ae9b951cdac6e97))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.5.19 ([#336](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/336)) ([5a01acb](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5a01acb5771a95b22506f51e80bf07abd1b8b4ec))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.5.20 ([#341](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/341)) ([c38e9ae](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/c38e9ae8514a1570cfb0a14b93864293d75f3cac))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.5.21 ([#348](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/348)) ([8dacb07](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8dacb07e92cb3dd0773d5d9478144a871c885bab))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.28 ([#338](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/338)) ([b00eb00](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b00eb00f86fd49d4de4a48b00113e5a9b09e44aa))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.29 ([#343](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/343)) ([27029ea](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/27029eaa23465eb4c5f5ee70a0a20269bf3eafc6))
+* **deps:** update zizmorcore/zizmor-action action to v0.6.0 ([#344](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/344)) ([1655eca](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1655eca4f82b315969bfbec180736c5fc4644eec))
+
 ## [0.3.21](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.20...v0.3.21) (2026-07-13)
 
 
