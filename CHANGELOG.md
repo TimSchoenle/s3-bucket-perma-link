@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.3.23](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.22...v0.3.23) (2026-07-28)
+
+
+### Miscellaneous
+
+* **deps:** update docker/login-action digest to 06fb636 ([#361](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/361)) ([3802bcc](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/3802bcc2bfe046769e3cbec9a2a31c2c87355727))
+* **deps:** update docker/login-action digest to 371161b ([#369](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/369)) ([b420b0e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b420b0ed58e44641252f0a332c3a95c08a1fba11))
+* **deps:** update docker/login-action digest to abd2ef4 ([#363](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/363)) ([4b8f592](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4b8f592dc3c614e8033c8eb3037dd590eb893431))
+* **deps:** update github/codeql-action action to v4.37.2 ([#364](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/364)) ([409d83e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/409d83e7ee999858f1f578bdac8f55e26c98abd3))
+* **deps:** update github/codeql-action action to v4.37.3 ([#365](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/365)) ([bba1023](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/bba102345a1071081cd2102698c4d4c099ace91a))
+* **deps:** update rust crate anyhow to v1.0.104 ([#354](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/354)) ([da6bb6c](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/da6bb6c16d00d2994d586611ab92c6b5fe1609ac))
+* **deps:** update rust crate serde to v1.0.229 ([#356](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/356)) ([27e4c5e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/27e4c5e60198d65de03cfe0c06970c39911e68f8))
+* **deps:** update rust crate thiserror to v2.0.19 ([#357](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/357)) ([5ce3bb9](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5ce3bb984568d26ca1bd20272215bbf4de1f0a3c))
+* **deps:** update rust crate tokio to v1.53.1 ([#362](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/362)) ([893d775](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/893d775765d64801d3ddd954365614825c6b1221))
+* **deps:** update rust crate tokio-stream to v0.1.19 ([#366](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/366)) ([93e0f92](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/93e0f92ef80d5ad31ea94000d1adc5a6bdd91eb9))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.5.22 ([#355](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/355)) ([82ab242](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/82ab2426698627ec139eb66b1894be59630e589a))
+* **deps:** update timschoenle/actions/actions/rust/auto-format to vactions-rust-auto-format-v1.1.7 ([#352](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/352)) ([8add395](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8add395520e95301eb3e58c3d467a253df6a3640))
+* **deps:** update timschoenle/actions/actions/rust/cargo-check to vactions-rust-cargo-check-v1.1.5 ([#359](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/359)) ([bb8e016](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/bb8e016ef205e77f087d0bd81783c4aeb8c6f74d))
+* **deps:** update timschoenle/actions/actions/rust/clippy to vactions-rust-clippy-v1.1.8 ([#360](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/360)) ([1348019](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1348019bd40c8fc07baffb61c992ab9e812ef4d5))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.30 ([#358](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/358)) ([d597a39](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/d597a39914f057af57e67628114ed321b0af4766))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.31 ([#367](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/367)) ([4821f7c](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4821f7c80279a229d54f404619cdf4281d955469))
+* **deps:** update zizmorcore/zizmor-action action to v0.6.1 ([#368](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/368)) ([eb8eb36](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/eb8eb36a86a2f1ad987ccb5d967a62051b13a1c8))
+
 ## [0.3.22](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.21...v0.3.22) (2026-07-20)
 
 
