@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.3.24](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.23...v0.3.24) (2026-08-03)
+
+
+### CI
+
+* update helm chart update action ([4a32d7f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4a32d7f3630c154267be77dd963bc11b1944abf1))
+
+
+### Build System
+
+* add native arm support ([6808963](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/68089633fbf9eeeca466faca5259f05d77b85bec))
+
+
+### Miscellaneous
+
+* **deps:** update docker/login-action digest to dbcb813 ([#372](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/372)) ([074672d](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/074672d29179cacef8021b8e0db09658e238a48e))
+* **deps:** update github artifact actions (major) ([#383](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/383)) ([649ab41](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/649ab414296f569abc49f1df68d40a8c5e77280b))
+* **deps:** update github/codeql-action action to v4.37.4 ([#377](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/377)) ([1a47188](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1a47188bc2b92590fd1af5ef40890014db950c1d))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.17 ([#379](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/379)) ([9a6792e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/9a6792e469a9653ae05c1de0df46936c6eda545a))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.28 ([#382](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/382)) ([614d3d3](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/614d3d37f8d77bd3838ea95e9a5a3d6fb3695787))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.5.23 ([#376](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/376)) ([e1bb08e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/e1bb08ebb2805bc3e7f9ceeccf2bce456a4b2c5a))
+* **deps:** update timschoenle/actions/actions/rust/auto-format to vactions-rust-auto-format-v1.1.8 ([#378](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/378)) ([85b144a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/85b144a1f2fccb1410e7b517dad94221a3515a17))
+* **deps:** update timschoenle/actions/actions/rust/clippy to vactions-rust-clippy-v1.1.9 ([#374](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/374)) ([5b418e7](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5b418e77cf24ecc27747add59ea4a05153d25079))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.32 ([#370](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/370)) ([984b09e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/984b09e077696dbf05f07b124364dbc5375a9276))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.33 ([#373](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/373)) ([b6fde15](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b6fde157d55b0182f447526b11dbd1cf98c48f50))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.34 ([#380](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/380)) ([b8fd52b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b8fd52b42e49f99911c7ff91f1cbfdf1d227c157))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#381](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/381)) ([3131d57](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/3131d57ab389ee49306f405bb216266c4ee88f9b))
+
 ## [0.3.23](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.22...v0.3.23) (2026-07-28)
 
 
