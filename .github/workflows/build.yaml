@@ -100,26 +100,35 @@ jobs:
         uses: TimSchoenle/actions/actions/rust/clippy@dcfb46a6a17ad8565db74057ce60278953056ad5 # tag=actions-rust-clippy-v1.1.9
 
   docker-build-test:
-    name: Docker Build and Test
-    runs-on: ubuntu-latest
+    name: Docker Build and Test (${{ matrix.platform }})
+    runs-on: ${{ matrix.runner }}
     needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
     permissions:
       contents: read # Required to checkout the code
       security-events: write # Required to upload Trivy scan results
-      pull-requests: write # Required to comment on PRs with image size
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
         with:
           egress-policy: audit
 
+      - name: Prepare platform slug
+        env:
+          PLATFORM: ${{ matrix.platform }}
+        run: echo "PLATFORM_SLUG=${PLATFORM//\//-}" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8 # v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4
@@ -128,6 +137,7 @@ jobs:
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
         with:
           context: .
+          platforms: ${{ matrix.platform }}
           push: false
           load: true
           tags: image:test
@@ -136,23 +146,59 @@ jobs:
             release=test
             vendor=Timmi6790
             VERSION=test
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ env.PLATFORM_SLUG }}
+          cache-to: type=gha,mode=max,scope=${{ env.PLATFORM_SLUG }}
+
+      - name: Verify image architecture
+        env:
+          PLATFORM: ${{ matrix.platform }}
+        run: |
+          expected="${PLATFORM#*/}"
+          actual=$(docker image inspect image:test --format='{{.Architecture}}')
+          echo "Expected: ${expected}, actual: ${actual}"
+          [ "${expected}" = "${actual}" ]
 
       - name: Test Docker image runs
+        env:
+          PLATFORM: ${{ matrix.platform }}
         run: |
-          docker run --rm image:test --version || true
-          docker run --rm image:test --help || true
+          set +e
+          output=$(docker run --rm image:test 2>&1)
+          status=$?
+          set -e
+          echo "${output}"
+          echo "Exit status: ${status}"
+          # The image has no shell and the binary exits on missing configuration, so a
+          # non-zero exit is expected. Exit codes in the 125-127 range mean the runtime
+          # could not execute the binary at all, which is what a wrong-architecture or
+          # broken (e.g. mis-packed) build looks like.
+          if [ "${status}" -ge 125 ] && [ "${status}" -le 127 ]; then
+            echo "::error::Container failed to execute the binary (exit ${status})"
+            exit 1
+          fi
+          if echo "${output}" | grep -qi 'exec format error'; then
+            echo "::error::Binary is not executable on ${PLATFORM}"
+            exit 1
+          fi
 
       - name: Check image size
-        id: size-check
         run: |
           SIZE=$(docker image inspect image:test --format='{{.Size}}' | awk '{print int($1/1024/1024)}')
-          echo "size=${SIZE}" >> $GITHUB_OUTPUT
           echo "Image size: ${SIZE}MB"
-          if [ $SIZE -gt 150 ]; then
+          mkdir -p "${RUNNER_TEMP}/sizes"
+          echo "${SIZE}" > "${RUNNER_TEMP}/sizes/${PLATFORM_SLUG}"
+          if [ "${SIZE}" -gt 150 ]; then
             echo "::warning::Image size (${SIZE}MB) exceeds 150MB threshold"
           fi
+
+      - name: Upload image size
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        with:
+          name: sizes-${{ env.PLATFORM_SLUG }}
+          path: ${{ runner.temp }}/sizes/*
+          if-no-files-found: error
+          retention-days: 1
 
       - name: Scan Docker image for vulnerabilities
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
@@ -167,20 +213,46 @@ jobs:
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
+          category: trivy-${{ env.PLATFORM_SLUG }}
 
-      - name: Comment image size on PR
+  docker-size-report:
+    name: Docker Size Report
+    runs-on: ubuntu-latest
+    needs: docker-build-test
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write # Required to comment on PRs with image size
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
+        with:
+          egress-policy: audit
+
+      - name: Download image sizes
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
+        with:
+          path: sizes
+          pattern: sizes-*
+          merge-multiple: true
+
+      - name: Comment image sizes on PR
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
-        if: github.event_name == 'pull_request'
-        env:
-          SIZE: ${{ steps.size-check.outputs.size }}
         with:
           script: |
-            const size = process.env.SIZE;
+            const fs = require('fs');
+            const rows = fs.readdirSync('sizes')
+              .sort()
+              .map((file) => {
+                const platform = file.replace('-', '/');
+                const size = fs.readFileSync(`sizes/${file}`, 'utf8').trim();
+                return `| \`${platform}\` | ${size}MB |`;
+              })
+              .join('\n');
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🐳 Docker image size: **${size}MB**`
+              body: `🐳 **Docker image sizes**\n\n| Platform | Size |\n| --- | --- |\n${rows}`
             });
 
   dependency-review:
