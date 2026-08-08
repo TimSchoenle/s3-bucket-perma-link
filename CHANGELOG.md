@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.25](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.24...v0.3.25) (2026-08-08)
+
+
+### Miscellaneous
+
+* **deps:** update github/codeql-action action to v4.37.5 ([#390](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/390)) ([5a3768e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5a3768ec4583bb410fa685296faca11d847113f9))
+* **deps:** update github/codeql-action action to v4.37.6 ([#392](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/392)) ([be5e4ee](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/be5e4ee0d63a20b3e16af1f449f4b601b74cf15f))
+* **deps:** update step-security/harden-runner action to v2.20.1 ([#394](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/394)) ([0a5d8d7](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0a5d8d70b464c1403af20570cbf29d8d231ebbea))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.18 ([#393](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/393)) ([ca3f9a1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ca3f9a192b3b9a2c8b4c03191480de0f5b629848))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.29 ([#388](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/388)) ([66b364f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/66b364f879b83920691dccde6f951ab88515a88a))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.6.1 ([#389](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/389)) ([7e0a6ff](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7e0a6ff7c713393790b5735894dcd04703c0f47e))
+* **deps:** update timschoenle/actions/actions/rust/auto-format to vactions-rust-auto-format-v1.1.10 ([#391](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/391)) ([03d1b4b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/03d1b4b9559c22fb1c193aa14cf6303178897758))
+* **deps:** update timschoenle/actions/actions/rust/auto-format to vactions-rust-auto-format-v1.1.9 ([#384](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/384)) ([cdfbaa1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/cdfbaa1ad09a9e64cde76ab7b2edf1855584d0b5))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.35 ([#387](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/387)) ([ab010da](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ab010dae922348e11f3da0cd3e252e0c5a9cd26e))
+* **deps:** update zizmorcore/zizmor-action action to v0.6.2 ([#386](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/386)) ([2b5848a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2b5848a94e1d72eff932123940aff38880390520))
+
 ## [0.3.24](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.23...v0.3.24) (2026-08-03)
 
 
