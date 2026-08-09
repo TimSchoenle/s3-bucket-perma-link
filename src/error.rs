@@ -9,8 +9,13 @@ pub enum Error {
     IoError(#[from] std::io::Error),
     #[error("Invalid route")]
     InvalidRoute(String),
-    #[error("Config error")]
-    Config(#[from] config::ConfigError),
+    // The message is carried through, unlike the variants around it: a configuration failure
+    // names the key, the file or the mount an operator has to fix, and this is also what the
+    // reload supervisor prints when a re-read fails on a service that is still serving.
+    #[error("Config error: {0}")]
+    Config(#[from] terrace_config::Error),
+    #[error("Config watch error: {0}")]
+    ConfigWatch(#[from] terrace_config::reload::WatchError),
     #[error("Bukkit error")]
     S3(#[from] s3::error::S3Error),
     #[error("{0}")]
