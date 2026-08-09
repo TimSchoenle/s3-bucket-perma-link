@@ -2331,7 +2331,7 @@ checksum = "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f"
 
 [[package]]
 name = "s3_bucket_perma_link"
-version = "0.3.24"
+version = "1.0.0"
 dependencies = [
  "actix-web",
  "anyhow",
