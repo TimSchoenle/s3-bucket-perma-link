@@ -38,7 +38,7 @@ tokio-util = "0.7.19"
 # `figment::Jail` is how the loader tests set `S3_PERMA_LINK_*` and write config files without
 # touching the real environment. The loader itself reaches figment through `terrace-config`;
 # this entry exists to switch on figment's `test` feature.
-figment = { version = "0.10", features = ["toml", "env", "test"] }
+figment = { version = "=0.10.19", features = ["toml", "env", "test"] }
 
 [profile.release]
 lto = true
