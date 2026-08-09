@@ -22,11 +22,23 @@ anyhow = { version = "1.0.86", features = ["backtrace"] }
 thiserror = "2.0.0"
 actix-web = { version = "4.9.0", default-features = false, features = ["macros", "compress-brotli", "compress-gzip", "cookies"] } # Guessed features, but safer to stick to default if unsure. Reverting to default for actix-web to avoid breakage unless specified.
 tracing-actix-web = "0.7.12"
-config = "0.15.0"
 serde = "1.0.209"
 rust-s3 = { version = "0.37.1", default-features = false, features = ["tokio-rustls-tls"] }
 sentry = { version = "0.48.0", default-features = false, features = ["anyhow", "debug-images", "backtrace", "contexts", "panic", "rustls"] }
 secrecy = { version = "0.10.3", features = ["serde"] }
+# The layered configuration loader: struct defaults, TOML, environment, mounted secrets, and
+# the supervisor that rebuilds the service when a mounted secret is rotated. Pinned by tag
+# rather than a branch so a version change is visible in review.
+# `full` — the loader alone would leave a rotated S3 credential unseen until the pod restarts.
+terrace-config = { git = "https://github.com/TimSchoenle/terrace-config", tag = "v0.2.0", default-features = false, features = ["full"] }
+# `CancellationToken`, the shutdown/reload signal the supervisor and the listener share.
+tokio-util = "0.7.19"
+
+[dev-dependencies]
+# `figment::Jail` is how the loader tests set `S3_PERMA_LINK_*` and write config files without
+# touching the real environment. The loader itself reaches figment through `terrace-config`;
+# this entry exists to switch on figment's `test` feature.
+figment = { version = "0.10", features = ["toml", "env", "test"] }
 
 [profile.release]
 lto = true

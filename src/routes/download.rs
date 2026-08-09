@@ -17,7 +17,7 @@ async fn download(
             info!("Valid path request!");
 
             if let Some(bucket_client) = download_data.buckets().get(path.as_str()) {
-                match bucket_client.get_object_stream(bucket.file()).await {
+                match bucket_client.get_object_stream(bucket.object()).await {
                     Ok(data) => {
                         Ok(HttpResponse::Ok()
                             .streaming(data.bytes.map(|res| {

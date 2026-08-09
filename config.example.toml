@@ -1,0 +1,40 @@
+# Example configuration.
+#
+# Copy to `config.toml` next to the binary, or point `S3_PERMA_LINK_CONFIG` at it (a file, or a
+# directory whose `*.toml` files are merged in name order).
+#
+# Do not put credentials in here on a real deployment. Mount them instead: every key below can
+# come from a file, which is what lets a rotated credential be picked up without a restart.
+#
+#   S3_PERMA_LINK_SECRETS_DIR=/etc/s3-perma-link/secrets  -> one file per key, named
+#                                                            `s3__secret_key`, `s3__access_key`,
+#                                                            ... (`__` separates nesting levels)
+#   S3_PERMA_LINK_S3__SECRET_KEY_FILE=/run/secrets/s3_key -> one key, from the named file
+#
+# A key supplied by two of {environment, secrets directory, `_FILE`} fails the boot rather than
+# being resolved by precedence: a stale environment variable silently outranking a rotated
+# mounted secret is exactly the failure the file layers exist to remove.
+
+[server]
+host = "0.0.0.0"
+port = 8080
+
+[s3]
+host = "s3.eu-central-1.amazonaws.com"
+region = "eu-central-1"
+access_key = "mount-me-instead"
+secret_key = "mount-me-instead"
+
+# One block per permanent link. The table key is the request path, so this entry serves
+# `GET /docs/handbook`.
+[bucket.entries."docs/handbook"]
+bucket = "media"
+object = "handbook.pdf"
+
+[bucket.entries.changelog]
+bucket = "media"
+object = "releases/CHANGELOG.md"
+
+[telemetry]
+log_level = "info"
+# sentry_dsn = "mount-me-instead"
