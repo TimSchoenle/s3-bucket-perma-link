@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.1](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v1.0.0...v1.0.1) (2026-08-17)
+
+
+### Miscellaneous
+
+* **deps:** update github/codeql-action action to v4.37.7 ([#409](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/409)) ([9037a4a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/9037a4a874e8ad16d203af7d406b834cf03cd8fc))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.19 ([#402](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/402)) ([9ed418a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/9ed418a5b90f690e9e4af8ee178123bf2a1df55c))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.20 ([#405](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/405)) ([a675d12](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a675d120f6283cb9d33747c780025a2cb30cd32a))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.30 ([#403](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/403)) ([6e2f301](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/6e2f301d2aa74b45dbfe7320e9ee3a94141261b5))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.31 ([#406](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/406)) ([422328f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/422328fa64709a713da787a10cb0137a3908a220))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.6.2 ([#407](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/407)) ([cfcf677](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/cfcf6770025a54baad18f6268cf65c6d10fd6b27))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.6.3 ([#410](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/410)) ([2fe8779](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2fe87795157f42d7d8a34cd235656c93643c0af4))
+* **deps:** update timschoenle/actions/actions/rust/auto-format to vactions-rust-auto-format-v1.1.11 ([#408](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/408)) ([1b09708](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1b097082becacf8868cc18e6619feb82526e421c))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.36 ([#399](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/399)) ([65b3a00](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/65b3a00bb5bdd05966b8a31d02432a85d7b009d6))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.37 ([#404](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/404)) ([ae86454](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ae86454a23b3d628c4f611b46af8fb02376fdc9f))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#400](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/400)) ([73eeb71](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/73eeb71c79b9820e6512ccfab803e4eb9f067491))
+
 ## [1.0.0](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v0.3.24...v1.0.0) (2026-08-09)
 
 
