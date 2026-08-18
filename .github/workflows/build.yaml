@@ -72,6 +72,12 @@ jobs:
       name: ci
       deployment: false
     runs-on: ubuntu-latest
+    # Shared with docs.yml, which renders README.md onto the same branch. Both make verified
+    # commits through the API, and that call rejects a commit whose parent has moved — so two of
+    # them racing would leave one failing for no reason a reader could act on. They queue instead.
+    concurrency:
+      group: branch-writes-${{ github.ref }}
+      cancel-in-progress: false
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0

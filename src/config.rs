@@ -13,68 +13,111 @@ mod loader;
 use s3::creds::Credentials;
 use s3::{Bucket, Region};
 use secrecy::{ExposeSecret, SecretString};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::str::FromStr;
+use terrace_config::schema::{Describe, Schema};
 use tracing::Level;
 
 use crate::error::Error;
 
-pub use loader::{ConfigError, Loaded, Sources, load, load_watched, terrace};
+pub use loader::{ConfigError, Loaded, Sources, explain, load, load_watched, terrace};
 
 const DEFAULT_SERVER_HOST: &str = "0.0.0.0";
 const DEFAULT_SERVER_PORT: u16 = 8080;
 const DEFAULT_LOG_LEVEL: &str = "info";
 
 /// Everything the service reads at boot.
-#[derive(Debug, Deserialize, Getters)]
+///
+/// [`Describe`] is what the configuration reference in `README.md` is generated from: the key
+/// paths, the environment spellings, the types and the `///` comments below are read off this
+/// tree by `examples/config-schema.rs` rather than restated in prose that can drift from it.
+#[derive(Debug, Deserialize, Serialize, Getters, Describe)]
 #[getset(get = "pub")]
 pub struct Config {
+    #[config(nested)]
     #[serde(default)]
     server: ServerConfig,
+    #[config(nested)]
     s3: S3Config,
+    #[config(nested)]
     bucket: BucketConfig,
+    #[config(nested)]
     #[serde(default)]
     telemetry: TelemetryConfig,
 }
 
+/// What the schema generator reads the `Default` column out of.
+///
+/// It is not a configuration a service could run on: [`S3Config`]'s fields are required, and a
+/// required key reports no default at all, so nothing here reaches the generated table. Only the
+/// blocks that really do have defaults — [`ServerConfig`] and [`TelemetryConfig`] — contribute.
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            server: ServerConfig::default(),
+            s3: S3Config::default(),
+            bucket: BucketConfig::default(),
+            telemetry: TelemetryConfig::default(),
+        }
+    }
+}
+
 /// Where the object store lives and how to authenticate against it.
-#[derive(Debug, Deserialize, Getters)]
+#[derive(Debug, Deserialize, Serialize, Default, Getters, Describe)]
 #[getset(get = "pub")]
 pub struct S3Config {
+    /// S3 access key. Mount it rather than setting it in a file that is committed.
+    ///
     /// A [`SecretString`]: this struct is nested inside a [`Config`] that the reload supervisor
-    /// logs, and a credential must not be one `{:?}` away from the log stream.
+    /// logs, and a credential must not be one `{:?}` away from the log stream. `SecretString`
+    /// refuses to implement [`Serialize`] for the same reason, which is why the field is skipped
+    /// on the way out — `#[config(secret)]` renders `<redacted>` in its place anyway.
+    #[config(secret)]
+    #[serde(skip_serializing)]
     access_key: SecretString,
+    /// S3 secret key. Mount it rather than setting it in a file that is committed.
+    #[config(secret)]
+    #[serde(skip_serializing)]
     secret_key: SecretString,
     /// The endpoint, e.g. `s3.eu-central-1.amazonaws.com`.
     host: String,
+    /// The region the endpoint serves, e.g. `eu-central-1`.
     region: String,
 }
 
 /// The listener the service binds.
-#[derive(Debug, Deserialize, Getters)]
+#[derive(Debug, Deserialize, Serialize, Getters, Describe)]
 #[getset(get = "pub")]
 pub struct ServerConfig {
+    /// Address to listen on. `0.0.0.0` in a container, which is the deployment this ships as.
     #[serde(default = "ServerConfig::default_host")]
     host: String,
+    /// Port to listen on.
     #[serde(default = "ServerConfig::default_port")]
     port: u16,
 }
 
 /// The routes the service serves, and the object each one resolves to.
-#[derive(Debug, Deserialize, Getters)]
+#[derive(Debug, Deserialize, Serialize, Default, Getters, Describe)]
 #[getset(get = "pub")]
 pub struct BucketConfig {
-    /// Request path to object. A table rather than the delimiter-separated string this used to
-    /// be: the string existed only because an environment variable cannot carry a map, and the
-    /// TOML layer can.
+    /// One `[bucket.entries.<request path>]` block per permanent link, each carrying a `bucket`
+    /// and an `object`.
+    ///
+    /// A leaf rather than `#[config(nested)]`, because the key paths under it are the operator's
+    /// route names and no type knows them ahead of time — see [`BucketEntry`] for the two fields
+    /// each block takes. A table rather than the delimiter-separated string this used to be: the
+    /// string existed only because an environment variable cannot carry a map, and the TOML layer
+    /// can.
     entries: HashMap<String, BucketEntry>,
 }
 
 /// One route's object.
-#[derive(Debug, Clone, Deserialize, Getters)]
+#[derive(Debug, Clone, Deserialize, Serialize, Getters)]
 #[getset(get = "pub")]
 pub struct BucketEntry {
+    /// The bucket [`Self::object`] lives in.
     bucket: String,
     /// The object key inside [`Self::bucket`].
     ///
@@ -88,16 +131,42 @@ pub struct BucketEntry {
 ///
 /// Both are installed once, before the reload supervisor is reached, and cannot be reinstalled
 /// on a running process — so this is the one block a configuration reload does not apply.
-#[derive(Debug, Deserialize, Getters)]
+#[derive(Debug, Deserialize, Serialize, Getters, Describe)]
 #[getset(get = "pub")]
 pub struct TelemetryConfig {
-    /// `trace`, `debug`, `info`, `warn` or `error`. Parsed by [`Self::level`].
+    /// How much the service says: `trace`, `debug`, `info`, `warn` or `error`.
+    ///
+    /// Parsed by [`Self::level`].
     #[serde(default = "TelemetryConfig::default_log_level")]
     log_level: String,
-    /// Absent disables Sentry entirely. A [`SecretString`]: a DSN is a write credential for
-    /// the project it names.
-    #[serde(default)]
+    /// Sentry DSN. Absent disables Sentry entirely.
+    ///
+    /// A [`SecretString`]: a DSN is a write credential for the project it names — and, like the
+    /// S3 credentials, one serde must not be able to write back out.
+    #[config(secret)]
+    #[serde(default, skip_serializing)]
     sentry_dsn: Option<SecretString>,
+}
+
+/// The configuration surface, described rather than deserialised.
+///
+/// The reference tables in `README.md` are rendered from this: the key paths, the environment
+/// spellings, the types, the defaults and the `///` comments all come off [`Config`], so the
+/// documentation cannot say something the type does not. `examples/config-schema.rs` and
+/// `examples/readme-variables.rs` are the two callers; both go through here so that neither can
+/// describe a different loader than the service boots with.
+///
+/// Reads nothing from the environment — the `Default` column is filled from [`Config::default`],
+/// so a documentation job produces the same answer on a runner where none of these variables
+/// exist. Required keys report no default at all, which is why the empty S3 credentials
+/// [`Config::default`] carries never reach the table.
+///
+/// # Errors
+/// Returns [`ConfigError`] if [`Config`] does not serialise.
+pub fn schema() -> Result<Schema, ConfigError> {
+    terrace()
+        .schema::<Config>()
+        .with_defaults_from(&Config::default())
 }
 
 impl ServerConfig {

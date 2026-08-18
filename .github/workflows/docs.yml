@@ -1,0 +1,142 @@
+name: Docs
+
+# `README.md` is generated from `.github/templates/README.md.hbs`. This workflow is what makes
+# that claim true in both directions.
+#
+# On a pull request it renders the template and commits the result to the branch, so the
+# configuration reference — every key of `Config`, its environment spelling, its default and its
+# `///` comment — is never edited by hand. The case that matters is a pull request that adds a
+# configuration key: it arrives with the documentation for that key already written, because the
+# table is read off the type in the same commit that changes it.
+#
+# Everywhere it cannot commit — a push to `master`, a pull request from a fork — it renders in
+# `check` mode instead, writing nothing and failing if the committed `README.md` is stale.
+# Without that half, editing `README.md` directly would appear to work right up until the next
+# pull request silently reverted it.
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+# Not scoped to this workflow: the auto-format job in build.yaml also commits to the pull request
+# branch, and the API call that makes a verified commit rejects one whose parent has moved. Two
+# writers racing would leave one of them failing for no reason a reader could act on, so they
+# queue instead. `cancel-in-progress: false` for the same reason — a cancelled run here means a
+# branch left holding a half-generated file.
+concurrency:
+  group: branch-writes-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions: {}
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  render:
+    name: Render
+    # Forks get no secrets, so the App token would be empty and the commit could not be pushed to
+    # their branch anyway. `check` below picks those pull requests up instead.
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Where ACTIONS_MAINTENANCE_APP_ID and ACTIONS_MAINTENANCE_PRIVATE_KEY live, as in the
+    # auto-format job of build.yaml.
+    environment:
+      name: ci
+      deployment: false
+    permissions:
+      contents: read # the write happens with the App token below, not with GITHUB_TOKEN
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        with:
+          egress-policy: audit
+
+      # An App installation token, so the commit is verified and — unlike one made with
+      # `GITHUB_TOKEN` — re-triggers the checks on the branch it lands on.
+      - name: Generate Bot Token
+        id: generate_token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
+          private-key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
+          permission-contents: write
+
+      # The head of the branch, not the merge commit: the render has to read the `Config` the
+      # pull request proposes, and the commit has to land on top of what is there now.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: false
+
+      - name: Install stable toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1.17.0
+
+      - name: Collect README variables
+        id: variables
+        run: |
+          json="$(cargo run --quiet --example readme-variables)"
+          echo "json=${json}" >> "$GITHUB_OUTPUT"
+
+      - name: Render and commit the README
+        id: readme
+        uses: TimSchoenle/actions/actions/common/render-template-and-commit@15d83f02081c9dc8a844646199c63792dcccdfa8 # tag=actions-common-render-template-and-commit-v1.1.3
+        with:
+          template: .github/templates/README.md.hbs
+          output: README.md
+          variables: ${{ steps.variables.outputs.json }}
+          token: ${{ steps.generate_token.outputs.token }}
+          commit_message: 'docs: render README from template'
+
+      - name: Summarise
+        env:
+          COMMITTED: ${{ steps.readme.outputs.changes_detected }}
+          COMMIT_URL: ${{ steps.readme.outputs.commit_url }}
+        run: |
+          if [ "${COMMITTED}" = "true" ]; then
+            echo "README.md re-rendered: ${COMMIT_URL}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "README.md already matched its template." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  check:
+    name: README
+    # The complement of `render`: the pushes to `master` that no pull request rendered, and the
+    # fork pull requests that could not be committed to. Between the two conditions, every event
+    # this workflow sees is handled by exactly one job.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install stable toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1.17.0
+
+      - name: Collect README variables
+        id: variables
+        run: |
+          json="$(cargo run --quiet --example readme-variables)"
+          echo "json=${json}" >> "$GITHUB_OUTPUT"
+
+      # Writes nothing; fails with the first differing line when README.md is stale.
+      - name: Verify README.md is current
+        uses: TimSchoenle/actions/actions/common/render-template@3b7d152374ee63e720e7c16bed8b088b40554911 # tag=actions-common-render-template-v1.1.1
+        with:
+          template: .github/templates/README.md.hbs
+          output: README.md
+          variables: ${{ steps.variables.outputs.json }}
+          check: true
