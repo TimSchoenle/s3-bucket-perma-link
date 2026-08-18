@@ -1,3 +1,21 @@
+<!--
+Generated from .github/templates/README.md.hbs — edit that file, not this one. CI renders it on
+every pull request and commits the result back to the branch; a push to master whose README.md
+does not match its template fails the `readme` check in .github/workflows/docs.yml.
+
+Variables come from `cargo run --example readme-variables`, which reads them off the code they
+describe:
+
+    repo, branch, build_workflow, docker_image   the repository coordinates, defined once
+    prefix, config_var, secrets_dir_var,
+    indirection_suffix                           the loader's own dialect, from src/config/loader.rs
+    loader_table, keys_table                     generated from Config, via terrace-config's
+                                                 `schema` feature
+
+That is what keeps the configuration reference honest: a key added to `Config` without a `///`
+comment shows an empty Purpose cell in the pull request that adds it, and a key removed from it
+leaves this page on the same commit.
+-->
 <br/>
 <p align="center">
   <h3 align="center">S3 Bucket Permanent Permanent Link</h3>
@@ -12,7 +30,7 @@
 <div align="center">
 
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/timmi6790/s3-bucket-perma-link)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/TimSchoenle/s3-bucket-perma-link/build.yml)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/TimSchoenle/s3-bucket-perma-link/build.yaml)
 ![Issues](https://img.shields.io/github/issues/TimSchoenle/s3-bucket-perma-link)
 [![codecov](https://codecov.io/gh/TimSchoenle/s3-bucket-perma-link/branch/master/graph/badge.svg?token=dDUZjsYmh2)](https://codecov.io/gh/TimSchoenle/s3-bucket-perma-link)
 ![License](https://img.shields.io/github/license/TimSchoenle/s3-bucket-perma-link)
@@ -50,21 +68,39 @@ Mounted files are watched. When one changes, the service rebuilds its bucket cli
 listener in place — a rotated S3 credential needs no restart. `telemetry.*` is the exception:
 the log subscriber and the Sentry client are installed once and still need one.
 
+Every generation logs which layer supplied each key, so an unexpected value can be traced to the
+file or variable it came from without attaching a debugger.
+
 See [config.example.toml](config.example.toml) for a complete file.
 
-| Key                   | Required | Environment variable                    | Description                                    | Example                                  |
-|-----------------------|----------|-----------------------------------------|------------------------------------------------|------------------------------------------|
-| `s3.access_key`       | X        | `S3_PERMA_LINK_S3__ACCESS_KEY`          | S3 access key                                  | `e25a2fd93e1049a4bb48d00907d6f4bf.access` |
-| `s3.secret_key`       | X        | `S3_PERMA_LINK_S3__SECRET_KEY`          | S3 secret key                                  | `a5990007b7a54f83b52594a86c4d520e`       |
-| `s3.host`             | X        | `S3_PERMA_LINK_S3__HOST`                | S3 endpoint                                    | `s3.amazon.com`                          |
-| `s3.region`           | X        | `S3_PERMA_LINK_S3__REGION`              | S3 region                                      | `eu-central-1`                           |
-| `bucket.entries`      | X        | see below                               | Request path to bucket and object key          | see below                                |
-| `server.host`         |          | `S3_PERMA_LINK_SERVER__HOST`            | Listen address [default: `0.0.0.0`]            | `0.0.0.0`                                |
-| `server.port`         |          | `S3_PERMA_LINK_SERVER__PORT`            | Listen port [default: `8080`]                  | `9090`                                   |
-| `telemetry.log_level` |          | `S3_PERMA_LINK_TELEMETRY__LOG_LEVEL`    | `trace`/`debug`/`info`/`warn`/`error` [default: `info`] | `info`                          |
-| `telemetry.sentry_dsn`|          | `S3_PERMA_LINK_TELEMETRY__SENTRY_DSN`   | Sentry DSN; absent disables Sentry             |                                          |
+#### The variables read before the configuration exists
 
-`bucket.entries` is a table keyed by request path:
+| Variable | Role | Default | Purpose |
+|---|---|---|---|
+| `S3_PERMA_LINK_CONFIG` | config | `config.toml` | Names the TOML layer: a file, or a directory whose `*.toml` files are all merged in name order. |
+| `S3_PERMA_LINK_SECRETS_DIR` | secrets dir | — | Names a directory of key-named files — a mounted Kubernetes `Secret` volume. Each file supplies the key its name spells. |
+
+#### The keys
+
+Every key below is spelled the same way in all four layers: `__` separates nesting levels and
+case is folded. `s3.secret_key` is `S3_PERMA_LINK_S3__SECRET_KEY` as an environment
+variable, `S3_PERMA_LINK_S3__SECRET_KEY_FILE` as file indirection, and
+`s3__secret_key` as a file name inside `$S3_PERMA_LINK_SECRETS_DIR`.
+
+| TOML | Type | Environment | Default | Flags | Purpose |
+|---|---|---|---|---|---|
+| `server.host` | `String` | `S3_PERMA_LINK_SERVER__HOST` | `0.0.0.0` | — | Address to listen on. `0.0.0.0` in a container, which is the deployment this ships as. |
+| `server.port` | `u16` | `S3_PERMA_LINK_SERVER__PORT` | `8080` | — | Port to listen on. |
+| `s3.access_key` | `SecretString` | `S3_PERMA_LINK_S3__ACCESS_KEY` | — | required, secret | S3 access key. Mount it rather than setting it in a file that is committed. |
+| `s3.secret_key` | `SecretString` | `S3_PERMA_LINK_S3__SECRET_KEY` | — | required, secret | S3 secret key. Mount it rather than setting it in a file that is committed. |
+| `s3.host` | `String` | `S3_PERMA_LINK_S3__HOST` | — | required | The endpoint, e.g. `s3.eu-central-1.amazonaws.com`. |
+| `s3.region` | `String` | `S3_PERMA_LINK_S3__REGION` | — | required | The region the endpoint serves, e.g. `eu-central-1`. |
+| `bucket.entries` | `HashMap<String, BucketEntry>` | `S3_PERMA_LINK_BUCKET__ENTRIES` | — | required | One `[bucket.entries.<request path>]` block per permanent link, each carrying a `bucket` and an `object`. |
+| `telemetry.log_level` | `String` | `S3_PERMA_LINK_TELEMETRY__LOG_LEVEL` | `info` | — | How much the service says: `trace`, `debug`, `info`, `warn` or `error`. |
+| `telemetry.sentry_dsn` | `SecretString` | `S3_PERMA_LINK_TELEMETRY__SENTRY_DSN` | unset | secret | Sentry DSN. Absent disables Sentry entirely. |
+
+`bucket.entries` is one row above rather than one per link, because the key paths under it are
+route names no type knows ahead of time. Each is a table keyed by request path:
 
 ```toml
 [bucket.entries."docs/handbook"]
@@ -80,7 +116,20 @@ S3_PERMA_LINK_BUCKET__ENTRIES__CHANGELOG__BUCKET=media
 S3_PERMA_LINK_BUCKET__ENTRIES__CHANGELOG__OBJECT=releases/CHANGELOG.md
 ```
 
+## Contributing
+
+`README.md` is generated. Edit [.github/templates/README.md.hbs](.github/templates/README.md.hbs)
+instead — CI renders it on every pull request and commits the result back to the branch, and a
+push to `master` whose `README.md` does not match its template fails.
+
+The configuration tables in it are generated from `Config` in
+[src/config.rs](src/config.rs), so a key is documented by documenting the field:
+
+```bash
+cargo run --example config-schema -- --format markdown
+```
+
 ## License
 
-See [LICENSE](https://github.com/TimSchoenle/s3-bucket-perma-link/blob/main/LICENSE.md) for
+See [LICENSE](https://github.com/TimSchoenle/s3-bucket-perma-link/blob/master/LICENSE) for
 more information.

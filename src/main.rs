@@ -50,11 +50,29 @@ async fn main() -> Result<()> {
 /// Returns when `shutdown` is cancelled — by the OS signal, or by the supervisor because the
 /// configuration changed and this runtime is being replaced.
 async fn serve(config: Arc<Config>, shutdown: CancellationToken) -> Result<()> {
+    log_config_sources();
+
     let buckets = config.s3().create_buckets(config.bucket().entries())?;
     let download_data = DownloadData::new(buckets, config.bucket().entries().clone());
 
     let server = Server::new(config.server().host().to_string(), *config.server().port());
     server.run_until_stopped(download_data, shutdown).await
+}
+
+/// Log which layer supplied each configuration key.
+///
+/// Here rather than at boot because this runs once per generation: after a reload the report
+/// describes the layers *that* load saw, which is the one moment the question "where did this
+/// value come from" is being asked about something that just changed.
+///
+/// The report carries no configuration value — the keys and their sources, never the contents —
+/// so there is nothing in it to redact. A failure to assemble it is not a failure to serve: the
+/// configuration it describes has already loaded, so it is logged and stepped over.
+fn log_config_sources() {
+    match config::explain() {
+        Ok(explanation) => info!("Configuration sources:\n{explanation}"),
+        Err(error) => warn!("Could not explain the configuration sources: {error}"),
+    }
 }
 
 fn setup_tracing(telemetry: &TelemetryConfig) -> Result<()> {
