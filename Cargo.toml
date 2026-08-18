@@ -52,7 +52,7 @@ terrace-config = { git = "https://github.com/TimSchoenle/terrace-config", tag = 
 # `examples/readme-variables.rs` assembles the README template payload. Building it here rather
 # than by hand is what makes the embedded Markdown tables safe: a `|` or a newline inside a
 # generated cell is a JSON escape, not a broken document.
-serde_json = "1.0.151"
+serde_json = "=1.0.151"
 
 [profile.release]
 lto = true
