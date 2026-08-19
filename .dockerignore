@@ -96,3 +96,7 @@ fabric.properties
 
 # Local configuration; never baked into an image.
 config.toml
+
+# Generated documentation. Nothing in the build reads it, and leaving it in the context would
+# have a docs-only change invalidate every cached Rust layer.
+/docs/

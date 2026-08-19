@@ -37,10 +37,13 @@ secrecy = { version = "0.10.3", features = ["serde"] }
 #   reload  the loader alone would leave a rotated S3 credential unseen until the pod restarts.
 #   schema  `examples/config-schema.rs` and `examples/readme-variables.rs` generate the README
 #           configuration tables from the types in `src/config.rs`, so the reference cannot drift
-#           from the code. Nothing in the binary calls it, and release LTO drops it.
+#           from the code — and the same example generates the configuration *contract* the
+#           container build embeds in the image and attaches to its digest, together with the
+#           `dev.terrace.config.*` labels that make it discoverable. Nothing in the binary calls
+#           it, and release LTO drops it.
 #   explain which layer supplied each key, logged once per generation in `main` — the answer to
 #           "the mounted secret is not being picked up" without attaching a debugger.
-terrace-config = { git = "https://github.com/TimSchoenle/terrace-config", tag = "v0.5.0", default-features = false, features = ["full"] }
+terrace-config = { git = "https://github.com/TimSchoenle/terrace-config", tag = "v0.6.0", default-features = false, features = ["full"] }
 # `CancellationToken`, the shutdown/reload signal the supervisor and the listener share.
 tokio-util = "0.7.19"
 
@@ -48,7 +51,7 @@ tokio-util = "0.7.19"
 # The same crate again, for its `testing` feature: the sandbox the loader tests arrange their
 # layers in. It is deliberately outside `full`, because a service image has no reason to link a
 # test harness — a dev-dependency on the same tag is how it is meant to be taken.
-terrace-config = { git = "https://github.com/TimSchoenle/terrace-config", tag = "v0.5.0", default-features = false, features = ["testing"] }
+terrace-config = { git = "https://github.com/TimSchoenle/terrace-config", tag = "v0.6.0", default-features = false, features = ["testing"] }
 # `examples/readme-variables.rs` assembles the README template payload. Building it here rather
 # than by hand is what makes the embedded Markdown tables safe: a `|` or a newline inside a
 # generated cell is a JSON escape, not a broken document.
