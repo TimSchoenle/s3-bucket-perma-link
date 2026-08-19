@@ -1,0 +1,11 @@
+# The files below are compared byte for byte against the output of a generator that writes LF,
+# so a working copy that checked them out with CRLF would fail the comparison on a developer's
+# machine while passing in CI. `core.autocrlf` is a per-machine setting; this is not.
+#
+#   docs/config.contract.json   diffed against `config-schema --format contract`
+#   Dockerfile                  its LABEL block diffed against `--format dockerfile`, and it is
+#                               read by a Linux builder besides
+#   .github/scripts/*.sh        run by `bash` on a Linux runner
+/docs/config.contract.json text eol=lf
+/Dockerfile text eol=lf
+/.github/scripts/*.sh text eol=lf

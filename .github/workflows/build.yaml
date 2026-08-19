@@ -164,6 +164,37 @@ jobs:
           echo "Expected: ${expected}, actual: ${actual}"
           [ "${expected}" = "${actual}" ]
 
+      # The `contract` stage holds the two generated files and nothing else, so this exports a
+      # two-file layer rather than the builder's filesystem. It runs on the builder the step
+      # above already populated, so every layer is a cache hit and no second compile happens —
+      # which is also what makes the exported document *the* document the image carries. The
+      # build arguments have to match that build exactly, or the two would legitimately differ.
+      - name: Export the generated configuration contract
+        env:
+          PLATFORM: ${{ matrix.platform }}
+        run: |
+          docker buildx build \
+            --target contract \
+            --platform "${PLATFORM}" \
+            --build-arg version=test \
+            --build-arg release=test \
+            --build-arg vendor=Timmi6790 \
+            --build-arg VERSION=test \
+            --cache-from "type=gha,scope=${PLATFORM_SLUG}" \
+            --output "type=local,dest=contract-out" \
+            .
+          ls -l contract-out
+          cat contract-out/contract.labels
+
+      # The checkpoint the whole scheme rests on, and the reason a hand-written LABEL block is
+      # safe. Checking the *image* rather than the Dockerfile is the point: a source diff cannot
+      # see a base image that overrode a label, a `LABEL` line deleted on a branch nobody diffed,
+      # or a build argument that failed to interpolate. Blocking, on every platform in the
+      # matrix — labels live in each manifest's own config blob, so one architecture can carry
+      # them while another does not.
+      - name: Verify the image's configuration contract
+        run: .github/scripts/check-contract-image.sh image:test contract-out
+
       - name: Test Docker image runs
         env:
           PLATFORM: ${{ matrix.platform }}

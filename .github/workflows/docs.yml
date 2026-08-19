@@ -1,18 +1,25 @@
 name: Docs
 
-# `README.md` is generated from `.github/templates/README.md.hbs`. This workflow is what makes
-# that claim true in both directions.
+# Three artefacts in this repository are generated from `src/config.rs` and then committed, and
+# this workflow is what makes that claim true in both directions:
 #
-# On a pull request it renders the template and commits the result to the branch, so the
-# configuration reference — every key of `Config`, its environment spelling, its default and its
-# `///` comment — is never edited by hand. The case that matters is a pull request that adds a
-# configuration key: it arrives with the documentation for that key already written, because the
-# table is read off the type in the same commit that changes it.
+#   README.md                   rendered from `.github/templates/README.md.hbs`
+#   docs/config.contract.json   the contract the image publishes and a chart validates against
+#   Dockerfile                  the LABEL block that makes that contract discoverable
 #
-# Everywhere it cannot commit — a push to `master`, a pull request from a fork — it renders in
-# `check` mode instead, writing nothing and failing if the committed `README.md` is stale.
-# Without that half, editing `README.md` directly would appear to work right up until the next
+# On a pull request it regenerates all three and commits the result to the branch, so none of
+# them is ever edited by hand. The case that matters is a pull request that adds or renames a
+# configuration key: it arrives with the documentation and the contract for that key already
+# written, because both are read off the type in the same commit that changes it.
+#
+# Everywhere it cannot commit — a push to `master`, a pull request from a fork — it runs the same
+# generators in `check` mode instead, writing nothing and failing if what is committed is stale.
+# Without that half, editing one of them directly would appear to work right up until the next
 # pull request silently reverted it.
+#
+# The contract has a second, stronger gate that lives elsewhere: `build.yaml` checks the labels
+# the *built image* carries, which is the only check that can see a base image overriding a label
+# or a build argument that failed to interpolate. This one is cheaper and one step earlier.
 
 on:
   pull_request:
@@ -75,6 +82,28 @@ jobs:
       - name: Install stable toolchain
         uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1.17.0
 
+      # The other two artefacts generated from `src/config.rs`: the contract the image publishes,
+      # and the LABEL block in the Dockerfile that makes it discoverable. Regenerated and
+      # committed for the same reason the README is — a pull request that renames a key or
+      # changes the loader's prefix arrives with the document for it already written, in the
+      # commit that caused it.
+      #
+      # Committed before the README below rather than with it: the two have different sources and
+      # different commit messages, and `commit-changes` reads the branch head from the API each
+      # time, so the second lands cleanly on top of the first.
+      - name: Regenerate the configuration contract
+        run: .github/scripts/check-contract-drift.sh --write
+
+      - name: Commit the configuration contract
+        id: contract
+        uses: TimSchoenle/actions/actions/common/commit-changes@0a6ad3014d13b1baa2e6ab1966603fe88ed5887b # tag=actions-common-commit-changes-v1.3.1
+        with:
+          # Named rather than left to default to `.`, so nothing else a step left dirty in the
+          # workspace can ride along in a commit that claims to be about the contract.
+          file_pattern: docs/config.contract.json Dockerfile
+          commit_message: 'docs: regenerate the configuration contract'
+          token: ${{ steps.generate_token.outputs.token }}
+
       - name: Collect README variables
         id: variables
         run: |
@@ -95,11 +124,18 @@ jobs:
         env:
           COMMITTED: ${{ steps.readme.outputs.changes_detected }}
           COMMIT_URL: ${{ steps.readme.outputs.commit_url }}
+          CONTRACT_COMMITTED: ${{ steps.contract.outputs.changes_detected }}
+          CONTRACT_COMMIT_URL: ${{ steps.contract.outputs.commit_url }}
         run: |
           if [ "${COMMITTED}" = "true" ]; then
             echo "README.md re-rendered: ${COMMIT_URL}" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "README.md already matched its template." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "${CONTRACT_COMMITTED}" = "true" ]; then
+            echo "Configuration contract regenerated: ${CONTRACT_COMMIT_URL}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "The configuration contract already matched the types." >> "$GITHUB_STEP_SUMMARY"
           fi
 
   check:
@@ -140,3 +176,10 @@ jobs:
           output: README.md
           variables: ${{ steps.variables.outputs.json }}
           check: true
+
+      # The same half for the contract and the Dockerfile's LABEL block: writes nothing, and
+      # fails with the diff when either has drifted from the configuration types. Without it,
+      # editing the committed contract by hand would appear to work right up until the next pull
+      # request silently reverted it — and a stale LABEL block is a contract nothing can find.
+      - name: Verify the configuration contract is current
+        run: .github/scripts/check-contract-drift.sh

@@ -16,12 +16,17 @@ use secrecy::{ExposeSecret, SecretString};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::str::FromStr;
-use terrace_config::schema::{Describe, Schema};
+use terrace_config::schema::{App, Contract, Describe, External, ExternalVar, Schema};
 use tracing::Level;
 
 use crate::error::Error;
 
 pub use loader::{ConfigError, Loaded, Sources, explain, load, load_watched, terrace};
+
+/// The service's name, as its image is named.
+const APP_NAME: &str = "s3-bucket-perma-link";
+/// Where the source this was built from lives.
+const SOURCE: &str = "https://github.com/TimSchoenle/s3-bucket-perma-link";
 
 const DEFAULT_SERVER_HOST: &str = "0.0.0.0";
 const DEFAULT_SERVER_PORT: u16 = 8080;
@@ -169,6 +174,99 @@ pub fn schema() -> Result<Schema, ConfigError> {
         .with_defaults_from(&Config::default())
 }
 
+/// The image's name and where its source lives — everything about this service that no build
+/// argument decides.
+///
+/// The two fields that *do* differ between builds of one source tree — the release and the
+/// commit — are deliberately not set here. `examples/config-schema.rs` takes them as flags, so
+/// this function reads nothing that a documentation job and a container build could disagree
+/// about.
+#[must_use]
+pub fn app() -> App {
+    App::new(APP_NAME).source(SOURCE)
+}
+
+/// The whole contract this image publishes: every configuration key, and everything else it
+/// reads.
+///
+/// [`schema`] covers the `S3_PERMA_LINK_` namespace, which a derive can see. [`external`] covers
+/// the rest — the variables a dependency reads straight out of the environment before any of
+/// this crate's layers exist, and the names a Kubernetes pod carries that belong to nobody here.
+/// Without that half the document would claim this image reads nothing outside its own prefix,
+/// and a validator believing it would reject a pod for carrying `KUBERNETES_SERVICE_HOST`.
+///
+/// `app` carries what this particular build is; [`app`] is the part of it that is a constant.
+///
+/// # Errors
+/// Returns [`ConfigError`] if [`Config`] does not serialise, or if the declared external surface
+/// is not one a validator could act on — a variable colliding with a configuration key's own
+/// environment spelling, for instance.
+pub fn contract(app: App) -> Result<Contract, ConfigError> {
+    schema()?.into_contract(app).external(external()).build()
+}
+
+/// The environment this image reads that the loader does not own.
+///
+/// Every entry below is something a dependency reads directly, or something the platform injects.
+/// `Unknown::Reject` stays on — the default — so a variable that is neither a configuration key
+/// nor named here is a defect rather than a shrug, and the list is what makes that claim
+/// survivable.
+///
+/// `sentry` is the only dependency that reads the environment behind our back: `sentry::init`
+/// applies its own defaults for anything [`main`](../main/index.html) left unset, and the DSN and
+/// the release are the two it does not reach for, because both are passed explicitly.
+///
+/// Ignored rather than declared are the names with no owner in this image at all — what the
+/// kubelet injects into every container. Nothing here reads them, and an image cannot describe
+/// what it does not read.
+fn external() -> External {
+    External::new()
+        .var(
+            ExternalVar::new("SENTRY_ENVIRONMENT")
+                .owner("sentry")
+                .ty("String")
+                .default("production")
+                .docs("Environment tag on reported events. Read by `sentry::init`, not by this loader."),
+        )
+        .var(
+            ExternalVar::new("HTTP_PROXY")
+                .owner("sentry")
+                .ty("String")
+                .docs("Proxy for Sentry's transport. Read by `sentry::init`; `http_proxy` is also accepted."),
+        )
+        .var(
+            ExternalVar::new("HTTPS_PROXY")
+                .owner("sentry")
+                .ty("String")
+                .docs("As `HTTP_PROXY`, for TLS. Falls back to `HTTP_PROXY`; `https_proxy` is also accepted."),
+        )
+        .var(
+            ExternalVar::new("SSL_VERIFY")
+                .owner("sentry")
+                .ty("bool")
+                .default("true")
+                .docs("Whether Sentry's transport validates certificates. `false` accepts invalid ones."),
+        )
+        // The lowercase spellings the same reader falls back to. Declared rather than ignored:
+        // an ignored name is one a chart can misspell freely, and these have an owner.
+        .var(
+            ExternalVar::new("http_proxy")
+                .owner("sentry")
+                .ty("String")
+                .docs("Lowercase spelling of `HTTP_PROXY`, read when the uppercase one is unset."),
+        )
+        .var(
+            ExternalVar::new("https_proxy")
+                .owner("sentry")
+                .ty("String")
+                .docs("Lowercase spelling of `HTTPS_PROXY`, read when the uppercase one is unset."),
+        )
+        // No owner in this image: the kubelet writes them into every container and nothing here
+        // reads them. `HOSTNAME` is the pod name; `KUBERNETES_*` is the API server's address.
+        .ignore("KUBERNETES_*")
+        .ignore("HOSTNAME")
+}
+
 impl ServerConfig {
     fn default_host() -> String {
         DEFAULT_SERVER_HOST.to_string()
@@ -241,5 +339,49 @@ impl S3Config {
         }
 
         Ok(buckets)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{app, contract};
+    use std::collections::BTreeMap;
+    use terrace_config::schema::{DEFAULT_PATH, LABEL_PATH, LABEL_PREFIX, LABEL_VERSION};
+
+    /// The contract assembles at all.
+    ///
+    /// Not a formality: `ContractBuilder::build` is what refuses an external surface a validator
+    /// could not act on — a variable carrying the loader's own prefix, one declared twice, one
+    /// colliding with a key's environment spelling. The container build runs the same code, so
+    /// without this the first report of a bad declaration would be a failed image build.
+    #[test]
+    fn the_contract_assembles() {
+        contract(app()).expect("the declared external surface is one a validator can act on");
+    }
+
+    /// The labels the Dockerfile carries name *this* loader.
+    ///
+    /// The block in the Dockerfile is hand-written, because a `LABEL` key cannot be interpolated.
+    /// `.github/scripts/check-contract-drift.sh` diffs it against the generator and the build
+    /// checks the image against it; this pins the third side of that triangle — that the values
+    /// the generator emits are the loader's own prefix and the path the image copies the document
+    /// to, rather than whatever a refactor left behind.
+    #[test]
+    fn the_labels_describe_this_loader() {
+        let contract = contract(app()).expect("the contract assembles");
+        let labels: BTreeMap<String, String> = contract
+            .labels(DEFAULT_PATH)
+            .into_iter()
+            .map(|(name, value)| ((*name).to_owned(), value))
+            .collect();
+
+        assert_eq!(labels[LABEL_VERSION], "1");
+        assert_eq!(labels[LABEL_PATH], "/config/contract.json");
+        assert_eq!(labels[LABEL_PREFIX], "S3_PERMA_LINK_");
+
+        // The same check the build runs against the image, over the labels the build would paste.
+        contract
+            .verify_labels(DEFAULT_PATH, &labels)
+            .expect("the generated labels satisfy the generated contract");
     }
 }
