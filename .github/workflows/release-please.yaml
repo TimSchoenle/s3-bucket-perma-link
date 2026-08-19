@@ -362,12 +362,27 @@ jobs:
           ARTIFACT_TYPE: ${{ env.CONTRACT_ARTIFACT_TYPE }}
         run: |
           set -euo pipefail
+          # Polled rather than read once. Docker Hub's referrers index is eventually consistent:
+          # the attach above returns as soon as the referrer manifest is stored, but
+          # `/v2/.../referrers/<digest>` keeps answering with an empty index for seconds
+          # afterwards, which fails this step over a contract that is in fact attached.
+          #
           # `oras discover` has spelled its top-level key differently across releases; both are
           # accepted rather than pinning the shape to the version that happens to be installed.
-          referrers="$(oras discover --format json --artifact-type "${ARTIFACT_TYPE}" "${IMAGE}@${DIGEST}")"
-          count="$(jq '[.referrers // .manifests // []] | flatten | length' <<< "${referrers}")"
+          referrers=""
+          count=0
+          for attempt in 1 2 3 4 5 6; do
+            if [ "${attempt}" -gt 1 ]; then
+              sleep $(( (attempt - 1) * 5 ))
+            fi
+            referrers="$(oras discover --format json --artifact-type "${ARTIFACT_TYPE}" "${IMAGE}@${DIGEST}")"
+            count="$(jq '[.referrers // .manifests // []] | flatten | length' <<< "${referrers}")"
+            if [ "${count}" != "0" ]; then
+              break
+            fi
+          done
           if [ "${count}" != "1" ]; then
-            echo "::error::expected exactly one ${ARTIFACT_TYPE} referrer on ${IMAGE}@${DIGEST}, found ${count}"
+            echo "::error::expected exactly one ${ARTIFACT_TYPE} referrer on ${IMAGE}@${DIGEST} within 75s of attaching it, found ${count}"
             exit 1
           fi
           reference="$(jq -r '[.referrers // .manifests // []] | flatten | .[0].reference // empty' <<< "${referrers}")"
