@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.0](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v1.0.1...v1.1.0) (2026-08-19)
+
+
+### Features
+
+* **config:** publish a configuration contract with the image ([#416](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/416)) ([ec5f353](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ec5f3530de1259a20b620730f0038baf325a01c6))
+* **config:** update terrace-config to 0.5.0 and generate the README from the types ([#414](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/414)) ([f0ad2a8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f0ad2a812499c4bcc7f3cf392fcd1922f8a69b84))
+
+
+### Miscellaneous
+
+* **deps:** pin rust crate serde_json to =1.0.151 ([#415](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/415)) ([7bb6eeb](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7bb6eeb6ebbce9f8880bc398a821066839078dfe))
+* **deps:** update step-security/harden-runner action to v2.21.0 ([#413](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/413)) ([bb11999](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/bb119990e31a0d49aaab1aac35e78da33545bf09))
+* **deps:** update timschoenle/actions/actions/common/commit-changes to vactions-common-commit-changes-v1.3.2 ([#417](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/417)) ([fd5016a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/fd5016aedcd002ab09aead393f9377c7122d6bd4))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.38 ([#411](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/411)) ([1adb4b0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1adb4b055f62d97daf9e7f7379f09fb4860d4bd0))
+
 ## [1.0.1](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v1.0.0...v1.0.1) (2026-08-17)
 
 
