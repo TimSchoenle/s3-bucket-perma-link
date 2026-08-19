@@ -132,14 +132,17 @@ jobs:
       # value here would produce a different document and the comparison below would fail for a
       # reason that is not a defect.
       - name: Export the generated configuration contract
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          TAG_NAME: ${{ needs.release-please.outputs.tag_name }}
         run: |
           docker buildx build \
             --target contract \
-            --platform "${{ matrix.platform }}" \
-            --build-arg version=${{ needs.release-please.outputs.tag_name }} \
-            --build-arg release=${{ needs.release-please.outputs.tag_name }} \
+            --platform "${PLATFORM}" \
+            --build-arg "version=${TAG_NAME}" \
+            --build-arg "release=${TAG_NAME}" \
             --build-arg vendor=Timmi6790 \
-            --build-arg VERSION=${{ needs.release-please.outputs.tag_name }} \
+            --build-arg "VERSION=${TAG_NAME}" \
             --output "type=local,dest=contract-out" \
             .
           cat contract-out/contract.labels

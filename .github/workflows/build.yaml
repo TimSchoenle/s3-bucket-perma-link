@@ -170,10 +170,12 @@ jobs:
       # which is also what makes the exported document *the* document the image carries. The
       # build arguments have to match that build exactly, or the two would legitimately differ.
       - name: Export the generated configuration contract
+        env:
+          PLATFORM: ${{ matrix.platform }}
         run: |
           docker buildx build \
             --target contract \
-            --platform "${{ matrix.platform }}" \
+            --platform "${PLATFORM}" \
             --build-arg version=test \
             --build-arg release=test \
             --build-arg vendor=Timmi6790 \
