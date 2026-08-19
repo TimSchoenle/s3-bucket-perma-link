@@ -10,7 +10,7 @@
 //! cargo run --example config-schema -- --format markdown    # the README tables
 //! cargo run --example config-schema -- --format json        # the machine-readable schema
 //! cargo run --example config-schema -- --format json-schema # for an editor to validate against
-//! cargo run --example config-schema -- --format contract    > contract.json
+//! cargo run --example config-schema -- --format contract    > docs/config.contract.json
 //! cargo run --example config-schema -- --format labels      > contract.labels
 //! cargo run --example config-schema -- --format dockerfile  # paste into the Dockerfile
 //! ```
@@ -18,16 +18,28 @@
 //! `--format markdown` is the one the README is built from — `examples/readme-variables.rs`
 //! embeds the same tables into the template. Run it here to read them on their own.
 //!
+//! # What is left here
+//!
+//! The `--format` vocabulary, the argument parsing, the dispatch across the six renderings, the
+//! printing and the exit code are [`Cli`](terrace_config::schema::cli::Cli). They were the same
+//! two hundred lines in every repository that had a generator, which is how three of them ended
+//! up disagreeing about how to cut a `LABEL` block back out of a Dockerfile.
+//!
+//! What is genuinely this service's own is below, and all of it comes from `src/config.rs`, beside
+//! the code that reads the values: the schema, the app identity, the JSON Schema's `$id`, and the
+//! external surface no derive can find. A documentation job and a container build therefore cannot
+//! describe different loaders.
+//!
 //! # The build outputs
 //!
 //! `contract`, `labels` and `dockerfile` describe the *image* rather than a page about it, and
 //! the three are one set: the document is copied into the image and attached to its digest, the
 //! labels are what let a chart find it without pulling a layer, and the `LABEL` block is those
-//! labels in the form a Dockerfile can carry. Generate the first two from one run of this
-//! program in one build — that is the only thing that makes it impossible for them to disagree —
-//! and check the built image against the second, because a hand-pasted `LABEL` block with
-//! nothing checking it is exactly the failure the labels exist to rule out.
-//! `.github/scripts/check-contract-labels.sh` is that check.
+//! labels in the form a Dockerfile can carry. Generate them from one run of this program in one
+//! build — that is the only thing that makes it impossible for them to disagree — and check the
+//! built image against the labels, because a hand-pasted `LABEL` block with nothing checking it is
+//! exactly the failure the labels exist to rule out. The `rust/config-contract` action is that
+//! check, and the Dockerfile drift gate beside it.
 //!
 //! Nothing below reads the environment, so the output is the same on a developer's machine as on
 //! a runner where none of the variables it describes exist. `--version`, `--revision` and
@@ -38,153 +50,29 @@
 use std::process::ExitCode;
 
 use s3_bucket_perma_link::config;
-use terrace_config::schema::{Contract, DEFAULT_PATH, JsonSchema};
+use terrace_config::schema::JsonSchema;
+use terrace_config::schema::cli::Cli;
 
 /// The `$id` the generated JSON Schema carries.
 const SCHEMA_ID: &str = "https://github.com/TimSchoenle/s3-bucket-perma-link/config.schema.json";
 
 fn main() -> ExitCode {
-    let options = match Options::from_args() {
-        Ok(options) => options,
-        Err(message) => {
-            eprintln!("{message}");
+    let schema = match config::schema() {
+        Ok(schema) => schema,
+        Err(error) => {
+            eprintln!("{error}");
             return ExitCode::FAILURE;
         }
     };
 
-    match render(&options) {
-        Ok(rendered) => {
-            print!("{rendered}");
-            ExitCode::SUCCESS
-        }
-        Err(error) => {
-            eprintln!("{error}");
-            ExitCode::FAILURE
-        }
-    }
-}
-
-fn render(options: &Options) -> Result<String, config::ConfigError> {
-    match options.format {
-        Format::Markdown => Ok(config::schema()?.to_markdown()),
-        Format::Json => config::schema()?.to_json(),
-        Format::JsonSchema => config::schema()?.to_json_schema_with(
-            &JsonSchema::new()
+    Cli::new(config::app())
+        .json_schema(
+            JsonSchema::new()
                 .title("s3-bucket-perma-link configuration")
                 .id(SCHEMA_ID),
-        ),
-        // A trailing newline on each of the three, because every one of them is redirected into
-        // a file that another tool reads line by line or byte for byte.
-        Format::Contract => Ok(format!("{}\n", contract(options)?.to_json()?)),
-        Format::Labels => Ok(contract(options)?
-            .labels(DEFAULT_PATH)
-            .into_iter()
-            .map(|(name, value)| format!("{name}={value}\n"))
-            .collect()),
-        Format::Dockerfile => Ok(contract(options)?.to_dockerfile_labels(DEFAULT_PATH)),
-    }
+        )
+        // Declared in `src/config.rs` rather than here, so that `config::contract` — which the
+        // unit tests build — and this generator cannot describe different external surfaces.
+        .contract_with(&|builder| builder.external(config::external()))
+        .main(schema)
 }
-
-/// The contract this build publishes.
-///
-/// The configuration surface and the external variables come from `src/config.rs`, beside the
-/// code that reads them. Only what makes this a *build* rather than a source tree is assembled
-/// here.
-fn contract(options: &Options) -> Result<Contract, config::ConfigError> {
-    let mut app = config::app();
-    if let Some(version) = &options.version {
-        app = app.version(version);
-    }
-    if let Some(revision) = &options.revision {
-        app = app.revision(revision);
-    }
-    if let Some(created) = &options.created {
-        app = app.created(created);
-    }
-    config::contract(app)
-}
-
-/// What to emit, and what this build is.
-struct Options {
-    format: Format,
-    /// The release this build is of, spelled as the image tag spells it — `v1.0.1`, not `1.0.1`.
-    version: Option<String>,
-    /// The commit this build is of.
-    revision: Option<String>,
-    /// When this build happened, RFC 3339.
-    created: Option<String>,
-}
-
-/// Which rendering to emit.
-#[derive(Clone, Copy)]
-enum Format {
-    /// GitHub-flavoured tables, for a pipeline whose next step is a README.
-    Markdown,
-    /// The versioned schema, for a pipeline that renders its own tables.
-    Json,
-    /// A JSON Schema, for an editor to validate a `config.toml` against.
-    JsonSchema,
-    /// The document a build embeds in its image and attaches to its digest.
-    Contract,
-    /// The image labels that make that document discoverable, one `NAME=value` per line.
-    Labels,
-    /// The same labels as the `LABEL` instruction to paste into a Dockerfile.
-    Dockerfile,
-}
-
-impl Options {
-    /// JSON unless asked otherwise: it is the rendering that loses nothing.
-    fn from_args() -> Result<Self, String> {
-        let mut options = Self {
-            format: Format::Json,
-            version: None,
-            revision: None,
-            created: None,
-        };
-        let mut args = std::env::args().skip(1);
-        while let Some(flag) = args.next() {
-            match flag.as_str() {
-                "--format" => {
-                    options.format = match args.next().as_deref() {
-                        Some("markdown" | "md") => Format::Markdown,
-                        Some("json") => Format::Json,
-                        Some("json-schema" | "jsonschema") => Format::JsonSchema,
-                        Some("contract") => Format::Contract,
-                        Some("labels") => Format::Labels,
-                        Some("dockerfile") => Format::Dockerfile,
-                        Some(other) => return Err(format!("unknown format `{other}`; {USAGE}")),
-                        None => return Err(format!("--format takes a value; {USAGE}")),
-                    };
-                }
-                "--version" => options.version = Some(value(&mut args, "--version", "a release")?),
-                "--revision" => {
-                    options.revision = Some(value(&mut args, "--revision", "a commit")?);
-                }
-                "--created" => {
-                    options.created = Some(value(&mut args, "--created", "a timestamp")?);
-                }
-                other => return Err(format!("unknown argument `{other}`; {USAGE}")),
-            }
-        }
-        Ok(options)
-    }
-}
-
-/// The argument after `flag`, or a message naming what was expected.
-///
-/// An empty value is refused rather than recorded: a build passing `--version "$VERSION"` with
-/// nothing in `VERSION` means the argument failed to interpolate, and a contract claiming the
-/// empty release is worse than a build that stops.
-fn value(
-    args: &mut impl Iterator<Item = String>,
-    flag: &str,
-    expected: &str,
-) -> Result<String, String> {
-    args.next()
-        .filter(|value| !value.is_empty())
-        .ok_or_else(|| format!("{flag} takes {expected}; {USAGE}"))
-}
-
-const USAGE: &str = "usage: config-schema \
-                     [--format markdown|json|json-schema|contract|labels|dockerfile] \
-                     [--version <release>] [--revision <commit>] [--created <rfc3339>]";

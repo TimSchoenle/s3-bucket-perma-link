@@ -155,13 +155,29 @@ jobs:
       #
       # The floating tags do not exist yet — they are created from these digests in
       # `docker-release` — so a failure here costs a retry rather than a release.
-      - name: Verify the pushed image's configuration contract
+      - name: Install stable toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1.17.0
+        with:
+          # This job publishes an image, and a restored cache is writable by any branch:
+          # caching here would let a poisoned entry reach a runtime artefact. The only
+          # thing compiled is the contract generator, so there is almost nothing to save.
+          cache: false
+
+      - name: Pull the pushed image
         env:
           IMAGE: ${{ env.DOCKER_REPO }}
           DIGEST: ${{ steps.build.outputs.digest }}
-        run: |
-          docker pull --quiet "${IMAGE}@${DIGEST}"
-          .github/scripts/check-contract-image.sh "${IMAGE}@${DIGEST}" contract-out
+        run: docker pull --quiet "${IMAGE}@${DIGEST}"
+
+      # The labels are constants for this service, so they do not depend on the `version` this
+      # build was given: the action renders them from the types and compares them with what the
+      # pushed manifest's config blob carries. The document inside the image does name this
+      # build, which is why the action checks that it is there and a contract rather than
+      # diffing it against a fresh, versionless render.
+      - name: Verify the pushed image's configuration contract
+        uses: TimSchoenle/actions/actions/rust/config-contract@99c83581b3486a8a9f28e43226b8f02025fcdf9a # tag=actions-rust-config-contract-v1.1.0
+        with:
+          image: ${{ env.DOCKER_REPO }}@${{ steps.build.outputs.digest }}
 
       - name: Export digest
         env:

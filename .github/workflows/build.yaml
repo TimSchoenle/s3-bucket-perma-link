@@ -192,8 +192,23 @@ jobs:
       # or a build argument that failed to interpolate. Blocking, on every platform in the
       # matrix — labels live in each manifest's own config blob, so one architecture can carry
       # them while another does not.
+      #
+      # The toolchain is here rather than at the top of the job because only this step needs it:
+      # the action renders the labels from `src/config.rs` itself rather than trusting a file
+      # the build wrote, which is what lets it also check the Dockerfile region and the
+      # committed document in the same pass.
+      - name: Install stable toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1.17.0
+        with:
+          # This job publishes an image, and a restored cache is writable by any branch:
+          # caching here would let a poisoned entry reach a runtime artefact. The only
+          # thing compiled is the contract generator, so there is almost nothing to save.
+          cache: false
+
       - name: Verify the image's configuration contract
-        run: .github/scripts/check-contract-image.sh image:test contract-out
+        uses: TimSchoenle/actions/actions/rust/config-contract@99c83581b3486a8a9f28e43226b8f02025fcdf9a # tag=actions-rust-config-contract-v1.1.0
+        with:
+          image: image:test
 
       - name: Test Docker image runs
         env:

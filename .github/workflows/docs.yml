@@ -91,8 +91,13 @@ jobs:
       # Committed before the README below rather than with it: the two have different sources and
       # different commit messages, and `commit-changes` reads the branch head from the API each
       # time, so the second lands cleanly on top of the first.
+      - name: Install just
+        uses: taiki-e/install-action@288e746965032cfcc232e09af2daf5f23c14d780 # v2.86.1
+        with:
+          tool: just
+
       - name: Regenerate the configuration contract
-        run: .github/scripts/check-contract-drift.sh --write
+        run: just regenerate
 
       - name: Commit the configuration contract
         id: contract
@@ -177,9 +182,15 @@ jobs:
           variables: ${{ steps.variables.outputs.json }}
           check: true
 
-      # The same half for the contract and the Dockerfile's LABEL block: writes nothing, and
+      # The same half for the contract and the Dockerfile's LABEL region: writes nothing, and
       # fails with the diff when either has drifted from the configuration types. Without it,
       # editing the committed contract by hand would appear to work right up until the next pull
-      # request silently reverted it — and a stale LABEL block is a contract nothing can find.
+      # request silently reverted it — and a stale LABEL region is a contract nothing can find.
+      #
+      # `image` is empty, so the two checks that need one are skipped and this job stays the
+      # cheap half: it reports a renamed key in the pull request that renamed it, without
+      # waiting for a build.
       - name: Verify the configuration contract is current
-        run: .github/scripts/check-contract-drift.sh
+        uses: TimSchoenle/actions/actions/rust/config-contract@99c83581b3486a8a9f28e43226b8f02025fcdf9a # tag=actions-rust-config-contract-v1.1.0
+        with:
+          image: ''
