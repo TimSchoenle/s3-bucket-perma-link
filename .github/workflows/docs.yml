@@ -91,8 +91,13 @@ jobs:
       # Committed before the README below rather than with it: the two have different sources and
       # different commit messages, and `commit-changes` reads the branch head from the API each
       # time, so the second lands cleanly on top of the first.
+      - name: Install just
+        uses: taiki-e/install-action@288e746965032cfcc232e09af2daf5f23c14d780 # v2.86.1
+        with:
+          tool: just
+
       - name: Regenerate the configuration contract
-        run: .github/scripts/regenerate-contract.sh
+        run: just regenerate
 
       - name: Commit the configuration contract
         id: contract
