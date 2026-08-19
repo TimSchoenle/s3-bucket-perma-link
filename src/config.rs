@@ -219,7 +219,7 @@ pub fn contract(app: App) -> Result<Contract, ConfigError> {
 /// Ignored rather than declared are the names with no owner in this image at all — what the
 /// kubelet injects into every container. Nothing here reads them, and an image cannot describe
 /// what it does not read.
-fn external() -> External {
+pub fn external() -> External {
     External::new()
         .var(
             ExternalVar::new("SENTRY_ENVIRONMENT")
