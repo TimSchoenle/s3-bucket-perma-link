@@ -333,9 +333,15 @@ jobs:
       # Attached verbatim: the bytes the generator wrote inside the build, checked against the
       # copy inside the image, with nothing added afterwards. The chart repository reads both
       # carriers and refuses the image if they differ.
+      #
+      # The reference is spelled out with its registry. `oras` does not apply Docker's implicit
+      # `docker.io` default: it reads the first segment of a bare `user/repo` as a registry
+      # hostname and tries to resolve it in DNS. Everything else in this job — buildx, cosign —
+      # defaults the registry itself, which is why these two steps are the only place it is
+      # written.
       - name: Attach the configuration contract to the image digest
         env:
-          IMAGE: ${{ env.DOCKER_REPO }}
+          IMAGE: docker.io/${{ env.DOCKER_REPO }}
           DIGEST: ${{ steps.manifest.outputs.digest }}
           CONTRACT: ${{ steps.contract.outputs.path }}
           ARTIFACT_TYPE: ${{ env.CONTRACT_ARTIFACT_TYPE }}
@@ -351,7 +357,7 @@ jobs:
       # already signed by the step above; this signs the attachment.
       - name: Sign the attached contract with GitHub OIDC Token
         env:
-          IMAGE: ${{ env.DOCKER_REPO }}
+          IMAGE: docker.io/${{ env.DOCKER_REPO }}
           DIGEST: ${{ steps.manifest.outputs.digest }}
           ARTIFACT_TYPE: ${{ env.CONTRACT_ARTIFACT_TYPE }}
         run: |
