@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v1.1.0...v1.1.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* **ci:** qualify the contract's image reference with docker.io ([#418](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/418)) ([146e9eb](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/146e9ebbf845740feb7912dfed7747ac9964a92f))
+* **ci:** qualify the contract's image reference with docker.io ([#420](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/420)) ([eaeb8fe](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/eaeb8fe4317e18612eb1a1c0a1f410154c6b5856))
+
 ## [1.1.0](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v1.0.1...v1.1.0) (2026-08-19)
 
 
