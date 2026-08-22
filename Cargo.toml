@@ -26,7 +26,7 @@ tracing-actix-web = "0.7.12"
 # `#[derive(Deserialize, Serialize)]`, so the crate that names it is the crate that needs it.
 serde = { version = "1.0.209", features = ["derive"] }
 rust-s3 = { version = "0.37.1", default-features = false, features = ["tokio-rustls-tls"] }
-sentry = { version = "0.48.0", default-features = false, features = ["anyhow", "debug-images", "backtrace", "contexts", "panic", "rustls"] }
+sentry = { version = "0.49.0", default-features = false, features = ["anyhow", "debug-images", "backtrace", "contexts", "panic", "rustls"] }
 secrecy = { version = "0.10.3", features = ["serde"] }
 # The layered configuration loader: struct defaults, TOML, environment, mounted secrets, and
 # the supervisor that rebuilds the service when a mounted secret is rotated. Pinned by tag
