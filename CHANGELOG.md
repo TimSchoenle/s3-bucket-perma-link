@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.2.0](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v1.1.1...v1.2.0) (2026-08-22)
+
+
+### Features
+
+* **config:** take terrace-config v0.7.0 and the shared contract check ([#421](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/421)) ([b4624a5](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b4624a59d67c3cd5e9a30191fc7375ebaf286fb2))
+
+
+### Bug Fixes
+
+* **deps:** update rust crate terrace-config to v0.9.0 ([#427](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/427)) ([ad5eace](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ad5eace4515d990359476dca3f8915907ae06bee))
+
+
+### Miscellaneous
+
+* **deps:** update docker/setup-buildx-action digest to 37fe631 ([#426](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/426)) ([2ed8831](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2ed88312c874589e7e012a9030a569ede6872cb5))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.21 ([#423](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/423)) ([6219997](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/62199979fd696c5355a799fa2313df190ed3e93c))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.32 ([#424](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/424)) ([ac25db5](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ac25db5df6097c0f2103bebe81a3257e67fe16f6))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.39 ([#425](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/425)) ([98f2342](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/98f23420b7cf1246360d2a8bd02d2a8ac2e299f7))
+
 ## [1.1.1](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v1.1.0...v1.1.1) (2026-08-19)
 
 
