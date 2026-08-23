@@ -2,6 +2,14 @@
 name = "s3_bucket_perma_link"
 version = "1.1.1"
 edition = "2024"
+# `readme-variables` reads these two on its way to the README template: the page's one-line
+# description and the licence it names come from here rather than from the GitHub API, so a
+# description edited in the web UI cannot change a rendered file with no commit behind it.
+#
+# There is still no `rust-version`, so the payload carries no `toolchain.msrv` and the README
+# claims no minimum. A number here is a supported floor somebody has to test against.
+description = "Serves S3 objects under fixed request paths, so a published link survives the object behind it changing."
+license = "GPL-3.0-only"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
