@@ -105,10 +105,46 @@ jobs:
       - name: Run Clippy
         uses: TimSchoenle/actions/actions/rust/clippy@dcfb46a6a17ad8565db74057ce60278953056ad5 # tag=actions-rust-clippy-v1.1.9
 
+  # The rustdoc lints in [workspace.lints.rustdoc] only run under `rustdoc`, never under
+  # `cargo check` or `cargo clippy`, so a broken intra-doc link is invisible to every other job
+  # here. `RUSTDOCFLAGS` is where the deny lands, because rustdoc reads it and `cargo doc` has no
+  # flag for it.
+  doc:
+    name: Doc
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # Required to checkout the code
+    env:
+      RUSTDOCFLAGS: '-D warnings'
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install stable toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1.17.0
+
+      - name: Render the documentation
+        run: cargo doc --all-features --no-deps
+
+      # The `test` job is `cargo nextest`, which runs no doctest at all. This step is the only
+      # place in CI the example on `DownloadData::get_entry` is compiled and asserted.
+      - name: Run the doctests
+        run: cargo test --doc --all-features
+
   docker-build-test:
     name: Docker Build and Test (${{ matrix.platform }})
     runs-on: ${{ matrix.runner }}
-    needs: check
+    # `doc` as well as `check`: this job publishes the image and its configuration contract, and
+    # the contract is generated from the same doc comments the documentation job renders. An
+    # image whose contract came out of a crate that will not document is not one to build.
+    needs: [check, doc]
     strategy:
       fail-fast: false
       matrix:

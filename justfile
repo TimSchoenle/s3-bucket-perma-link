@@ -84,9 +84,9 @@ dockerfile-labels:
     mv "$rewritten" "{{ dockerfile }}"
     echo "wrote the LABEL region in {{ dockerfile }}"
 
-[doc('Format, lint and test — what a pull request is going to run anyway')]
+[doc('Format, lint, test and render the docs — what a pull request is going to run anyway')]
 [group('check')]
-verify: fmt lint test
+verify: fmt lint test doc
 
 [group('check')]
 fmt:
@@ -99,3 +99,12 @@ lint:
 [group('check')]
 test:
     cargo test --all-features
+
+# The rustdoc lints never run under `cargo check` or `cargo clippy`, and `RUSTDOCFLAGS` is the
+# only place the deny can go. `--no-deps` because a warning in a dependency is not actionable
+# here. The doctests are not repeated: `test` above is `cargo test`, which runs them already. CI
+# needs its own step for them because its test job is `cargo nextest`, which runs no doctest.
+[doc('Render the documentation with the rustdoc lints denied')]
+[group('check')]
+doc:
+    RUSTDOCFLAGS='-D warnings' cargo doc --all-features --no-deps

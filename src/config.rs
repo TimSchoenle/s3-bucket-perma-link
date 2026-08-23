@@ -3,7 +3,7 @@
 //! The layering is [`terrace_config`]'s. Lowest precedence first: struct defaults, TOML at
 //! `$S3_PERMA_LINK_CONFIG` (`config.toml` in the working directory when unset),
 //! `S3_PERMA_LINK_`-prefixed `__`-nested environment variables, `$S3_PERMA_LINK_SECRETS_DIR`,
-//! and `S3_PERMA_LINK_<KEY>_FILE` indirection. See [`loader`] for the details.
+//! and `S3_PERMA_LINK_<KEY>_FILE` indirection. [`terrace`] is where those names are spelled.
 //!
 //! Call [`load_watched`] rather than [`load`] when the process should be able to pick the
 //! configuration up again after a mounted file changes.
@@ -48,15 +48,23 @@ const DEFAULT_LOG_LEVEL: &str = "info";
 /// paths, the environment spellings, the types and the `///` comments below are read off this
 /// tree by `examples/config-schema.rs` rather than restated in prose that can drift from it.
 #[derive(Debug, Deserialize, Serialize, Getters, Describe)]
+// Not rustdoc: where these `///` lines are rendered is above, for whoever reads the reference.
+// This is for whoever adds a field. `Getters` copies the `///` onto the getter it generates, so
+// leaving one off fails `missing_docs` on a span pointing at the derive, never at the field.
 #[getset(get = "pub")]
 pub struct Config {
+    /// Where the service listens. Omit the block for `0.0.0.0:8080`.
     #[config(nested)]
     #[serde(default)]
     server: ServerConfig,
+    /// The object store and the credentials for it. The boot fails without this block.
     #[config(nested)]
     s3: S3Config,
+    /// The permanent links this instance serves. The boot fails without this block, though an
+    /// empty `entries` table loads and then answers 404 to everything but `/health`.
     #[config(nested)]
     bucket: BucketConfig,
+    /// Logging and error reporting. Omit the block for `info` and no Sentry.
     #[config(nested)]
     #[serde(default)]
     telemetry: TelemetryConfig,
@@ -239,6 +247,7 @@ pub fn contract(app: App) -> Result<Contract, ConfigError> {
 /// Ignored rather than declared are the names with no owner in this image at all — what the
 /// kubelet injects into every container. Nothing here reads them, and an image cannot describe
 /// what it does not read.
+#[must_use]
 pub fn external() -> External {
     let external = External::new();
 
@@ -327,6 +336,15 @@ impl Default for TelemetryConfig {
 }
 
 impl S3Config {
+    /// One S3 client per request path in `entries`, sharing these credentials and this endpoint.
+    ///
+    /// Path-style addressing, so the bucket name goes in the URL path and `host` is spelled as
+    /// the endpoint rather than as a per-bucket name. Nothing here reaches the network, so a
+    /// credential the store will reject still builds and first fails on a download.
+    ///
+    /// # Errors
+    /// Returns [`Error::Custom`] if the credentials are malformed, or if a bucket named in
+    /// `entries` cannot be addressed under `region` and `host`.
     pub fn create_buckets(
         &self,
         entries: &HashMap<String, BucketEntry>,

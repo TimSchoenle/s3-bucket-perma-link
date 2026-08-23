@@ -1,5 +1,8 @@
 use actix_web::{HttpResponse, web};
 
+/// Registers `/health`, which answers 200 with an empty body.
+///
+/// Reaches nothing downstream, so a 200 means the listener is bound and says nothing about S3.
 pub fn get_config(cfg: &mut web::ServiceConfig) {
     cfg.service(web::resource("/health").route(web::get().to(HttpResponse::Ok)));
 }
