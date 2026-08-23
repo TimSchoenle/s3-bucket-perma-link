@@ -117,7 +117,8 @@ jobs:
         id: config
         run: |
           set -euo pipefail
-          echo "json=$(cargo run --quiet --example readme-variables)" >> "$GITHUB_OUTPUT"
+          json="$(cargo run --quiet --example readme-variables)"
+          echo "json=${json}" >> "$GITHUB_OUTPUT"
 
       # The other half, read off the files in the checkout: the repository coordinates, the
       # release from Cargo.toml, and the table of documents walked out of docs/.
@@ -192,7 +193,8 @@ jobs:
         id: config
         run: |
           set -euo pipefail
-          echo "json=$(cargo run --quiet --example readme-variables)" >> "$GITHUB_OUTPUT"
+          json="$(cargo run --quiet --example readme-variables)"
+          echo "json=${json}" >> "$GITHUB_OUTPUT"
 
       - name: Collect the README payload
         id: variables
