@@ -109,11 +109,29 @@ jobs:
           commit_message: 'docs: regenerate the configuration contract'
           token: ${{ steps.generate_token.outputs.token }}
 
-      - name: Collect README variables
-        id: variables
+      # The half of the payload only this crate can produce: the two configuration tables and the
+      # loader's own spellings. It deliberately emits no `repo`, `branch`, `release` or `docs` —
+      # `extra` is deep-merged over the derived payload, so a key spelled the same way there
+      # would replace what the action worked out.
+      - name: Generate the configuration payload
+        id: config
         run: |
-          json="$(cargo run --quiet --example readme-variables)"
-          echo "json=${json}" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          echo "json=$(cargo run --quiet --example readme-variables)" >> "$GITHUB_OUTPUT"
+
+      # The other half, read off the files in the checkout: the repository coordinates, the
+      # release from Cargo.toml, and the table of documents walked out of docs/.
+      #
+      # `branch` is the repository's default branch and not `github.ref_name`, which on a pull
+      # request is `<number>/merge`. Rendering that into the badge and permalink URLs would make
+      # this job and the `check` job below disagree by construction, and every merge would then
+      # fail the gate for a reason that is not in its diff.
+      - name: Collect the README payload
+        id: variables
+        uses: TimSchoenle/actions/actions/common/readme-variables@b5b5c9e047f00ffa00b7772536c8bdb4f158f706 # tag=actions-common-readme-variables-v1.1.0
+        with:
+          branch: ${{ github.event.repository.default_branch }}
+          extra: ${{ steps.config.outputs.json }}
 
       - name: Render and commit the README
         id: readme
@@ -121,7 +139,7 @@ jobs:
         with:
           template: .github/templates/README.md.hbs
           output: README.md
-          variables: ${{ steps.variables.outputs.json }}
+          variables: ${{ steps.variables.outputs.variables }}
           token: ${{ steps.generate_token.outputs.token }}
           commit_message: 'docs: render README from template'
 
@@ -167,11 +185,21 @@ jobs:
       - name: Install stable toolchain
         uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1.17.0
 
-      - name: Collect README variables
-        id: variables
+      # The same two steps as `render`, in the same order and with the same inputs. They have to
+      # be: this job's whole job is to reproduce that render and compare, so a difference between
+      # the two step lists here would be a gate that passes on a stale file.
+      - name: Generate the configuration payload
+        id: config
         run: |
-          json="$(cargo run --quiet --example readme-variables)"
-          echo "json=${json}" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          echo "json=$(cargo run --quiet --example readme-variables)" >> "$GITHUB_OUTPUT"
+
+      - name: Collect the README payload
+        id: variables
+        uses: TimSchoenle/actions/actions/common/readme-variables@b5b5c9e047f00ffa00b7772536c8bdb4f158f706 # tag=actions-common-readme-variables-v1.1.0
+        with:
+          branch: ${{ github.event.repository.default_branch }}
+          extra: ${{ steps.config.outputs.json }}
 
       # Writes nothing; fails with the first differing line when README.md is stale.
       - name: Verify README.md is current
@@ -179,7 +207,7 @@ jobs:
         with:
           template: .github/templates/README.md.hbs
           output: README.md
-          variables: ${{ steps.variables.outputs.json }}
+          variables: ${{ steps.variables.outputs.variables }}
           check: true
 
       # The same half for the contract and the Dockerfile's LABEL region: writes nothing, and

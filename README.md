@@ -1,52 +1,143 @@
 <!--
-Generated from .github/templates/README.md.hbs — edit that file, not this one. CI renders it on
-every pull request and commits the result back to the branch; a push to master whose README.md
-does not match its template fails the `readme` check in .github/workflows/docs.yml.
+Generated from .github/templates/README.md.hbs. Edit that file, not this one.
 
-Variables come from `cargo run --example readme-variables`, which reads them off the code they
-describe:
+CI renders it on every pull request and commits the result back to the branch. A push to master
+whose README.md does not match its template fails the `README` job in
+.github/workflows/docs.yml.
 
-    repo, branch, build_workflow, docker_image   the repository coordinates, defined once
-    prefix, config_var, secrets_dir_var,
-    indirection_suffix                           the loader's own dialect, from src/config/loader.rs
-    loader_table, keys_table                     generated from Config, via terrace-config's
-                                                 `schema` feature
+The payload is two halves. The repository coordinates, the release read off Cargo.toml and the
+table of documents come from TimSchoenle/actions/actions/common/readme-variables. The
+configuration tables and the loader's own spellings come from one command in this repository,
+merged in as that action's `extra` input:
+
+    cargo run --quiet --example readme-variables
 
 That is what keeps the configuration reference honest: a key added to `Config` without a `///`
 comment shows an empty Purpose cell in the pull request that adds it, and a key removed from it
 leaves this page on the same commit.
+
+Nothing in this comment may contain a mustache that is not a real reference.
 -->
-<br/>
-<p align="center">
-  <h3 align="center">S3 Bucket Permanent Permanent Link</h3>
 
-  <p align="center">
-    <a href="https://github.com/TimSchoenle/s3-bucket-perma-link/issues">Report Bug</a>
-    .
-    <a href="https://github.com/TimSchoenle/s3-bucket-perma-link/issues">Request Feature</a>
-  </p>
-</p>
+# s3-bucket-perma-link
 
-<div align="center">
+Serves S3 objects under fixed request paths, so a published link survives the object behind it changing.
 
-![Docker Image Version (latest semver)](https://img.shields.io/docker/v/timmi6790/s3-bucket-perma-link)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/TimSchoenle/s3-bucket-perma-link/build.yaml)
-![Issues](https://img.shields.io/github/issues/TimSchoenle/s3-bucket-perma-link)
-[![codecov](https://codecov.io/gh/TimSchoenle/s3-bucket-perma-link/branch/master/graph/badge.svg?token=dDUZjsYmh2)](https://codecov.io/gh/TimSchoenle/s3-bucket-perma-link)
-![License](https://img.shields.io/github/license/TimSchoenle/s3-bucket-perma-link)
-[![wakatime](https://wakatime.com/badge/github/TimSchoenle/s3-bucket-perma-link.svg)](https://wakatime.com/badge/github/TimSchoenle/s3-bucket-perma-link)
+[![Release](https://img.shields.io/github/v/release/TimSchoenle/s3-bucket-perma-link?sort=semver)](https://github.com/TimSchoenle/s3-bucket-perma-link/releases)
+[![Build](https://img.shields.io/github/actions/workflow/status/TimSchoenle/s3-bucket-perma-link/build.yaml?branch=master)](https://github.com/TimSchoenle/s3-bucket-perma-link/actions/workflows/build.yaml)
+[![Coverage](https://codecov.io/gh/TimSchoenle/s3-bucket-perma-link/branch/master/graph/badge.svg?token=dDUZjsYmh2)](https://codecov.io/gh/TimSchoenle/s3-bucket-perma-link)
+[![License](https://img.shields.io/github/license/TimSchoenle/s3-bucket-perma-link)](LICENSE)
 
-</div>
+## What this is
 
-## About The Project
+A read-only front for an S3 bucket. Each block under `bucket.entries` binds one request path to
+one bucket and one object key, and a `GET` on that path streams the object back through the
+service. A path with no block answers 404 before any S3 call is made, so the bucket is never
+listed and never browsable.
 
-A simple web server to allow pre-defined urls to always access specific S3 bucket resources.
+The configuration tables below are generated from the `Config` type the binary loads, as is the
+contract the image publishes at `/config/contract.json`. Documenting a field with a `///` comment
+documents its key here, in the commit that adds the field.
 
-### Installation - Helm chart
+## Quick start
 
-- [Helm chart](https://github.com/TimSchoenle/helm-charts/tree/main/charts/s3-bucket-perma-link)
+```bash
+docker run --rm -p 8080:8080 \
+  -v "$PWD/config.example.toml:/app/config.toml:ro" \
+  timmi6790/s3-bucket-perma-link:v1.1.1
+```
 
-### Configuration
+The example file boots the service. Its credentials are placeholders, so replace `s3.access_key`
+and `s3.secret_key` before `GET /docs/handbook` returns anything but a 500.
+
+## Table of contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Operations](#operations)
+- [Compatibility](#compatibility)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [Security](#security)
+- [License](#license)
+
+## Features
+
+- The router has two entries: `/health`, and a catch-all that resolves the request path against
+  `bucket.entries`. Health is registered first, so no permanent link can be spelled `/health`.
+- Objects are streamed from the bucket to the client rather than buffered, so the process holds a
+  chunk of the object and never the object.
+- **A rotated credential is re-read, not restarted around.** When a watched file changes, the
+  supervisor rebuilds the bucket clients and the listener in place. `telemetry.*` is the
+  exception: the log subscriber and the Sentry client are installed once per process.
+- Configuration arrives in five layers, and the last three are mutually exclusive per key. A key
+  supplied by both an environment variable and a mounted secret fails the boot instead of letting
+  one of them win.
+- **The image describes its own configuration.** `/config/contract.json` lists every key the
+  binary reads and the six variables its dependencies read outside the loader's prefix, and three
+  OCI labels point at it. The chart repository reads that copy and the one attached to the image
+  digest, and refuses the image when the two differ.
+
+## Installation
+
+### Docker
+
+```bash
+docker pull timmi6790/s3-bucket-perma-link:v1.1.1
+```
+
+Published as a multi-platform manifest for `linux/amd64` and `linux/arm64`. Every release is
+signed with cosign, and its configuration contract is attached to the manifest digest as a signed
+referrer.
+
+### Helm
+
+```bash
+helm repo add timschoenle https://timschoenle.github.io/helm-charts
+helm install s3-bucket-perma-link timschoenle/s3-bucket-perma-link
+```
+
+The chart pins the image by digest and is bumped by this repository's release. Its values are at
+[charts/s3-bucket-perma-link](https://github.com/TimSchoenle/helm-charts/tree/main/charts/s3-bucket-perma-link).
+
+### From source
+
+```bash
+git clone https://github.com/TimSchoenle/s3-bucket-perma-link.git
+cd s3-bucket-perma-link
+cargo build --release
+```
+
+`just` with no arguments lists the recipes. `just verify` runs the formatter, clippy and the
+tests in one go.
+
+## Usage
+
+The service binds nothing until it has a configuration. Copy the example, fill in the four
+required `s3.*` keys, and run it:
+
+```bash
+cp config.example.toml config.toml
+cargo run --release
+```
+
+Credentials do not belong in that file on a deployment. Point the loader at a directory of
+key-named files instead, which is what a Kubernetes `Secret` volume mounts:
+
+```bash
+S3_PERMA_LINK_SECRETS_DIR=/etc/s3-perma-link/secrets cargo run --release
+```
+
+Two recipes cover the generated files and the checks:
+
+```bash
+just regenerate   # docs/config.contract.json and the Dockerfile LABEL block
+just verify       # fmt, clippy, tests
+```
+
+## Configuration
 
 Configuration is layered, via [terrace-config](https://github.com/TimSchoenle/terrace-config).
 Lowest precedence first:
@@ -64,23 +155,23 @@ rather than being resolved by precedence, because a stale environment variable s
 outranking a rotated mounted secret is how a service keeps serving on a credential its operator
 believes they replaced.
 
-Mounted files are watched. When one changes, the service rebuilds its bucket clients and
-listener in place — a rotated S3 credential needs no restart. `telemetry.*` is the exception:
-the log subscriber and the Sentry client are installed once and still need one.
+Mounted files are watched. When one changes, the service rebuilds its bucket clients and listener
+in place, so a rotated S3 credential needs no restart. `telemetry.*` is the exception: the log
+subscriber and the Sentry client are installed once and still need one.
 
 Every generation logs which layer supplied each key, so an unexpected value can be traced to the
 file or variable it came from without attaching a debugger.
 
 See [config.example.toml](config.example.toml) for a complete file.
 
-#### The variables read before the configuration exists
+### The variables read before the configuration exists
 
 | Variable | Role | Default | Purpose |
 |---|---|---|---|
 | `S3_PERMA_LINK_CONFIG` | config | `config.toml` | Names the TOML layer: a file, or a directory whose `*.toml` files are all merged in name order. |
 | `S3_PERMA_LINK_SECRETS_DIR` | secrets dir | — | Names a directory of key-named files — a mounted Kubernetes `Secret` volume. Each file supplies the key its name spells. |
 
-#### The keys
+### The keys
 
 Every key below is spelled the same way in all four layers: `__` separates nesting levels and
 case is folded. `s3.secret_key` is `S3_PERMA_LINK_S3__SECRET_KEY` as an environment
@@ -108,28 +199,60 @@ bucket = "media"
 object = "handbook.pdf"
 ```
 
-The same through the environment, one variable per field — note that the environment layer
-lowercases keys, so a path with uppercase or `-` in it has to come from the TOML layer:
+The same through the environment, one variable per field. That layer lowercases keys, so a path
+carrying uppercase or `-` has to come from the TOML layer:
 
-```
+```bash
 S3_PERMA_LINK_BUCKET__ENTRIES__CHANGELOG__BUCKET=media
 S3_PERMA_LINK_BUCKET__ENTRIES__CHANGELOG__OBJECT=releases/CHANGELOG.md
 ```
 
+## Operations
+
+`GET /health` returns 200 once the listener is bound. It carries no body and reaches nothing
+downstream, so it reports that the process is up rather than that S3 is.
+
+`SIGTERM` and `SIGINT` both drain: in-flight downloads finish before the listener releases the
+address. Actix's own signal handling is off, because the reload supervisor owns the process
+lifecycle and a listener that stopped itself would be rebuilt rather than shut down.
+
+The runtime image is `FROM scratch` and holds the binary, CA certificates, time zone data and
+`/config/contract.json`. There is no shell, so `kubectl exec` has nothing to run. It runs as
+`1000:1000` and writes nothing outside stdout, so it needs no writable filesystem.
+
+## Compatibility
+
+| | Supported |
+| --- | --- |
+| Rust | edition 2024 |
+| Platforms | `linux/amd64`, `linux/arm64` |
+| Image | `timmi6790/s3-bucket-perma-link` |
+| Helm chart | `timschoenle/s3-bucket-perma-link` |
+
+## Documentation
+
+| Document | Summary |
+| --- | --- |
+| [`docs/config.contract.json`](docs/config.contract.json) | — |
+
+That table is walked out of `docs/` rather than maintained by hand, which is why a document with
+no prose in it lands there with nothing to summarise. That one is the configuration contract the
+image publishes and the chart validates against.
+
 ## Contributing
 
-`README.md` is generated. Edit [.github/templates/README.md.hbs](.github/templates/README.md.hbs)
-instead — CI renders it on every pull request and commits the result back to the branch, and a
-push to `master` whose `README.md` does not match its template fails.
+Issues and pull requests are welcome. Commits follow Conventional Commits, and release-please
+reads them to open the release pull request, so the type on a commit decides the next version.
 
-The configuration tables in it are generated from `Config` in
-[src/config.rs](src/config.rs), so a key is documented by documenting the field:
+`README.md`, `docs/config.contract.json` and the `LABEL` block in the `Dockerfile` are generated.
+Each says so in its first lines, and CI reverts an edit made to the output instead of the source.
+Run `just verify` before pushing; it is what the pull request is going to run anyway.
 
-```bash
-cargo run --example config-schema -- --format markdown
-```
+## Security
+
+Do not open a public issue for a vulnerability. [SECURITY.md](SECURITY.md) has the reporting
+route and which versions get fixes.
 
 ## License
 
-See [LICENSE](https://github.com/TimSchoenle/s3-bucket-perma-link/blob/master/LICENSE) for
-more information.
+`GPL-3.0-only`. [LICENSE](LICENSE) has the terms.

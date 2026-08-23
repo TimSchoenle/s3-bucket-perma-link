@@ -1,8 +1,14 @@
-//! Emit the variable payload for `.github/templates/README.md.hbs` as strict JSON on stdout.
+//! Emit the half of the README render payload that only this crate can produce, as strict JSON
+//! on stdout.
 //!
-//! `README.md` is rendered from that template by `.github/workflows/docs.yml`, so every value in
-//! it that is derived from something else in the repository is derived *here* rather than typed
-//! into the README and left to rot. Two kinds of value qualify:
+//! `README.md` is rendered from `.github/templates/README.md.hbs` by
+//! `.github/workflows/docs.yml`. Most of what that template interpolates is derived from files
+//! in the checkout by `TimSchoenle/actions/actions/common/readme-variables` — the repository
+//! coordinates, the release read off `Cargo.toml`, the documentation index. This program
+//! supplies the rest, and the workflow hands it over as that action's `extra` input, where it is
+//! deep-merged over the derived payload.
+//!
+//! Two kinds of value qualify:
 //!
 //! - **The configuration reference.** Both tables come off `Config` through `config::schema`,
 //!   which means a key added to that type without a `///` comment shows an empty Purpose cell in
@@ -12,10 +18,15 @@
 //!   `S3_PERMA_LINK_SECRETS_DIR` come from the loader itself, so prose naming a variable the
 //!   service does not read is not expressible.
 //!
-//! The repository coordinates below it are the third kind: a constant with exactly one
-//! definition, rather than the same string typed into nine badge URLs.
+//! Below them sit the two coordinates no file in this repository declares: the workflow behind
+//! the build badge, and the image this releases to.
 //!
-//! Run it yourself to see what CI will render with:
+//! Nothing here emits `repo`, `branch`, `release` or `docs`. The merge is a deep merge over the
+//! derived payload, so a key spelled the same way replaces what the action worked out. `repo`
+//! there is an object the template reads fields out of, and a slug emitted under that name would
+//! take every one of them with it.
+//!
+//! Run it yourself to see what CI will merge in:
 //!
 //! ```text
 //! cargo run --example readme-variables
@@ -29,12 +40,6 @@ use std::process::ExitCode;
 use s3_bucket_perma_link::config;
 use serde_json::json;
 use terrace_config::schema::Column;
-
-/// `owner/repo`, as every badge and link in the README spells it.
-const REPOSITORY: &str = "TimSchoenle/s3-bucket-perma-link";
-
-/// The branch the README's permalinks point at.
-const BRANCH: &str = "master";
 
 /// The workflow whose status the build badge shows. A file name, not a display name — the badge
 /// URL takes the path, and getting it wrong renders a badge that reads "no status".
@@ -56,7 +61,7 @@ fn main() -> ExitCode {
     }
 }
 
-/// The payload, as one line of strict JSON.
+/// The `extra` half of the payload, as one line of strict JSON.
 ///
 /// Fails if the schema cannot be built or the payload cannot be serialised. Neither is reachable
 /// while `cargo test` passes, and both are worth failing the documentation job over rather than
@@ -66,8 +71,6 @@ fn variables() -> Result<String, Box<dyn std::error::Error>> {
     let schema = config::schema()?;
 
     let payload = json!({
-        "repo": REPOSITORY,
-        "branch": BRANCH,
         "build_workflow": BUILD_WORKFLOW,
         "docker_image": DOCKER_IMAGE,
         "prefix": terrace.dialect().prefix(),
