@@ -1,6 +1,5 @@
 //! The crate's error type, and the text an operator sees when the process gives up.
 
-use actix_web::http::Method;
 use thiserror::Error;
 
 /// Every failure this crate reports, from a configuration that will not load to a bucket the
@@ -27,12 +26,6 @@ pub enum Error {
     /// The listener could not bind `server.host` and `server.port`, or failed while running.
     #[error("IO error")]
     IoError(#[from] std::io::Error),
-    /// A method the matched route does not serve.
-    ///
-    /// Nothing constructs it: actix answers a method a resource has no route for with 405,
-    /// before any handler in this crate runs.
-    #[error("Invalid route")]
-    InvalidRoute(String),
     /// The configuration was refused: a required key is missing, a value did not parse, a
     /// file-backed layer could not be read, or one key was supplied by two of the last three
     /// layers.
@@ -65,11 +58,5 @@ impl Error {
     #[must_use]
     pub fn custom(msg: impl Into<String>) -> Self {
         Self::Custom(msg.into())
-    }
-
-    /// An [`Error::InvalidRoute`] naming the HTTP method that was refused.
-    #[must_use]
-    pub fn invalid_route(route: &Method) -> Self {
-        Self::InvalidRoute(route.to_string())
     }
 }
