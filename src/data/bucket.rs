@@ -17,7 +17,7 @@ pub struct DownloadData {
 }
 
 impl DownloadData {
-    /// The entry bound to `key`, or `None` when no permanent link is configured under it.
+    /// Returns the entry bound to `key`, or `None` when no permanent link is configured under it.
     ///
     /// # Examples
     /// ```

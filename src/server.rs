@@ -16,7 +16,7 @@ pub struct Server {
 }
 
 impl Server {
-    /// Serve until `shutdown` is cancelled.
+    /// Serves until `shutdown` is cancelled.
     ///
     /// Returns only once the listener has released the address and in-flight requests have
     /// drained. The reload supervisor relies on that: it builds the replacement only after this

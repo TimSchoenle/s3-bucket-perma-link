@@ -55,8 +55,7 @@ async fn main() -> Result<()> {
     .await
 }
 
-/// Runs one generation of the service: the bucket clients, the routing table they are looked
-/// up through, and the listener that serves from it.
+/// Runs one generation of the service.
 ///
 /// Returns when `shutdown` is cancelled — by the OS signal, or by the supervisor because the
 /// configuration changed and this runtime is being replaced.

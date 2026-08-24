@@ -336,7 +336,8 @@ impl Default for TelemetryConfig {
 }
 
 impl S3Config {
-    /// One S3 client per request path in `entries`, sharing these credentials and this endpoint.
+    /// Builds one S3 client per request path in `entries`, sharing these credentials and this
+    /// endpoint.
     ///
     /// Path-style addressing, so the bucket name goes in the URL path and `host` is spelled as
     /// the endpoint rather than as a per-bucket name. Nothing here reaches the network, so a

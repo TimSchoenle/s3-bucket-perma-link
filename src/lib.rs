@@ -1,4 +1,4 @@
-//! A read-only front for an S3 bucket, under request paths an operator chooses.
+//! A read-only front for objects in an S3-compatible store, at request paths an operator picks.
 //!
 //! [`data::DownloadData`] is `bucket.entries` resolved into one client per request path, and a
 //! path with no entry is refused before any S3 call.
@@ -20,10 +20,10 @@
 //! # It is a library so that the documentation can be generated from it
 //!
 //! At run time the binary is the only consumer. `examples/config-schema.rs` and
-//! `examples/readme-variables.rs` link it for [`config::schema`] alone: the README's
-//! configuration tables, `docs/config.contract.json` and the `LABEL` block in the `Dockerfile`
-//! are all rendered from the types the service deserialises into, so none of them can describe a
-//! loader other than the one that boots.
+//! `examples/readme-variables.rs` link it for [`config::schema`], [`config::app`],
+//! [`config::external`] and [`config::terrace`], which is how the README's configuration tables,
+//! `docs/config.contract.json` and the `LABEL` block in the `Dockerfile` are rendered from the
+//! types the service deserialises into.
 
 #[macro_use]
 extern crate getset;
@@ -39,8 +39,5 @@ pub mod server;
 pub mod shutdown;
 pub mod telemetry;
 
-/// A result carrying [`Error`].
-///
-/// `anyhow::Result<T, E>` is `core::result::Result<T, E>` with the second parameter filled in, so
-/// a caller can match on the variants.
+/// A result whose error is always [`Error`], never an erased `anyhow::Error`.
 pub type Result<T> = anyhow::Result<T, Error>;
