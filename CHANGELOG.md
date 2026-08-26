@@ -1,5 +1,39 @@
 # Changelog
 
+## [2.0.0](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v1.1.1...v2.0.0) (2026-08-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* sentry 0.49 as an optional feature with tracing support ([#433](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/433))
+
+### Features
+
+* **config:** take terrace-config v0.7.0 and the shared contract check ([#421](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/421)) ([b4624a5](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b4624a59d67c3cd5e9a30191fc7375ebaf286fb2))
+* sentry 0.49 as an optional feature with tracing support ([#433](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/433)) ([131bc2a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/131bc2a7950884e286db04072eafb945a012bbec))
+
+
+### Bug Fixes
+
+* **deps:** update rust crate terrace-config to v0.9.0 ([#427](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/427)) ([ad5eace](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ad5eace4515d990359476dca3f8915907ae06bee))
+
+
+### Documentation
+
+* bring the doc comments onto the estate standard ([#429](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/429)) ([8c99008](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8c99008b7af0da71f82cf3d9868b4e031c5f25e2))
+* render the README from the shared payload action ([#428](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/428)) ([95105ae](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/95105ae3fdaec3b339b7ef13cccd820b0270facc))
+
+
+### Miscellaneous
+
+* **deps:** update docker/setup-buildx-action digest to 37fe631 ([#426](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/426)) ([2ed8831](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2ed88312c874589e7e012a9030a569ede6872cb5))
+* **deps:** update github/codeql-action action to v4.37.8 ([#430](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/430)) ([3f4aa27](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/3f4aa27759b49c510788d6df5940e35159c44595))
+* **deps:** update rust crate actix-web to v4.15.0 ([#432](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/432)) ([da14c06](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/da14c06a167174a1bb031480b692c99abbea5910))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.21 ([#423](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/423)) ([6219997](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/62199979fd696c5355a799fa2313df190ed3e93c))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.32 ([#424](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/424)) ([ac25db5](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ac25db5df6097c0f2103bebe81a3257e67fe16f6))
+* **deps:** update timschoenle/actions/actions/common/commit-changes to vactions-common-commit-changes-v1.3.3 ([#431](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/431)) ([10bf85b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/10bf85b66f03f130742f6e8ef0d96bed086dad3e))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.39 ([#425](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/425)) ([98f2342](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/98f23420b7cf1246360d2a8bd02d2a8ac2e299f7))
+
 ## [1.1.1](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v1.1.0...v1.1.1) (2026-08-19)
 
 
