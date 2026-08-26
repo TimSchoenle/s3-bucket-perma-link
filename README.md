@@ -205,30 +205,30 @@ variable, `S3_PERMA_LINK_S3__SECRET_KEY_FILE` as file indirection, and
 
 | TOML | Type | Environment | Default | Flags | Purpose |
 |---|---|---|---|---|---|
-| `server.host` | `String` | `S3_PERMA_LINK_SERVER__HOST` | `0.0.0.0` | â€” | Address to listen on. `0.0.0.0` in a container, which is the deployment this ships as. |
-| `server.port` | `u16` | `S3_PERMA_LINK_SERVER__PORT` | `8080` | â€” | Port to listen on. |
-| `s3.access_key` | `SecretString` | `S3_PERMA_LINK_S3__ACCESS_KEY` | â€” | required, secret | S3 access key. Mount it rather than setting it in a file that is committed. |
-| `s3.secret_key` | `SecretString` | `S3_PERMA_LINK_S3__SECRET_KEY` | â€” | required, secret | S3 secret key. Mount it rather than setting it in a file that is committed. |
-| `s3.host` | `String` | `S3_PERMA_LINK_S3__HOST` | â€” | required | The endpoint, e.g. `s3.eu-central-1.amazonaws.com`. |
-| `s3.region` | `String` | `S3_PERMA_LINK_S3__REGION` | â€” | required | The region the endpoint serves, e.g. `eu-central-1`. |
-| `bucket.entries` | `HashMap<String, BucketEntry>` | `S3_PERMA_LINK_BUCKET__ENTRIES` | â€” | required | One `[bucket.entries.<request path>]` block per permanent link, each carrying a `bucket` and an `object`. |
-| `telemetry.log_level` | `String` | `S3_PERMA_LINK_TELEMETRY__LOG_LEVEL` | `info` | â€” | How much the service says: `trace`, `debug`, `info`, `warn` or `error`. |
-| `telemetry.sentry.enabled` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__ENABLED` | `false` | â€” | Initialise the Sentry client. `false` installs no client, no panic hook, no subscriber layer and no HTTP middleware, so every other key in this block is inert. |
+| `server.host` | `String` | `S3_PERMA_LINK_SERVER__HOST` | `0.0.0.0` | — | Address to listen on. `0.0.0.0` in a container, which is the deployment this ships as. |
+| `server.port` | `u16` | `S3_PERMA_LINK_SERVER__PORT` | `8080` | — | Port to listen on. |
+| `s3.access_key` | `SecretString` | `S3_PERMA_LINK_S3__ACCESS_KEY` | — | required, secret | S3 access key. Mount it rather than setting it in a file that is committed. |
+| `s3.secret_key` | `SecretString` | `S3_PERMA_LINK_S3__SECRET_KEY` | — | required, secret | S3 secret key. Mount it rather than setting it in a file that is committed. |
+| `s3.host` | `String` | `S3_PERMA_LINK_S3__HOST` | — | required | The endpoint, e.g. `s3.eu-central-1.amazonaws.com`. |
+| `s3.region` | `String` | `S3_PERMA_LINK_S3__REGION` | — | required | The region the endpoint serves, e.g. `eu-central-1`. |
+| `bucket.entries` | `HashMap<String, BucketEntry>` | `S3_PERMA_LINK_BUCKET__ENTRIES` | — | required | One `[bucket.entries.<request path>]` block per permanent link, each carrying a `bucket` and an `object`. |
+| `telemetry.log_level` | `String` | `S3_PERMA_LINK_TELEMETRY__LOG_LEVEL` | `info` | — | How much the service says: `trace`, `debug`, `info`, `warn` or `error`. |
+| `telemetry.sentry.enabled` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__ENABLED` | `false` | — | Initialise the Sentry client. `false` installs no client, no panic hook, no subscriber layer and no HTTP middleware, so every other key in this block is inert. |
 | `telemetry.sentry.dsn` | `SecretString` | `S3_PERMA_LINK_TELEMETRY__SENTRY__DSN` | unset | secret | Ingest URL, `https://<key>@<host>/<project>`. |
-| `telemetry.sentry.environment` | `String` | `S3_PERMA_LINK_TELEMETRY__SENTRY__ENVIRONMENT` | unset | â€” | Environment tag on every event, e.g. `production` or `staging`. |
-| `telemetry.sentry.release` | `String` | `S3_PERMA_LINK_TELEMETRY__SENTRY__RELEASE` | unset | â€” | Release tag on every event. |
-| `telemetry.sentry.server_name` | `String` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SERVER_NAME` | unset | â€” | Host tag on every event. Unset reports none: the identity of one replica is infrastructure detail, and in a container it is a pod name that is gone by the time anybody reads the issue. |
-| `telemetry.sentry.sample_rate` | `f32` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SAMPLE_RATE` | `1` | â€” | Fraction of captured events actually sent, `0.0`â€“`1.0`. |
-| `telemetry.sentry.traces_sample_rate` | `f32` | `S3_PERMA_LINK_TELEMETRY__SENTRY__TRACES_SAMPLE_RATE` | `0` | â€” | Fraction of traces this service **starts** that are recorded, `0.0`â€“`1.0`. |
-| `telemetry.sentry.capture_level` | `SentryLevel` | `S3_PERMA_LINK_TELEMETRY__SENTRY__CAPTURE_LEVEL` | `error` | â€” | Least severe `tracing` level reported as a Sentry **issue**. |
-| `telemetry.sentry.breadcrumb_level` | `SentryLevel` | `S3_PERMA_LINK_TELEMETRY__SENTRY__BREADCRUMB_LEVEL` | `info` | â€” | Least severe `tracing` level kept as a **breadcrumb** â€” the trail attached to the next issue. Records at or above `capture_level` become issues instead. |
-| `telemetry.sentry.max_breadcrumbs` | `usize` | `S3_PERMA_LINK_TELEMETRY__SENTRY__MAX_BREADCRUMBS` | `100` | â€” | How many breadcrumbs one event carries. |
-| `telemetry.sentry.attach_stacktrace` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__ATTACH_STACKTRACE` | `true` | â€” | Attach a stack trace to events that carry none of their own. |
-| `telemetry.sentry.send_default_pii` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SEND_DEFAULT_PII` | `false` | â€” | Send personally identifying data with every event: the client IP, the full request header set, and the request body where one was buffered. |
-| `telemetry.sentry.http_transactions` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__HTTP_TRANSACTIONS` | `true` | â€” | Record one Sentry transaction per request, named by the matched route. |
-| `telemetry.sentry.span_attributes` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SPAN_ATTRIBUTES` | `false` | â€” | Copy `tracing` span fields onto the Sentry span as attributes. |
-| `telemetry.sentry.shutdown_timeout_secs` | `u64` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SHUTDOWN_TIMEOUT_SECS` | `2` | â€” | How long process exit waits for queued events to drain, in seconds. |
-| `telemetry.sentry.debug` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__DEBUG` | `false` | â€” | Print the SDK's own diagnostics to stderr. For proving a DSN works, not for running. |
+| `telemetry.sentry.environment` | `String` | `S3_PERMA_LINK_TELEMETRY__SENTRY__ENVIRONMENT` | unset | — | Environment tag on every event, e.g. `production` or `staging`. |
+| `telemetry.sentry.release` | `String` | `S3_PERMA_LINK_TELEMETRY__SENTRY__RELEASE` | unset | — | Release tag on every event. |
+| `telemetry.sentry.server_name` | `String` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SERVER_NAME` | unset | — | Host tag on every event. Unset reports none: the identity of one replica is infrastructure detail, and in a container it is a pod name that is gone by the time anybody reads the issue. |
+| `telemetry.sentry.sample_rate` | `f32` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SAMPLE_RATE` | `1` | — | Fraction of captured events actually sent, `0.0`–`1.0`. |
+| `telemetry.sentry.traces_sample_rate` | `f32` | `S3_PERMA_LINK_TELEMETRY__SENTRY__TRACES_SAMPLE_RATE` | `0` | — | Fraction of traces this service **starts** that are recorded, `0.0`–`1.0`. |
+| `telemetry.sentry.capture_level` | `SentryLevel` | `S3_PERMA_LINK_TELEMETRY__SENTRY__CAPTURE_LEVEL` | `error` | — | Least severe `tracing` level reported as a Sentry **issue**. |
+| `telemetry.sentry.breadcrumb_level` | `SentryLevel` | `S3_PERMA_LINK_TELEMETRY__SENTRY__BREADCRUMB_LEVEL` | `info` | — | Least severe `tracing` level kept as a **breadcrumb** — the trail attached to the next issue. Records at or above `capture_level` become issues instead. |
+| `telemetry.sentry.max_breadcrumbs` | `usize` | `S3_PERMA_LINK_TELEMETRY__SENTRY__MAX_BREADCRUMBS` | `100` | — | How many breadcrumbs one event carries. |
+| `telemetry.sentry.attach_stacktrace` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__ATTACH_STACKTRACE` | `true` | — | Attach a stack trace to events that carry none of their own. |
+| `telemetry.sentry.send_default_pii` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SEND_DEFAULT_PII` | `false` | — | Send personally identifying data with every event: the client IP, the full request header set, and the request body where one was buffered. |
+| `telemetry.sentry.http_transactions` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__HTTP_TRANSACTIONS` | `true` | — | Record one Sentry transaction per request, named by the matched route. |
+| `telemetry.sentry.span_attributes` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SPAN_ATTRIBUTES` | `false` | — | Copy `tracing` span fields onto the Sentry span as attributes. |
+| `telemetry.sentry.shutdown_timeout_secs` | `u64` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SHUTDOWN_TIMEOUT_SECS` | `2` | — | How long process exit waits for queued events to drain, in seconds. |
+| `telemetry.sentry.debug` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__DEBUG` | `false` | — | Print the SDK's own diagnostics to stderr. For proving a DSN works, not for running. |
 
 `bucket.entries` is one row above rather than one per link, because the key paths under it are
 route names no type knows ahead of time. Each is a table keyed by request path:
