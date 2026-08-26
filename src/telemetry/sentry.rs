@@ -4,8 +4,8 @@
 //! nowhere is worse than no client, because it is discovered during the incident it was
 //! installed for. The combination is refused at boot rather than logged and stepped over.
 //!
-//! All three sinks share the one client [`init`] installs:
-//! - **`tracing`** — [`tracing_layer`] turns the service's own records into issues and
+//! All three sinks share the one client `init` installs:
+//! - **`tracing`** — `tracing_layer` turns the service's own records into issues and
 //!   breadcrumbs under the thresholds in [`SentryConfig`], and its spans into Sentry spans.
 //! - **panics** — the SDK's own hook, added by `sentry::init`.
 //! - **HTTP** — [`middleware`], mounted by [`crate::server::Server`]: a hub per request, and
@@ -172,7 +172,7 @@ where
 
 /// The per-request middleware, inert when Sentry is off.
 ///
-/// Read off the process-global recorded by [`init`] rather than passed down from the
+/// Read off the process-global recorded by `init` rather than passed down from the
 /// configuration, because that is what it describes — one client per process, against a
 /// listener that is rebuilt on every reload.
 ///

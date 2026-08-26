@@ -33,7 +33,7 @@ use tracing_subscriber::{Layer, filter};
 #[must_use = "dropping the guard closes the Sentry client and stops reporting"]
 pub struct TelemetryGuard {
     #[cfg(feature = "sentry")]
-    _sentry: Option<::sentry::ClientInitGuard>,
+    sentry: Option<::sentry::ClientInitGuard>,
 }
 
 /// Hand-written because `ClientInitGuard` implements no [`Debug`] of its own, and because the
@@ -42,7 +42,7 @@ pub struct TelemetryGuard {
 impl std::fmt::Debug for TelemetryGuard {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         #[cfg(feature = "sentry")]
-        let sentry = self._sentry.is_some();
+        let sentry = self.sentry.is_some();
         #[cfg(not(feature = "sentry"))]
         let sentry = false;
 
@@ -55,9 +55,12 @@ impl std::fmt::Debug for TelemetryGuard {
 /// Install the global `tracing` subscriber, and the Sentry client when one is configured.
 ///
 /// # Errors
-/// Returns [`Error::Logger`] if `telemetry.log_level` does not name a level,
-/// [`Error::Tracing`] if a subscriber is already installed, or [`Error::Sentry`] if
-/// `telemetry.sentry` is switched on but unusable.
+/// Returns [`Error::Logger`] if `telemetry.log_level` does not name a level, or
+/// [`Error::Tracing`] if a subscriber is already installed.
+#[cfg_attr(
+    feature = "sentry",
+    doc = "Returns [`Error::Sentry`] if `telemetry.sentry` is switched on but unusable."
+)]
 pub fn init(telemetry: &TelemetryConfig) -> Result<TelemetryGuard> {
     let level = telemetry.level()?;
 
@@ -95,6 +98,6 @@ pub fn init(telemetry: &TelemetryConfig) -> Result<TelemetryGuard> {
 
     Ok(TelemetryGuard {
         #[cfg(feature = "sentry")]
-        _sentry: guard,
+        sentry: guard,
     })
 }

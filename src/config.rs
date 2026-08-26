@@ -160,8 +160,7 @@ pub struct TelemetryConfig {
     /// How much the service says: `trace`, `debug`, `info`, `warn` or `error`.
     ///
     /// The console sink only. What Sentry takes is `telemetry.sentry.capture_level` and
-    /// `telemetry.sentry.breadcrumb_level`, which are filtered independently — see
-    /// [`SentryConfig::breadcrumb_level`].
+    /// `telemetry.sentry.breadcrumb_level`, which are filtered independently.
     ///
     /// Parsed by [`Self::level`].
     #[serde(default = "TelemetryConfig::default_log_level")]
@@ -240,7 +239,7 @@ pub fn contract(app: App) -> Result<Contract, ConfigError> {
 /// `sentry` is the only dependency that reads the environment behind our back, and only in a
 /// build carrying the `sentry` feature. The list shrank when `telemetry.sentry` arrived:
 /// `sentry::init` fills an *unset* field from `SENTRY_DSN`, `SENTRY_RELEASE` or
-/// `SENTRY_ENVIRONMENT`, and [`crate::telemetry::sentry`] now sets all three from the loader,
+/// `SENTRY_ENVIRONMENT`, and `telemetry::sentry` now sets all three from the loader,
 /// so none of them is reachable. What is left is the proxy and TLS settings, which no
 /// configuration key covers.
 ///

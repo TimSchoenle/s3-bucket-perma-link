@@ -45,6 +45,10 @@ pub enum SentryLevel {
 /// When [`Self::enabled`] is set the service refuses to boot without a usable [`Self::dsn`],
 /// rather than installing a client that reports nowhere. A reporter that silently reports
 /// nothing is discovered during the incident it was installed for.
+#[expect(
+    clippy::struct_excessive_bools,
+    reason = "each bool is a configuration key an operator writes and the contract schema               reads by name; the enum the lint asks for would rename all six"
+)]
 #[derive(Debug, Deserialize, Serialize, Getters, Describe)]
 #[getset(get = "pub")]
 pub struct SentryConfig {
