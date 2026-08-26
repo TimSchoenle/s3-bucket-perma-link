@@ -1,3 +1,16 @@
+//! The process: load the configuration, install the two things that outlive a reload, then hand
+//! the rest to the supervisor.
+//!
+//! Everything a configuration change can rebuild sits behind `serve`, which the supervisor calls
+//! again with the new configuration and the token that stops the old one. The tracing subscriber,
+//! and the Sentry client a `sentry` build carries, are installed here instead, before the
+//! supervisor exists, because both are process-global and neither can be replaced on a running
+//! process.
+//!
+//! The exit path is the same for a failed boot and a failed reload: the error is returned from
+//! `main` and printed by the runtime. There is no fallback configuration, so a process that
+//! cannot read its own settings binds nothing.
+
 use s3_bucket_perma_link::config::Config;
 use s3_bucket_perma_link::data::DownloadData;
 use std::sync::Arc;
@@ -42,8 +55,7 @@ async fn main() -> Result<()> {
     .await
 }
 
-/// Build and run everything a configuration change rebuilds: the bucket clients, the routing
-/// table they are looked up through, and the listener.
+/// Runs one generation of the service.
 ///
 /// Returns when `shutdown` is cancelled — by the OS signal, or by the supervisor because the
 /// configuration changed and this runtime is being replaced.
@@ -53,11 +65,11 @@ async fn serve(config: Arc<Config>, shutdown: CancellationToken) -> Result<()> {
     let buckets = config.s3().create_buckets(config.bucket().entries())?;
     let download_data = DownloadData::new(buckets, config.bucket().entries().clone());
 
-    let server = Server::new(config.server().host().to_string(), *config.server().port());
+    let server = Server::new(config.server().host().clone(), *config.server().port());
     server.run_until_stopped(download_data, shutdown).await
 }
 
-/// Log which layer supplied each configuration key.
+/// Logs which layer supplied each configuration key.
 ///
 /// Here rather than at boot because this runs once per generation: after a reload the report
 /// describes the layers *that* load saw, which is the one moment the question "where did this

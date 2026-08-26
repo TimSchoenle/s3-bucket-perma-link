@@ -1,3 +1,5 @@
+//! The HTTP listener, and its handover to the reload supervisor.
+
 use crate::Result;
 use crate::data::DownloadData;
 use crate::routes::{download, health_check};
@@ -6,6 +8,7 @@ use derive_new::new;
 use tokio_util::sync::CancellationToken;
 use tracing_actix_web::TracingLogger;
 
+/// The address one generation of the service listens on.
 #[derive(new)]
 pub struct Server {
     host: String,
@@ -13,11 +16,15 @@ pub struct Server {
 }
 
 impl Server {
-    /// Serve until `shutdown` is cancelled.
+    /// Serves until `shutdown` is cancelled.
     ///
     /// Returns only once the listener has released the address and in-flight requests have
     /// drained. The reload supervisor relies on that: it builds the replacement only after this
     /// future returns, and a replacement that raced this one would fail to bind.
+    ///
+    /// # Errors
+    /// Returns [`Error::IoError`](crate::error::Error::IoError) if the address is already taken
+    /// or cannot be resolved, or if the listener fails while running.
     pub async fn run_until_stopped(
         &self,
         download_data: DownloadData,

@@ -1,12 +1,13 @@
 //! Turning the operator's stop signal into one token every task can observe.
 //!
-//! The listener no longer installs its own handler ([`Server::run_until_stopped`] disables
-//! actix's): the reload supervisor stops and rebuilds it, so the signal has to reach the
-//! supervisor rather than the listener it happens to be running.
+//! The listener no longer installs its own handler, because
+//! [`Server::run_until_stopped`](crate::server::Server::run_until_stopped) disables actix's: the
+//! reload supervisor stops and rebuilds it, so the signal has to reach the supervisor rather
+//! than the listener it happens to be running.
 
 use tokio_util::sync::CancellationToken;
 
-/// Spawn the signal handler and return the token it cancels.
+/// Spawns the signal handler and returns the token it cancels.
 ///
 /// `SIGTERM` as well as `SIGINT`: `SIGTERM` is what a container runtime sends, and a service
 /// that only watches `SIGINT` is killed rather than drained on every rollout.

@@ -202,7 +202,7 @@
         "env": "S3_PERMA_LINK_TELEMETRY__LOG_LEVEL",
         "env_file": "S3_PERMA_LINK_TELEMETRY__LOG_LEVEL_FILE",
         "secrets_file": "telemetry__log_level",
-        "docs": "How much the service says: `trace`, `debug`, `info`, `warn` or `error`.\n\nThe console sink only. What Sentry takes is `telemetry.sentry.capture_level` and\n`telemetry.sentry.breadcrumb_level`, which are filtered independently — see\n[`SentryConfig::breadcrumb_level`].\n\nParsed by [`Self::level`].",
+        "docs": "How much the service says: `trace`, `debug`, `info`, `warn` or `error`.\n\nThe console sink only. What Sentry takes is `telemetry.sentry.capture_level` and\n`telemetry.sentry.breadcrumb_level`, which are filtered independently.\n\nParsed by [`Self::level`].",
         "ty": "String",
         "values": [],
         "constraint": {
@@ -679,7 +679,7 @@
         "properties": {
           "log_level": {
             "default": "info",
-            "description": "How much the service says: `trace`, `debug`, `info`, `warn` or `error`.\n\nThe console sink only. What Sentry takes is `telemetry.sentry.capture_level` and\n`telemetry.sentry.breadcrumb_level`, which are filtered independently — see\n[`SentryConfig::breadcrumb_level`].\n\nParsed by [`Self::level`].",
+            "description": "How much the service says: `trace`, `debug`, `info`, `warn` or `error`.\n\nThe console sink only. What Sentry takes is `telemetry.sentry.capture_level` and\n`telemetry.sentry.breadcrumb_level`, which are filtered independently.\n\nParsed by [`Self::level`].",
             "type": "string"
           },
           "sentry": {

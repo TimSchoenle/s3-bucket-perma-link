@@ -37,7 +37,7 @@ pub fn terrace() -> Terrace {
     Terrace::new(PREFIX)
 }
 
-/// Load a typed config.
+/// Loads `T` through [`terrace`].
 ///
 /// # Errors
 /// Returns [`ConfigError`] if a required value is missing, a value fails to parse, a
@@ -47,7 +47,7 @@ pub fn load<T: DeserializeOwned>() -> Result<T, ConfigError> {
     terrace().load()
 }
 
-/// Load a typed config and everything a reload needs to load it again.
+/// Loads `T` together with the sources a reload watches to read it again.
 ///
 /// # Errors
 /// As [`load`].
@@ -87,7 +87,7 @@ mod tests {
         Harness::over(terrace())
     }
 
-    /// Set the four values every load needs, so a test can say only what it is about.
+    /// Sets the four values every load needs, so a test can say only what it is about.
     fn set_credentials(jail: &mut Jail<'_>) {
         jail.env_key("s3.access_key", "access");
         jail.env_key("s3.secret_key", "secret");
