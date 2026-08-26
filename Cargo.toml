@@ -19,6 +19,22 @@ path = "src/lib.rs"
 path = "src/main.rs"
 name = "s3_bucket_perma_link"
 
+[features]
+# Sentry is in the default set because the image this repository publishes reports to it: the
+# Dockerfile uploads this build's debug symbols to a Sentry project before stripping, and the
+# generated configuration contract, the README tables and `docs/config.contract.json` are all
+# rendered from a default-feature build. A default-off feature would make those four artefacts
+# describe a binary nobody ships.
+#
+# What the feature buys is a build that genuinely does not contain the SDK — `cargo build
+# --no-default-features` links no `sentry*` crate, no second HTTP client and no TLS stack for
+# it, and `telemetry.sentry.*` stops being a key the loader accepts at all. That last part is
+# deliberate: a key that parses and does nothing is the failure this feature would otherwise
+# introduce, so with the feature off `S3_PERMA_LINK_TELEMETRY__SENTRY__ENABLED` is refused at
+# boot as an unknown variable rather than silently ignored.
+default = ["sentry"]
+sentry = ["dep:sentry"]
+
 [dependencies]
 getset = "0.1.2"
 derive-new = "0.7.0"
@@ -34,7 +50,46 @@ tracing-actix-web = "0.7.12"
 # `#[derive(Deserialize, Serialize)]`, so the crate that names it is the crate that needs it.
 serde = { version = "1.0.209", features = ["derive"] }
 rust-s3 = { version = "0.37.1", default-features = false, features = ["tokio-rustls-tls"] }
-sentry = { version = "0.48.0", default-features = false, features = ["anyhow", "debug-images", "backtrace", "contexts", "panic", "rustls"] }
+# Error reporting and distributed tracing, behind the `sentry` feature above and inert at
+# runtime until an operator sets `telemetry.sentry.enabled`. One crate rather than three:
+# `sentry` re-exports `sentry-tracing` and `sentry-actix` under `sentry::integrations::*`, so
+# the three versions cannot drift.
+#
+# `default-features = false` is load-bearing. The default set pulls `transport`, which is
+# `reqwest + native-tls` — and `native-tls` links OpenSSL, which the runtime image does not
+# ship. It also pulls `logs`, `metrics` and `release-health`: three further Sentry products
+# this deployment does not use, each an egress channel with no key in the configuration
+# reference describing it.
+#
+# What is on, and why:
+#   actix         one hub and one transaction per request, named by the *matched route*
+#                 (`GET /docs/{name}`) rather than by the URI, which is what stops every
+#                 permanent link becoming its own transaction name.
+#   backtrace     stack traces on events, plus the `in_app` frame classification.
+#   contexts      the OS/runtime tag block. Kept from the previous declaration.
+#   debug-images  the module list that symbolicates those traces against the debug files the
+#                 Dockerfile uploads. Without it that upload buys nothing.
+#   panic         the hook that turns a panic into an issue.
+#   reqwest       the transport itself, and the correction that motivated this bump: the
+#                 previous declaration named `rustls` with no transport feature beside it, and
+#                 `rustls` alone is only a TLS backend *for* one. The client therefore had no
+#                 way to send and every captured event was dropped on the floor.
+#   rustls        so that transport reuses the TLS stack `rust-s3` already builds rather than
+#                 introducing OpenSSL.
+#   tracing       the subscriber layer in `src/telemetry/sentry.rs` — the sink that turns the
+#                 service's own `tracing` records into issues, breadcrumbs and spans.
+#
+# `anyhow` was declared before this and used by nothing; it is dropped rather than carried.
+sentry = { version = "0.49.1", default-features = false, optional = true, features = [
+    "actix",
+    "backtrace",
+    "contexts",
+    "debug-images",
+    "panic",
+    "reqwest",
+    "rustls",
+    "tracing",
+] }
 secrecy = { version = "0.10.3", features = ["serde"] }
 # The layered configuration loader: struct defaults, TOML, environment, mounted secrets, and
 # the supervisor that rebuilds the service when a mounted secret is rotated. Pinned by tag

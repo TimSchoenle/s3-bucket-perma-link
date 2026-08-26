@@ -27,11 +27,20 @@ impl Server {
 
         let download_data = web::Data::new(download_data);
         let server = HttpServer::new(move || {
-            App::new()
+            let app = App::new()
                 .wrap(TracingLogger::default())
                 .app_data(download_data.clone())
                 .configure(health_check::get_config)
-                .configure(download::get_config)
+                .configure(download::get_config);
+
+            // Outermost, because `wrap` mounts the last one listed on the outside: the Sentry
+            // hub has to be bound before `TracingLogger` opens its span, or the span — and
+            // every record inside the request — reports onto the main hub instead of this
+            // request's. Inert unless `telemetry.sentry.enabled` is set.
+            #[cfg(feature = "sentry")]
+            let app = app.wrap(crate::telemetry::sentry::middleware());
+
+            app
         })
         // The process lifecycle belongs to `shutdown`: actix's own handler would stop this
         // listener without telling the supervisor, which would then rebuild it and leave a

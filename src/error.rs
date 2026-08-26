@@ -5,6 +5,14 @@ use thiserror::Error;
 pub enum Error {
     #[error("Tracing error")]
     Logger(#[from] tracing::metadata::ParseLevelError),
+    // Both telemetry variants carry their message for the same reason the config ones do: they
+    // are raised at boot, before anything is serving, and the text names the key an operator
+    // has to change. Neither ever carries the DSN itself — see `telemetry::sentry::init`.
+    #[error("Tracing error: {0}")]
+    Tracing(String),
+    #[cfg(feature = "sentry")]
+    #[error("Sentry error: {0}")]
+    Sentry(String),
     #[error("IO error")]
     IoError(#[from] std::io::Error),
     #[error("Invalid route")]

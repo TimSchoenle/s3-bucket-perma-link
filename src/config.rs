@@ -9,6 +9,8 @@
 //! configuration up again after a mounted file changes.
 
 mod loader;
+#[cfg(feature = "sentry")]
+mod sentry;
 
 use s3::creds::Credentials;
 use s3::{Bucket, Region};
@@ -16,15 +18,23 @@ use secrecy::{ExposeSecret, SecretString};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::str::FromStr;
-use terrace_config::schema::{App, Contract, Describe, External, ExternalVar, Schema};
+#[cfg(feature = "sentry")]
+use terrace_config::schema::ExternalVar;
+use terrace_config::schema::{App, Contract, Describe, External, Schema};
 use tracing::Level;
 
 use crate::error::Error;
 
 pub use loader::{ConfigError, Loaded, Sources, explain, load, load_watched, terrace};
+#[cfg(feature = "sentry")]
+pub use sentry::{SentryConfig, SentryLevel};
 
 /// The service's name, as its image is named.
-const APP_NAME: &str = "s3-bucket-perma-link";
+///
+/// Visible to the crate rather than to this module alone because it is also the release tag
+/// Sentry events carry ([`crate::telemetry::sentry`]): a build reporting under a name the image
+/// is not called is a build whose issues nobody can map back to a deploy.
+pub(crate) const APP_NAME: &str = "s3-bucket-perma-link";
 /// Where the source this was built from lives.
 const SOURCE: &str = "https://github.com/TimSchoenle/s3-bucket-perma-link";
 
@@ -141,16 +151,23 @@ pub struct BucketEntry {
 pub struct TelemetryConfig {
     /// How much the service says: `trace`, `debug`, `info`, `warn` or `error`.
     ///
+    /// The console sink only. What Sentry takes is `telemetry.sentry.capture_level` and
+    /// `telemetry.sentry.breadcrumb_level`, which are filtered independently — see
+    /// [`SentryConfig::breadcrumb_level`].
+    ///
     /// Parsed by [`Self::level`].
     #[serde(default = "TelemetryConfig::default_log_level")]
     log_level: String,
-    /// Sentry DSN. Absent disables Sentry entirely.
+    /// Sentry error reporting and distributed tracing. Off unless
+    /// `telemetry.sentry.enabled` is set.
     ///
-    /// A [`SecretString`]: a DSN is a write credential for the project it names — and, like the
-    /// S3 credentials, one serde must not be able to write back out.
-    #[config(secret)]
-    #[serde(default, skip_serializing)]
-    sentry_dsn: Option<SecretString>,
+    /// Present only in a build carrying the `sentry` feature, which is in the default set. A
+    /// build without it does not accept these keys at all, rather than accepting them and
+    /// reporting nowhere.
+    #[cfg(feature = "sentry")]
+    #[config(nested)]
+    #[serde(default)]
+    sentry: SentryConfig,
 }
 
 /// The configuration surface, described rather than deserialised.
@@ -212,22 +229,21 @@ pub fn contract(app: App) -> Result<Contract, ConfigError> {
 /// nor named here is a defect rather than a shrug, and the list is what makes that claim
 /// survivable.
 ///
-/// `sentry` is the only dependency that reads the environment behind our back: `sentry::init`
-/// applies its own defaults for anything [`main`](../main/index.html) left unset, and the DSN and
-/// the release are the two it does not reach for, because both are passed explicitly.
+/// `sentry` is the only dependency that reads the environment behind our back, and only in a
+/// build carrying the `sentry` feature. The list shrank when `telemetry.sentry` arrived:
+/// `sentry::init` fills an *unset* field from `SENTRY_DSN`, `SENTRY_RELEASE` or
+/// `SENTRY_ENVIRONMENT`, and [`crate::telemetry::sentry`] now sets all three from the loader,
+/// so none of them is reachable. What is left is the proxy and TLS settings, which no
+/// configuration key covers.
 ///
 /// Ignored rather than declared are the names with no owner in this image at all — what the
 /// kubelet injects into every container. Nothing here reads them, and an image cannot describe
 /// what it does not read.
 pub fn external() -> External {
-    External::new()
-        .var(
-            ExternalVar::new("SENTRY_ENVIRONMENT")
-                .owner("sentry")
-                .ty("String")
-                .default("production")
-                .docs("Environment tag on reported events. Read by `sentry::init`, not by this loader."),
-        )
+    let external = External::new();
+
+    #[cfg(feature = "sentry")]
+    let external = external
         .var(
             ExternalVar::new("HTTP_PROXY")
                 .owner("sentry")
@@ -260,11 +276,11 @@ pub fn external() -> External {
                 .owner("sentry")
                 .ty("String")
                 .docs("Lowercase spelling of `HTTPS_PROXY`, read when the uppercase one is unset."),
-        )
-        // No owner in this image: the kubelet writes them into every container and nothing here
-        // reads them. `HOSTNAME` is the pod name; `KUBERNETES_*` is the API server's address.
-        .ignore("KUBERNETES_*")
-        .ignore("HOSTNAME")
+        );
+
+    // No owner in this image: the kubelet writes them into every container and nothing here
+    // reads them. `HOSTNAME` is the pod name; `KUBERNETES_*` is the API server's address.
+    external.ignore("KUBERNETES_*").ignore("HOSTNAME")
 }
 
 impl ServerConfig {
@@ -304,7 +320,8 @@ impl Default for TelemetryConfig {
     fn default() -> Self {
         Self {
             log_level: Self::default_log_level(),
-            sentry_dsn: None,
+            #[cfg(feature = "sentry")]
+            sentry: SentryConfig::default(),
         }
     }
 }

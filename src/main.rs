@@ -1,16 +1,11 @@
-use s3_bucket_perma_link::config::{Config, TelemetryConfig};
+use s3_bucket_perma_link::config::Config;
 use s3_bucket_perma_link::data::DownloadData;
-use secrecy::ExposeSecret;
-use sentry::ClientInitGuard;
 use std::sync::Arc;
 use tokio_util::sync::CancellationToken;
-use tracing_subscriber::layer::SubscriberExt;
-use tracing_subscriber::util::SubscriberInitExt;
-use tracing_subscriber::{Layer, filter};
 
 use s3_bucket_perma_link::error::Error;
 use s3_bucket_perma_link::server::Server;
-use s3_bucket_perma_link::{Result, config, shutdown};
+use s3_bucket_perma_link::{Result, config, shutdown, telemetry};
 
 #[macro_use]
 extern crate tracing;
@@ -21,10 +16,13 @@ async fn main() -> Result<()> {
     // subscriber should be. A failure here is returned from `main` and printed by the runtime.
     let boot = config::load_watched::<Config>()?;
 
-    // Both are process-global and installed once, which is why `telemetry.*` is the one block
-    // a configuration reload cannot apply.
-    setup_tracing(boot.value.telemetry())?;
-    let _sentry = setup_sentry(boot.value.telemetry());
+    // The subscriber and the Sentry client are process-global and installed once, which is why
+    // `telemetry.*` is the one block a configuration reload cannot apply.
+    //
+    // Bound for the whole of `main`, not dropped on the spot: the guard is what flushes queued
+    // Sentry events on the way out, so `let _ = …` here would close the client before the
+    // service had served anything.
+    let _telemetry = telemetry::init(boot.value.telemetry())?;
 
     let shutdown = shutdown::install();
 
@@ -73,30 +71,4 @@ fn log_config_sources() {
         Ok(explanation) => info!("Configuration sources:\n{explanation}"),
         Err(error) => warn!("Could not explain the configuration sources: {error}"),
     }
-}
-
-fn setup_tracing(telemetry: &TelemetryConfig) -> Result<()> {
-    let level = telemetry.level()?;
-
-    tracing_subscriber::registry()
-        .with(tracing_subscriber::fmt::layer().with_filter(filter::LevelFilter::from_level(level)))
-        .init();
-
-    Ok(())
-}
-
-fn setup_sentry(telemetry: &TelemetryConfig) -> Option<ClientInitGuard> {
-    let Some(dsn) = telemetry.sentry_dsn() else {
-        info!("No Sentry DSN configured, skipping Sentry setup");
-        return None;
-    };
-
-    Some(sentry::init((
-        dsn.expose_secret(),
-        sentry::ClientOptions {
-            release: sentry::release_name!(),
-            attach_stacktrace: true,
-            ..Default::default()
-        },
-    )))
 }

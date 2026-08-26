@@ -72,11 +72,18 @@ and `s3.secret_key` before `GET /docs/handbook` returns anything but a 500.
 - **A rotated credential is re-read, not restarted around.** When a watched file changes, the
   supervisor rebuilds the bucket clients and the listener in place. `telemetry.*` is the
   exception: the log subscriber and the Sentry client are installed once per process.
+- **Error reporting and distributed tracing are optional twice over.** Sentry is a Cargo feature
+  — on by default, and `--no-default-features` produces a binary with no `sentry` crate in it at
+  all — and within that build it stays off until `telemetry.sentry.enabled` is set. Switched on,
+  it takes the service's own `tracing` stream: records become issues and breadcrumbs under
+  thresholds of their own, spans become Sentry spans, and each request gets its own hub so one
+  issue's breadcrumb trail belongs to one download. `enabled` without a usable DSN fails the
+  boot rather than installing a reporter that reports nowhere.
 - Configuration arrives in five layers, and the last three are mutually exclusive per key. A key
   supplied by both an environment variable and a mounted secret fails the boot instead of letting
   one of them win.
 - **The image describes its own configuration.** `/config/contract.json` lists every key the
-  binary reads and the six variables its dependencies read outside the loader's prefix, and three
+  binary reads and the five variables its dependencies read outside the loader's prefix, and three
   OCI labels point at it. The chart repository reads that copy and the one attached to the image
   digest, and refuses the image when the two differ.
 
@@ -112,6 +119,19 @@ cargo build --release
 
 `just` with no arguments lists the recipes. `just verify` runs the formatter, clippy and the
 tests in one go.
+
+The one Cargo feature is `sentry`, and it is in the default set — the published image reports to
+Sentry, and the configuration contract, the README tables below and `docs/config.contract.json`
+are all generated from a default-feature build, so they describe the binary that ships. Build
+without it for a deployment that should not carry the SDK at all:
+
+```bash
+cargo build --release --no-default-features
+```
+
+That binary links no `sentry*` crate and reads none of the proxy or TLS variables they own. It
+also stops accepting the `telemetry.sentry.*` keys: setting one is refused at boot as an unknown
+variable, rather than parsed and quietly ignored.
 
 ## Usage
 
@@ -159,6 +179,11 @@ Mounted files are watched. When one changes, the service rebuilds its bucket cli
 in place, so a rotated S3 credential needs no restart. `telemetry.*` is the exception: the log
 subscriber and the Sentry client are installed once and still need one.
 
+`telemetry.log_level` and the two `telemetry.sentry.*` thresholds are filtered independently, so
+tightening the console to `warn` does not also empty the breadcrumb trail every Sentry issue
+arrives with. `telemetry.sentry.dsn` is a credential for the project it names and takes the same
+treatment as the S3 keys: mount it.
+
 Every generation logs which layer supplied each key, so an unexpected value can be traced to the
 file or variable it came from without attaching a debugger.
 
@@ -188,7 +213,22 @@ variable, `S3_PERMA_LINK_S3__SECRET_KEY_FILE` as file indirection, and
 | `s3.region` | `String` | `S3_PERMA_LINK_S3__REGION` | — | required | The region the endpoint serves, e.g. `eu-central-1`. |
 | `bucket.entries` | `HashMap<String, BucketEntry>` | `S3_PERMA_LINK_BUCKET__ENTRIES` | — | required | One `[bucket.entries.<request path>]` block per permanent link, each carrying a `bucket` and an `object`. |
 | `telemetry.log_level` | `String` | `S3_PERMA_LINK_TELEMETRY__LOG_LEVEL` | `info` | — | How much the service says: `trace`, `debug`, `info`, `warn` or `error`. |
-| `telemetry.sentry_dsn` | `SecretString` | `S3_PERMA_LINK_TELEMETRY__SENTRY_DSN` | unset | secret | Sentry DSN. Absent disables Sentry entirely. |
+| `telemetry.sentry.enabled` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__ENABLED` | `false` | — | Initialise the Sentry client. `false` installs no client, no panic hook, no subscriber layer and no HTTP middleware, so every other key in this block is inert. |
+| `telemetry.sentry.dsn` | `SecretString` | `S3_PERMA_LINK_TELEMETRY__SENTRY__DSN` | unset | secret | Ingest URL, `https://<key>@<host>/<project>`. |
+| `telemetry.sentry.environment` | `String` | `S3_PERMA_LINK_TELEMETRY__SENTRY__ENVIRONMENT` | unset | — | Environment tag on every event, e.g. `production` or `staging`. |
+| `telemetry.sentry.release` | `String` | `S3_PERMA_LINK_TELEMETRY__SENTRY__RELEASE` | unset | — | Release tag on every event. |
+| `telemetry.sentry.server_name` | `String` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SERVER_NAME` | unset | — | Host tag on every event. Unset reports none: the identity of one replica is infrastructure detail, and in a container it is a pod name that is gone by the time anybody reads the issue. |
+| `telemetry.sentry.sample_rate` | `f32` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SAMPLE_RATE` | `1` | — | Fraction of captured events actually sent, `0.0`–`1.0`. |
+| `telemetry.sentry.traces_sample_rate` | `f32` | `S3_PERMA_LINK_TELEMETRY__SENTRY__TRACES_SAMPLE_RATE` | `0` | — | Fraction of traces this service **starts** that are recorded, `0.0`–`1.0`. |
+| `telemetry.sentry.capture_level` | `SentryLevel` | `S3_PERMA_LINK_TELEMETRY__SENTRY__CAPTURE_LEVEL` | `error` | — | Least severe `tracing` level reported as a Sentry **issue**. |
+| `telemetry.sentry.breadcrumb_level` | `SentryLevel` | `S3_PERMA_LINK_TELEMETRY__SENTRY__BREADCRUMB_LEVEL` | `info` | — | Least severe `tracing` level kept as a **breadcrumb** — the trail attached to the next issue. Records at or above `capture_level` become issues instead. |
+| `telemetry.sentry.max_breadcrumbs` | `usize` | `S3_PERMA_LINK_TELEMETRY__SENTRY__MAX_BREADCRUMBS` | `100` | — | How many breadcrumbs one event carries. |
+| `telemetry.sentry.attach_stacktrace` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__ATTACH_STACKTRACE` | `true` | — | Attach a stack trace to events that carry none of their own. |
+| `telemetry.sentry.send_default_pii` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SEND_DEFAULT_PII` | `false` | — | Send personally identifying data with every event: the client IP, the full request header set, and the request body where one was buffered. |
+| `telemetry.sentry.http_transactions` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__HTTP_TRANSACTIONS` | `true` | — | Record one Sentry transaction per request, named by the matched route. |
+| `telemetry.sentry.span_attributes` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SPAN_ATTRIBUTES` | `false` | — | Copy `tracing` span fields onto the Sentry span as attributes. |
+| `telemetry.sentry.shutdown_timeout_secs` | `u64` | `S3_PERMA_LINK_TELEMETRY__SENTRY__SHUTDOWN_TIMEOUT_SECS` | `2` | — | How long process exit waits for queued events to drain, in seconds. |
+| `telemetry.sentry.debug` | `bool` | `S3_PERMA_LINK_TELEMETRY__SENTRY__DEBUG` | `false` | — | Print the SDK's own diagnostics to stderr. For proving a DSN works, not for running. |
 
 `bucket.entries` is one row above rather than one per link, because the key paths under it are
 route names no type knows ahead of time. Each is a table keyed by request path:
