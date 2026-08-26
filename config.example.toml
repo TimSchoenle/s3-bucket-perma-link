@@ -36,5 +36,23 @@ bucket = "media"
 object = "releases/CHANGELOG.md"
 
 [telemetry]
+# The console sink. What Sentry takes is set below and filtered separately, so tightening this
+# to `warn` does not silently empty the breadcrumb trail every issue arrives with.
 log_level = "info"
-# sentry_dsn = "mount-me-instead"
+
+# Error reporting and distributed tracing. Off unless `enabled` is set, and then only with a
+# DSN — `enabled` without one fails the boot rather than installing a reporter that reports
+# nowhere. Present only in a build carrying the `sentry` feature, which is in the default set.
+#
+# The DSN is a credential for the project it names: mount it like the S3 keys above rather than
+# committing it.
+#
+# [telemetry.sentry]
+# enabled = true
+# dsn = "mount-me-instead"
+# environment = "production"
+# Fraction of traces this service *starts*. `0.0` still continues a trace that arrives already
+# sampled, so a caller that traces still sees this hop.
+# traces_sample_rate = 0.0
+# capture_level = "error"     # least severe level reported as an issue
+# breadcrumb_level = "info"   # least severe level kept as a breadcrumb

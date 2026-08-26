@@ -115,7 +115,8 @@ mod tests {
             assert_eq!(config.server().host(), "0.0.0.0");
             // A block untouched by the environment still materialises with its own defaults.
             assert_eq!(config.telemetry().log_level(), "info");
-            assert!(config.telemetry().sentry_dsn().is_none());
+            #[cfg(feature = "sentry")]
+            assert!(!config.telemetry().sentry().enabled());
 
             let entry = config.bucket().entries().get("docs").expect("docs entry");
             assert_eq!(entry.bucket(), "media");

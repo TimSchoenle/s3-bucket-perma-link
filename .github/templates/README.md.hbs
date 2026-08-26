@@ -72,11 +72,18 @@ and `s3.secret_key` before `GET /docs/handbook` returns anything but a 500.
 - **A rotated credential is re-read, not restarted around.** When a watched file changes, the
   supervisor rebuilds the bucket clients and the listener in place. `telemetry.*` is the
   exception: the log subscriber and the Sentry client are installed once per process.
+- **Error reporting and distributed tracing are optional twice over.** Sentry is a Cargo feature
+  — on by default, and `--no-default-features` produces a binary with no `sentry` crate in it at
+  all — and within that build it stays off until `telemetry.sentry.enabled` is set. Switched on,
+  it takes the service's own `tracing` stream: records become issues and breadcrumbs under
+  thresholds of their own, spans become Sentry spans, and each request gets its own hub so one
+  issue's breadcrumb trail belongs to one download. `enabled` without a usable DSN fails the
+  boot rather than installing a reporter that reports nowhere.
 - Configuration arrives in five layers, and the last three are mutually exclusive per key. A key
   supplied by both an environment variable and a mounted secret fails the boot instead of letting
   one of them win.
 - **The image describes its own configuration.** `/config/contract.json` lists every key the
-  binary reads and the six variables its dependencies read outside the loader's prefix, and three
+  binary reads and the five variables its dependencies read outside the loader's prefix, and three
   OCI labels point at it. The chart repository reads that copy and the one attached to the image
   digest, and refuses the image when the two differ.
 
@@ -112,6 +119,19 @@ cargo build --release
 
 `just` with no arguments lists the recipes. `just verify` runs the formatter, clippy and the
 tests in one go.
+
+The one Cargo feature is `sentry`, and it is in the default set — the published image reports to
+Sentry, and the configuration contract, the README tables below and `docs/config.contract.json`
+are all generated from a default-feature build, so they describe the binary that ships. Build
+without it for a deployment that should not carry the SDK at all:
+
+```bash
+cargo build --release --no-default-features
+```
+
+That binary links no `sentry*` crate and reads none of the proxy or TLS variables they own. It
+also stops accepting the `telemetry.sentry.*` keys: setting one is refused at boot as an unknown
+variable, rather than parsed and quietly ignored.
 
 ## Usage
 
@@ -158,6 +178,11 @@ believes they replaced.
 Mounted files are watched. When one changes, the service rebuilds its bucket clients and listener
 in place, so a rotated S3 credential needs no restart. `telemetry.*` is the exception: the log
 subscriber and the Sentry client are installed once and still need one.
+
+`telemetry.log_level` and the two `telemetry.sentry.*` thresholds are filtered independently, so
+tightening the console to `warn` does not also empty the breadcrumb trail every Sentry issue
+arrives with. `telemetry.sentry.dsn` is a credential for the project it names and takes the same
+treatment as the S3 keys: mount it.
 
 Every generation logs which layer supplied each key, so an unexpected value can be traced to the
 file or variable it came from without attaching a debugger.
