@@ -175,7 +175,7 @@ jobs:
       # build, which is why the action checks that it is there and a contract rather than
       # diffing it against a fresh, versionless render.
       - name: Verify the pushed image's configuration contract
-        uses: TimSchoenle/actions/actions/rust/config-contract@99c83581b3486a8a9f28e43226b8f02025fcdf9a # tag=actions-rust-config-contract-v1.1.0
+        uses: TimSchoenle/actions/actions/rust/config-contract@e16a1e466faf8ec751b26289c1898143a253269f # tag=actions-rust-config-contract-v1.2.0
         with:
           image: ${{ env.DOCKER_REPO }}@${{ steps.build.outputs.digest }}
 
