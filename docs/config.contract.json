@@ -5,7 +5,7 @@
     "source": "https://github.com/TimSchoenle/s3-bucket-perma-link"
   },
   "schema": {
-    "schema_version": 1,
+    "schema_version": 2,
     "dialect": {
       "prefix": "S3_PERMA_LINK_",
       "nesting_separator": "__",
@@ -175,10 +175,27 @@
         "env": "S3_PERMA_LINK_BUCKET__ENTRIES",
         "env_file": "S3_PERMA_LINK_BUCKET__ENTRIES_FILE",
         "secrets_file": "bucket__entries",
-        "docs": "One `[bucket.entries.<request path>]` block per permanent link, each carrying a `bucket`\nand an `object`.\n\nA leaf rather than `#[config(nested)]`, because the key paths under it are the operator's\nroute names and no type knows them ahead of time — see [`BucketEntry`] for the two fields\neach block takes. A table rather than the delimiter-separated string this used to be: the\nstring existed only because an environment variable cannot carry a map, and the TOML layer\ncan.",
+        "docs": "One `[bucket.entries.<request path>]` block per permanent link, each carrying a `bucket`\nand an `object`.\n\nStill one key rather than `#[config(nested)]`, because the key paths under it are the\noperator's route names and no type knows them ahead of time. `#[config(element)]` is the\nopt-in this crate takes up instead: it describes the shape one block takes — see\n[`BucketEntry`] for the two fields — without inventing a key for the route name, which\nstays undocumented on purpose. A table rather than the delimiter-separated string this\nused to be: the string existed only because an environment variable cannot carry a map,\nand the TOML layer can.",
         "ty": "HashMap<String, BucketEntry>",
         "values": [],
         "constraint": {
+          "additionalProperties": {
+            "properties": {
+              "bucket": {
+                "description": "The bucket [`Self::object`] lives in.",
+                "type": "string"
+              },
+              "object": {
+                "description": "The object key inside [`Self::bucket`].\n\nNamed `object` rather than `file`, which the loader cannot express: `_FILE` is the\nsuffix marking file indirection, so `S3_PERMA_LINK_BUCKET__ENTRIES__DOCS__FILE` would be\nread as \"the value of this key is in the file named by this variable\".",
+                "type": "string"
+              }
+            },
+            "required": [
+              "bucket",
+              "object"
+            ],
+            "type": "object"
+          },
           "type": "object"
         },
         "text_constraint": {
@@ -626,7 +643,25 @@
         "additionalProperties": false,
         "properties": {
           "entries": {
-            "description": "One `[bucket.entries.<request path>]` block per permanent link, each carrying a `bucket`\nand an `object`.\n\nA leaf rather than `#[config(nested)]`, because the key paths under it are the operator's\nroute names and no type knows them ahead of time — see [`BucketEntry`] for the two fields\neach block takes. A table rather than the delimiter-separated string this used to be: the\nstring existed only because an environment variable cannot carry a map, and the TOML layer\ncan.",
+            "additionalProperties": {
+              "additionalProperties": false,
+              "properties": {
+                "bucket": {
+                  "description": "The bucket [`Self::object`] lives in.",
+                  "type": "string"
+                },
+                "object": {
+                  "description": "The object key inside [`Self::bucket`].\n\nNamed `object` rather than `file`, which the loader cannot express: `_FILE` is the\nsuffix marking file indirection, so `S3_PERMA_LINK_BUCKET__ENTRIES__DOCS__FILE` would be\nread as \"the value of this key is in the file named by this variable\".",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "bucket",
+                "object"
+              ],
+              "type": "object"
+            },
+            "description": "One `[bucket.entries.<request path>]` block per permanent link, each carrying a `bucket`\nand an `object`.\n\nStill one key rather than `#[config(nested)]`, because the key paths under it are the\noperator's route names and no type knows them ahead of time. `#[config(element)]` is the\nopt-in this crate takes up instead: it describes the shape one block takes — see\n[`BucketEntry`] for the two fields — without inventing a key for the route name, which\nstays undocumented on purpose. A table rather than the delimiter-separated string this\nused to be: the string existed only because an environment variable cannot carry a map,\nand the TOML layer can.",
             "type": "object"
           }
         },
