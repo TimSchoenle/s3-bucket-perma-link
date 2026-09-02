@@ -1,5 +1,40 @@
 # Changelog
 
+## [2.1.0](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.0.0...v2.1.0) (2026-09-02)
+
+
+### Features
+
+* update terrace to 0.10.0 and opt in to new nested feature ([#455](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/455)) ([ce490d0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ce490d0a0043cd3c58964a591f4799ed71e17dcf))
+
+
+### Bug Fixes
+
+* **deps:** update rust crate terrace-config to v0.9.1 ([#437](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/437)) ([d565155](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/d56515565e332cdd75f0bc8e8b1239dc1f6918fa))
+
+
+### Miscellaneous
+
+* **deps:** update github/codeql-action action to v4.37.9 ([#434](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/434)) ([2829347](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/28293474f5773dd70a12e06ae1288274f138f486))
+* **deps:** update rust crate sentry to v0.49.2 ([#435](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/435)) ([b33e601](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b33e601a60db0a165cbea5374cef5dbe2b0cf5df))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-timed-auto-pr-approve.yaml to vworkflows-maintenance-timed-auto-pr-approve-v1.2.33 ([#441](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/441)) ([cbed9b5](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/cbed9b5b6489b9a93f3884b7a785090fb5537f9d))
+* **deps:** update timschoenle/actions/actions/common/commit-changes to vactions-common-commit-changes-v1.4.0 ([#449](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/449)) ([97b37eb](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/97b37eb1cc5b0f048680fa7d3e6e40833f30f0ce))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.1.1 ([#442](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/442)) ([ae8c082](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ae8c0823b138818ca26e51618b7ab45f426450d2))
+* **deps:** update timschoenle/actions/actions/common/render-template to vactions-common-render-template-v1.1.2 ([#443](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/443)) ([971ab3b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/971ab3be7e2be0b9c22da083a91ee40d1ade5b08))
+* **deps:** update timschoenle/actions/actions/common/render-template-and-commit to vactions-common-render-template-and-commit-v1.1.4 ([#439](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/439)) ([f5e25e1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/f5e25e1347f1b893fd9ee7c85eb47efa7053b33a))
+* **deps:** update timschoenle/actions/actions/common/render-template-and-commit to vactions-common-render-template-and-commit-v1.1.5 ([#451](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/451)) ([25f40cd](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/25f40cd7c36dd3504e5127b0a7e82984397a8508))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.6.4 ([#438](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/438)) ([38a8947](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/38a89474809a7891c5bb30f59a7e4baa39877409))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.6.5 ([#452](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/452)) ([956d9f7](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/956d9f702c374b403cce518c4499048acc881b07))
+* **deps:** update timschoenle/actions/actions/rust/auto-format to vactions-rust-auto-format-v1.1.12 ([#444](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/444)) ([8d3bd09](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8d3bd096ca3e9dd558ad052a33e0f9f6a2f3073f))
+* **deps:** update timschoenle/actions/actions/rust/auto-format to vactions-rust-auto-format-v1.1.13 ([#453](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/453)) ([e1afb07](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/e1afb0733edf440b2f6b4f2eaecccf4487d3618f))
+* **deps:** update timschoenle/actions/actions/rust/cargo-check to vactions-rust-cargo-check-v1.1.6 ([#445](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/445)) ([2771a27](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2771a271f068a9af134ea890d0d13215e3e9c5bd))
+* **deps:** update timschoenle/actions/actions/rust/clippy to vactions-rust-clippy-v1.1.10 ([#446](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/446)) ([1f15d7f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1f15d7f3c7ec84647477f33887530e4635d94a50))
+* **deps:** update timschoenle/actions/actions/rust/config-contract to vactions-rust-config-contract-v1.2.0 ([#450](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/450)) ([e291616](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/e291616ee5a35c210bb294bd8716d4392ec46f29))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.40 ([#440](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/440)) ([8dfd534](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8dfd53437856d0cdad0d84d6d2d955c2488f4874))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.41 ([#447](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/447)) ([5976ae2](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5976ae2272e80f892a2b8ad02183d2e2c8b58f9a))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.42 ([#454](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/454)) ([bdcd713](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/bdcd713953aebaee08a6f7435e9a386c7506e9f0))
+* **deps:** update timschoenle/actions/actions/rust/test to vactions-rust-test-v1.1.2 ([#448](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/448)) ([d55e2ed](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/d55e2ed4208ab5b3454b506cfeb61903a073d70b))
+
 ## [2.0.0](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v1.1.1...v2.0.0) (2026-08-26)
 
 
