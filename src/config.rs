@@ -128,16 +128,19 @@ pub struct BucketConfig {
     /// One `[bucket.entries.<request path>]` block per permanent link, each carrying a `bucket`
     /// and an `object`.
     ///
-    /// A leaf rather than `#[config(nested)]`, because the key paths under it are the operator's
-    /// route names and no type knows them ahead of time — see [`BucketEntry`] for the two fields
-    /// each block takes. A table rather than the delimiter-separated string this used to be: the
-    /// string existed only because an environment variable cannot carry a map, and the TOML layer
-    /// can.
+    /// Still one key rather than `#[config(nested)]`, because the key paths under it are the
+    /// operator's route names and no type knows them ahead of time. `#[config(element)]` is the
+    /// opt-in this crate takes up instead: it describes the shape one block takes — see
+    /// [`BucketEntry`] for the two fields — without inventing a key for the route name, which
+    /// stays undocumented on purpose. A table rather than the delimiter-separated string this
+    /// used to be: the string existed only because an environment variable cannot carry a map,
+    /// and the TOML layer can.
+    #[config(element)]
     entries: HashMap<String, BucketEntry>,
 }
 
 /// One route's object.
-#[derive(Debug, Clone, Deserialize, Serialize, Getters)]
+#[derive(Debug, Clone, Deserialize, Serialize, Getters, Describe)]
 #[getset(get = "pub")]
 pub struct BucketEntry {
     /// The bucket [`Self::object`] lives in.
