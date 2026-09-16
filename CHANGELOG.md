@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.2.2](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.1...v2.2.2) (2026-09-16)
+
+
+### Miscellaneous
+
+* **deps:** update timschoenle/actions/actions/common/commit-changes to vactions-common-commit-changes-v1.5.2 ([#506](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/506)) ([4cf77bb](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4cf77bbba48aab5710f427cf9cc2b8d74ee67e4c))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.2.2 ([#508](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/508)) ([78c2dc6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/78c2dc6848ac26cf5ad0a5a06435cdd260163a5a))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.6.11 ([#511](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/511)) ([947826d](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/947826d8efe041a023a24aee132cd09c31952cc2))
+
 ## [2.2.1](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.0...v2.2.1) (2026-09-13)
 
 
