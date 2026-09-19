@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.2.2](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.1...v2.2.2) (2026-09-19)
+
+
+### Miscellaneous
+
+* **deps:** update docker/build-push-action digest to c3c9e26 ([#518](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/518)) ([373872f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/373872fee9f55fedd648d7c9ba6fdf9c38c88c51))
+* **deps:** update docker/setup-buildx-action digest to f87e599 ([#519](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/519)) ([be3b68d](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/be3b68df06424779f350c4fd738980a6066714be))
+* **deps:** update timschoenle/actions/.github/workflows/maintenance-auto-approve-renovate.yaml to vworkflows-maintenance-auto-approve-renovate-v1.4.24 ([#505](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/505)) ([a87514d](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a87514d8cad6cb161fbfb70d048043adeb86804d))
+* **deps:** update timschoenle/actions/actions/common/commit-changes to vactions-common-commit-changes-v1.5.2 ([#506](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/506)) ([4cf77bb](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4cf77bbba48aab5710f427cf9cc2b8d74ee67e4c))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.2.2 ([#508](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/508)) ([78c2dc6](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/78c2dc6848ac26cf5ad0a5a06435cdd260163a5a))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.6.11 ([#511](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/511)) ([947826d](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/947826d8efe041a023a24aee132cd09c31952cc2))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.6.12 ([#516](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/516)) ([aa3d06c](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/aa3d06cb0b6a6f16593f55f143a78f3493bca86d))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.48 ([#513](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/513)) ([5849d32](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/5849d32a1bfd14ddb3ddde99b69181313d54a6ca))
+
 ## [2.2.1](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.0...v2.2.1) (2026-09-13)
 
 
