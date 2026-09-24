@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.3](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.2...v2.2.3) (2026-09-24)
+
+
+### Miscellaneous
+
+* **deps:** update rust crate sentry to v0.49.3 ([#523](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/523)) ([ecd869a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ecd869ad66aa59e54b549c99853fdc2845f2b790))
+
 ## [2.2.2](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.1...v2.2.2) (2026-09-21)
 
 
