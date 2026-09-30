@@ -1,5 +1,10 @@
 {
   "terrace_contract": 1,
+  "producer": {
+    "name": "terrace-config",
+    "version": "0.14.0",
+    "loader": "figment"
+  },
   "app": {
     "name": "s3-bucket-perma-link",
     "source": "https://github.com/TimSchoenle/s3-bucket-perma-link"
