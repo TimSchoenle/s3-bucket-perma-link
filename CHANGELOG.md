@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.2.3](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.2...v2.2.3) (2026-09-30)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate terrace-config to v0.14.0 ([#496](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/496)) ([7c170d0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/7c170d07760bb87899661ae30af31e94362196ef))
+
+
+### Miscellaneous
+
+* **deps:** update github/codeql-action action to v4.38.2 ([#526](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/526)) ([1cbe59c](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/1cbe59c08a855fa3718a417b3b7edd211048739e))
+* **deps:** update rust crate sentry to v0.49.3 ([#523](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/523)) ([ecd869a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ecd869ad66aa59e54b549c99853fdc2845f2b790))
+* **deps:** update rust crate thiserror to v2.0.21 ([#525](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/525)) ([0975f0b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0975f0bc99350b6c620ab6cf5c4adcd9f5f89e9e))
+
 ## [2.2.2](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.1...v2.2.2) (2026-09-21)
 
 
