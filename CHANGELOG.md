@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.2.4](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.3...v2.2.4) (2026-10-03)
+
+
+### Miscellaneous
+
+* **deps:** update timschoenle/actions/actions/common/commit-changes to vactions-common-commit-changes-v1.5.3 ([#528](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/528)) ([0fa282e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0fa282ec11d540313c45c7ad513eb9b8f86fa79f))
+* **deps:** update timschoenle/actions/actions/common/readme-variables to vactions-common-readme-variables-v1.2.3 ([#529](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/529)) ([2faacdf](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2faacdf2b066d056ed9bba4f2a9ae2521795e8ce))
+* **deps:** update timschoenle/actions/actions/common/render-template to vactions-common-render-template-v1.2.3 ([#531](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/531)) ([e587d70](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/e587d7002637cddb0266d198b42b70a81315ab99))
+* **deps:** update timschoenle/actions/actions/common/upsert-pr-comment to vactions-common-upsert-pr-comment-v1.1.3 ([#532](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/532)) ([d311616](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/d311616867cbef82f35c06daeee7d582dfd525f8))
+* **deps:** update timschoenle/actions/actions/helm/update-chart-version to vactions-helm-update-chart-version-v1.6.13 ([#533](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/533)) ([c718585](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/c7185855d31925c1175fed367a0f4a4e47c65c6d))
+* **deps:** update timschoenle/actions/actions/rust/clippy to vactions-rust-clippy-v1.1.12 ([#534](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/534)) ([8dab2fa](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8dab2fa0d4939b628dccf4699cf5e614d795dbab))
+* **deps:** update timschoenle/actions/actions/rust/config-contract to vactions-rust-config-contract-v1.3.3 ([#535](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/535)) ([0cd0e03](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0cd0e03fc339104fbd2979cc4786d1faf62ba2cf))
+* **deps:** update timschoenle/actions/actions/rust/coverage-codecov to vactions-rust-coverage-codecov-v1.1.49 ([#536](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/536)) ([0ffbef2](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0ffbef27e289e54af1391f2554e2e3c6b01afeda))
+
 ## [2.2.3](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.2...v2.2.3) (2026-09-30)
 
 
