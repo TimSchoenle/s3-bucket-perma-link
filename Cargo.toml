@@ -37,7 +37,6 @@ sentry = ["dep:sentry"]
 
 [dependencies]
 getset = "0.1.2"
-derive-new = "0.7.0"
 tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread", "net", "signal", "time", "io-util"] }
 tokio-stream = "0.1.14"
 tracing = "0.1.40"
