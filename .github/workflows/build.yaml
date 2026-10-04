@@ -269,46 +269,28 @@ jobs:
             exit 1
           fi
 
-      - name: Check image size
-        run: |
-          SIZE=$(docker image inspect image:test --format='{{.Size}}' | awk '{print int($1/1024/1024)}')
-          echo "Image size: ${SIZE}MB"
-          mkdir -p "${RUNNER_TEMP}/sizes"
-          echo "${SIZE}" > "${RUNNER_TEMP}/sizes/${PLATFORM_SLUG}"
-          if [ "${SIZE}" -gt 150 ]; then
-            echo "::warning::Image size (${SIZE}MB) exceeds 150MB threshold"
-          fi
-
-      - name: Upload image size
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+      # Size check, Trivy scan and SARIF upload in one step. `platform` derives the SARIF category
+      # `trivy-linux-amd64` / `trivy-linux-arm64` — the same value `trivy-${PLATFORM_SLUG}` produced
+      # before — so the existing code-scanning alerts stay attached to their category. `summary`
+      # makes each leg upload a fragment instead of commenting, because two legs cannot share one
+      # comment without racing; the `image-size-report` job below turns the fragments into the table.
+      - name: Check Docker image
+        uses: TimSchoenle/actions/actions/docker/image-check@7568f9a485ca91c369095414ce4d9f1a8237df21 # tag=actions-docker-image-check-v1.1.0
         with:
-          name: sizes-${{ env.PLATFORM_SLUG }}
-          path: ${{ runner.temp }}/sizes/*
-          if-no-files-found: error
-          retention-days: 1
+          image: image:test
+          platform: ${{ matrix.platform }}
+          comment: summary
 
-      - name: Scan Docker image for vulnerabilities
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
-        with:
-          image-ref: image:test
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-
-      - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
-          category: trivy-${{ env.PLATFORM_SLUG }}
-
-  docker-size-report:
-    name: Docker Size Report
+  # One table of every platform rather than one comment per leg. `always()`, so a leg that failed
+  # does not cost the table the rows of the legs that passed. Reporting only: nothing here gates
+  # the merge.
+  image-size-report:
+    name: Image Size Report
     runs-on: ubuntu-latest
     needs: docker-build-test
-    if: github.event_name == 'pull_request'
+    if: always() && github.event_name == 'pull_request'
     permissions:
+      contents: read # Required to download this run's image-check fragments
       pull-requests: write # Required to comment on PRs with image size
     steps:
       - name: Harden Runner
@@ -316,35 +298,12 @@ jobs:
         with:
           egress-policy: audit
 
-      - name: Download image sizes
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-        with:
-          path: sizes
-          pattern: sizes-*
-          merge-multiple: true
-
-      - name: Build image size comment body
-        id: sizes_body
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
-        with:
-          script: |
-            const fs = require('fs');
-            const rows = fs.readdirSync('sizes')
-              .sort()
-              .map((file) => {
-                const platform = file.replace('-', '/');
-                const size = fs.readFileSync(`sizes/${file}`, 'utf8').trim();
-                return `| \`${platform}\` | ${size}MB |`;
-              })
-              .join('\n');
-            core.setOutput('body', `🐳 **Docker image sizes**\n\n| Platform | Size |\n| --- | --- |\n${rows}`);
-
+      # `docker-image-size` is the identifier the hand-written table used, so open pull requests
+      # get their existing comment updated rather than a second one beside it.
       - name: Comment image sizes on PR
-        uses: TimSchoenle/actions/actions/common/upsert-pr-comment@7e8fd61045447d321c5139eea8f2e2b766333f8b # tag=actions-common-upsert-pr-comment-v1.1.3
+        uses: TimSchoenle/actions/actions/docker/image-check-summary@7568f9a485ca91c369095414ce4d9f1a8237df21 # tag=actions-docker-image-check-summary-v1.1.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           identifier: docker-image-size
-          body: ${{ steps.sizes_body.outputs.body }}
 
   dependency-review:
     name: Dependency Review
