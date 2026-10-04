@@ -4,18 +4,23 @@ use crate::Result;
 use crate::data::DownloadData;
 use crate::routes::{download, health_check};
 use actix_web::{App, HttpServer, web};
-use derive_new::new;
 use tokio_util::sync::CancellationToken;
 use tracing_actix_web::TracingLogger;
 
 /// The address one generation of the service listens on.
-#[derive(new)]
 pub struct Server {
     host: String,
     port: u16,
 }
 
 impl Server {
+    /// Describes a listener on `host`:`port`; nothing is bound until
+    /// [`run_until_stopped`](Self::run_until_stopped).
+    #[must_use]
+    pub fn new(host: String, port: u16) -> Self {
+        Self { host, port }
+    }
+
     /// Serves until `shutdown` is cancelled.
     ///
     /// Returns only once the listener has released the address and in-flight requests have

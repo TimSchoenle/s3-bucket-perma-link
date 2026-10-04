@@ -1,5 +1,4 @@
 use crate::config::BucketEntry;
-use derive_new::new;
 use s3::Bucket;
 use std::collections::HashMap;
 
@@ -7,7 +6,7 @@ use std::collections::HashMap;
 ///
 /// Both maps are keyed by request path and built from the same `bucket.entries`, so a key in one
 /// is a key in the other.
-#[derive(Getters, new)]
+#[derive(Getters)]
 #[getset(get = "pub")]
 pub struct DownloadData {
     /// The client each request path is served through.
@@ -17,6 +16,20 @@ pub struct DownloadData {
 }
 
 impl DownloadData {
+    /// Pairs each request path's bucket client with the entry it resolves to.
+    ///
+    /// The caller keeps the two maps keyed identically; see the type documentation.
+    #[must_use]
+    pub fn new(
+        buckets: HashMap<String, Bucket>,
+        bucket_config: HashMap<String, BucketEntry>,
+    ) -> Self {
+        Self {
+            buckets,
+            bucket_config,
+        }
+    }
+
     /// Returns the entry bound to `key`, or `None` when no permanent link is configured under it.
     ///
     /// # Examples
