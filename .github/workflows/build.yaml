@@ -301,7 +301,7 @@ jobs:
       # `docker-image-size` is the identifier the hand-written table used, so open pull requests
       # get their existing comment updated rather than a second one beside it.
       - name: Comment image sizes on PR
-        uses: TimSchoenle/actions/actions/docker/image-check-summary@7568f9a485ca91c369095414ce4d9f1a8237df21 # tag=actions-docker-image-check-summary-v1.1.0
+        uses: TimSchoenle/actions/actions/docker/image-check-summary@c4068f4412c52bcf92d15f9bb255d37b2eafd0b7 # tag=actions-docker-image-check-summary-v1.1.1
         with:
           identifier: docker-image-size
 
