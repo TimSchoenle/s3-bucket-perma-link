@@ -48,7 +48,7 @@ tracing-actix-web = "0.7.12"
 # `derive` is declared here rather than left to feature unification: `src/config.rs` writes
 # `#[derive(Deserialize, Serialize)]`, so the crate that names it is the crate that needs it.
 serde = { version = "1.0.209", features = ["derive"] }
-rust-s3 = { version = "0.37.1", default-features = false, features = ["tokio-rustls-tls"] }
+rust-s3 = { version = "0.38.0", default-features = false, features = ["tokio-rustls-tls"] }
 # Error reporting and distributed tracing, behind the `sentry` feature above and inert at
 # runtime until an operator sets `telemetry.sentry.enabled`. One crate rather than three:
 # `sentry` re-exports `sentry-tracing` and `sentry-actix` under `sentry::integrations::*`, so
