@@ -73,9 +73,9 @@ and `s3.secret_key` before `GET /docs/handbook` returns anything but a 500.
 - **A rotated credential is re-read, not restarted around.** When a watched file changes, the
   supervisor rebuilds the bucket clients and the listener in place. `telemetry.*` is the
   exception: the log subscriber and the Sentry client are installed once per process.
-- **Error reporting and distributed tracing are optional twice over.** Sentry is a Cargo feature
-  — on by default, and `--no-default-features` produces a binary with no `sentry` crate in it at
-  all — and within that build it stays off until `telemetry.sentry.enabled` is set. Switched on,
+- **Error reporting and distributed tracing are optional twice over.** Sentry is a Cargo feature,
+  on by default, and `--no-default-features` produces a binary with no `sentry` crate in it at
+  all. Within the default build it stays off until `telemetry.sentry.enabled` is set. Switched on,
   it takes the service's own `tracing` stream: records become issues and breadcrumbs under
   thresholds of their own, spans become Sentry spans, and each request gets its own hub so one
   issue's breadcrumb trail belongs to one download. `enabled` without a usable DSN fails the
@@ -121,7 +121,7 @@ cargo build --release
 `just` with no arguments lists the recipes. `just verify` runs the formatter, clippy and the
 tests in one go.
 
-The one Cargo feature is `sentry`, and it is in the default set — the published image reports to
+The one Cargo feature is `sentry`, and it is in the default set. The published image reports to
 Sentry, and the configuration contract, the README tables below and `docs/config.contract.json`
 are all generated from a default-feature build, so they describe the binary that ships. Build
 without it for a deployment that should not carry the SDK at all:
@@ -235,8 +235,8 @@ The runtime image is `FROM scratch` and holds the binary, CA certificates, time 
 
 | | Supported |
 | --- | --- |
-| Rust | edition {{ toolchain.edition }} |
-| Platforms | `linux/amd64`, `linux/arm64` |
+{{#if toolchain.edition}}| Rust | edition {{ toolchain.edition }} |
+{{/if}}| Platforms | `linux/amd64`, `linux/arm64` |
 | Image | `{{ docker_image }}` |
 | Helm chart | `timschoenle/{{ repo.name }}` |
 
@@ -244,12 +244,12 @@ The runtime image is `FROM scratch` and holds the binary, CA certificates, time 
 
 | Document | Summary |
 | --- | --- |
-{{#each docs}}| [`{{ path }}`]({{ path }}) | {{ default (mdCell summary) "—" }} |
+{{#each docs}}| [{{ title }}]({{ path }}) | {{ default (mdCell summary) "—" }} |
 {{/each}}
 
-That table is walked out of `docs/` rather than maintained by hand, which is why a document with
-no prose in it lands there with nothing to summarise. That one is the configuration contract the
-image publishes and the chart validates against.
+The table is generated from the files in `docs/`, so a file with no prose in it has nothing to
+summarise. `docs/config.contract.json` is one: the configuration contract the image publishes and
+the chart validates against.
 
 ## Contributing
 
