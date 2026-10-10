@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.2.5](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.4...v2.2.5) (2026-10-10)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate terrace-config to v0.15.1 ([#572](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/572)) ([46cc9dc](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/46cc9dcc4401785a11825b82272bad2942599bd8))
+
+
+### Documentation
+
+* **readme:** add a Helm chart badge ([#574](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/574)) ([8a7568f](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8a7568f4ebc5ceabdd14828f5202c7e938f316a8))
+
+
+### Miscellaneous
+
+* **deps:** update actions/download-artifact digest to 9000827 ([#576](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/576)) ([4bb1d97](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/4bb1d976059654f973831b08c17990829ccf36c2))
+* **deps:** update actions/upload-artifact digest to cf430e0 ([#577](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/577)) ([9b39b9a](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/9b39b9a0cbf105bb1a86e7baa437b7b121eb3823))
+
 ## [2.2.4](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.3...v2.2.4) (2026-10-10)
 
 
