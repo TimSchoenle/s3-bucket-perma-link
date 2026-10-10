@@ -24,6 +24,7 @@ Nothing in this comment may contain a mustache that is not a real reference.
 Serves S3 objects under fixed request paths, so a published link survives the object behind it changing.
 
 [![Release](https://img.shields.io/github/v/release/TimSchoenle/s3-bucket-perma-link?sort=semver)](https://github.com/TimSchoenle/s3-bucket-perma-link/releases)
+[![Chart](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Ftimschoenle.github.io%2Fhelm-charts%2Findex.yaml&query=%24.entries.s3-bucket-perma-link%5B0%5D.version&label=chart)](https://github.com/TimSchoenle/helm-charts/tree/main/charts/s3-bucket-perma-link)
 [![Build](https://img.shields.io/github/actions/workflow/status/TimSchoenle/s3-bucket-perma-link/build.yaml?branch=master)](https://github.com/TimSchoenle/s3-bucket-perma-link/actions/workflows/build.yaml)
 [![Coverage](https://codecov.io/gh/TimSchoenle/s3-bucket-perma-link/branch/master/graph/badge.svg?token=dDUZjsYmh2)](https://codecov.io/gh/TimSchoenle/s3-bucket-perma-link)
 [![License](https://img.shields.io/github/license/TimSchoenle/s3-bucket-perma-link)](LICENSE)
