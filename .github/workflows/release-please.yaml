@@ -49,6 +49,12 @@ jobs:
         with:
           app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
           private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+          # Narrowed to what release-please does with it: push the release branch and tag,
+          # open and update the release pull request, and label it. An unscoped token inherits
+          # every permission the installation holds, which zizmor's `github-app` rule reports.
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: write
 
       - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5
         id: release
@@ -187,7 +193,7 @@ jobs:
           touch "${RUNNER_TEMP}/digests/${DIGEST#sha256:}"
 
       - name: Upload digest
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: digests-${{ env.PLATFORM_SLUG }}
           path: ${{ runner.temp }}/digests/*
@@ -199,7 +205,7 @@ jobs:
       # before publishing either — the generator reads nothing architecture-dependent, and a
       # difference would mean one of the two images describes a configuration the other does not.
       - name: Upload the generated configuration contract
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: contract-${{ env.PLATFORM_SLUG }}
           path: contract-out/contract.json
@@ -243,7 +249,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Download digests
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           path: ${{ runner.temp }}/digests
           pattern: digests-*
@@ -302,7 +308,7 @@ jobs:
       # one would change bytes that were already generated and already checked.
 
       - name: Download the generated configuration contracts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           path: ${{ runner.temp }}/contracts
           pattern: contract-*
