@@ -63,7 +63,6 @@ examples/** linguist-documentation
 /.github export-ignore
 /tests export-ignore
 /.claude export-ignore
-/codecov.yml export-ignore
 /renovate.json export-ignore
 /justfile export-ignore
 
