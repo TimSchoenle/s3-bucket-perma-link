@@ -45,7 +45,7 @@ documents its key here, in the commit that adds the field.
 ```bash
 docker run --rm -p 8080:8080 \
   -v "$PWD/config.example.toml:/app/config.toml:ro" \
-  timmi6790/s3-bucket-perma-link:v2.2.4
+  timmi6790/s3-bucket-perma-link:v2.2.5
 ```
 
 The example file boots the service. Its credentials are placeholders, so replace `s3.access_key`
@@ -93,7 +93,7 @@ and `s3.secret_key` before `GET /docs/handbook` returns anything but a 500.
 ### Docker
 
 ```bash
-docker pull timmi6790/s3-bucket-perma-link:v2.2.4
+docker pull timmi6790/s3-bucket-perma-link:v2.2.5
 ```
 
 Published as a multi-platform manifest for `linux/amd64` and `linux/arm64`. Every release is
