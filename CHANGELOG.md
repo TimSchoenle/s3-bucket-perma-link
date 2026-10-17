@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.2.5](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.4...v2.2.5) (2026-10-17)
+
+
+### Bug Fixes
+
+* **deps:** update rust crate terrace-config to v0.15.1 ([#572](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/572)) ([46cc9dc](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/46cc9dcc4401785a11825b82272bad2942599bd8))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#589](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/589)) ([79e3316](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/79e3316c89e2a7ac3ca24ec190fe6748001cad0f))
+* **deps:** update rust crate actix-web to v4.16.0 ([#599](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/599)) ([01761d0](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/01761d04dd145dcfce6455caa2afd1301d3a366e))
+* **deps:** update rust crate serde_json to v1.0.152 ([#596](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/596)) ([58a04f8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/58a04f84abe356af87fae9ca2a65dc8bed4172a0))
+* **deps:** update rust crate serde_json to v1.0.154 ([#597](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/597)) ([46ee58b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/46ee58b2219eaf2eb882725e92b12d4855dc3fc1))
+* **deps:** update rust crate tokio to v1.53.3 ([#601](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/601)) ([df50cca](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/df50cca818c3d2e5e9175094d4dcf145d9ca1424))
+
 ## [2.2.4](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.3...v2.2.4) (2026-10-10)
 
 
