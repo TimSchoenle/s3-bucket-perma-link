@@ -129,7 +129,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install stable toolchain
+      - name: Install pinned toolchain
         uses: actions-rust-lang/setup-rust-toolchain@ecabd13d1c56bd1345c230e542e9144811ad706f # v2.0.0
 
       - name: Render the documentation
@@ -235,7 +235,7 @@ jobs:
       # the action renders the labels from `src/config.rs` itself rather than trusting a file
       # the build wrote, which is what lets it also check the Dockerfile region and the
       # committed document in the same pass.
-      - name: Install stable toolchain
+      - name: Install pinned toolchain
         uses: actions-rust-lang/setup-rust-toolchain@ecabd13d1c56bd1345c230e542e9144811ad706f # v2.0.0
         with:
           # This job publishes an image, and a restored cache is writable by any branch:
