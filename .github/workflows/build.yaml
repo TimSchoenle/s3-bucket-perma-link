@@ -177,6 +177,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
 
+      # Every build reads the layer cache of its platform; only a push to `master` writes it.
+      #
+      # A pull request's export lands in a cache `master` never reads, but it counts against the
+      # repository's 10 GB Actions cache all the same, and each one that rebuilt the cook layer
+      # added a compiled dependency tree of about 520 MB per platform. GitHub makes room by evicting
+      # the least recently used entries, `master`'s among them: a pull request run found
+      # `master`'s arm64 index naming blobs that were gone (`blob … not found`). The cost is that a
+      # pull request changing the lockfile or the build stages cooks again on each of its pushes.
       - name: Build Docker image
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
         with:
@@ -191,7 +199,7 @@ jobs:
             vendor=Timmi6790
             VERSION=test
           cache-from: type=gha,scope=${{ env.PLATFORM_SLUG }}
-          cache-to: type=gha,mode=max,scope=${{ env.PLATFORM_SLUG }}
+          cache-to: ${{ github.event_name == 'push' && format('type=gha,mode=max,scope={0}', env.PLATFORM_SLUG) || '' }}
 
       - name: Verify image architecture
         env:
@@ -203,24 +211,32 @@ jobs:
           [ "${expected}" = "${actual}" ]
 
       # The `contract` stage holds the two generated files and nothing else, so this exports a
-      # two-file layer rather than the builder's filesystem. It runs on the builder the step
-      # above already populated, so every layer is a cache hit and no second compile happens —
-      # which is also what makes the exported document *the* document the image carries. The
-      # build arguments have to match that build exactly, or the two would legitimately differ.
+      # two-file layer rather than the builder's filesystem. It is the same build graph as the
+      # image, which is also what makes the exported document *the* document the image carries.
+      # The build arguments have to match that build exactly, or the two would legitimately differ.
+      #
+      # Through the action rather than a `docker buildx build` in a `run` step: `type=gha` needs the
+      # runtime token the action hands to BuildKit and a `run` step does not see, so the flag there
+      # read nothing. The image build pulls cached layers lazily, so on a run whose image came from
+      # the cache the contract stage was not on the runner, and the step rebuilt it from the
+      # toolchain up: 115 s on a run whose image build took 3 s. It reads the cache and writes
+      # nothing.
       - name: Export the generated configuration contract
-        env:
-          PLATFORM: ${{ matrix.platform }}
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          target: contract
+          outputs: type=local,dest=contract-out
+          build-args: |
+            version=test
+            release=test
+            vendor=Timmi6790
+            VERSION=test
+          cache-from: type=gha,scope=${{ env.PLATFORM_SLUG }}
+
+      - name: Show the exported configuration contract
         run: |
-          docker buildx build \
-            --target contract \
-            --platform "${PLATFORM}" \
-            --build-arg version=test \
-            --build-arg release=test \
-            --build-arg vendor=Timmi6790 \
-            --build-arg VERSION=test \
-            --cache-from "type=gha,scope=${PLATFORM_SLUG}" \
-            --output "type=local,dest=contract-out" \
-            .
           ls -l contract-out
           cat contract-out/contract.labels
 

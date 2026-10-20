@@ -4,23 +4,25 @@ ARG BINARY_PATH=/out/app
 
 FROM lukemathwalker/cargo-chef:latest-rust-alpine AS chef
 ARG TARGETARCH
-RUN apk add --no-cache musl-dev pkgconfig openssl-dev openssl-libs-static upx curl jq
-# Map the Docker architecture to the machine name used by Rust target triples and
-# by upstream release artifacts. Unsupported architectures fail the build early.
+RUN apk add --no-cache musl-dev pkgconfig openssl-dev openssl-libs-static upx
+# Map the Docker architecture to the Rust target triple. Unsupported architectures fail the build
+# early.
 RUN set -eu; \
     case "${TARGETARCH}" in \
         amd64) machine=x86_64 ;; \
         arm64) machine=aarch64 ;; \
         *) echo "unsupported architecture: ${TARGETARCH}" >&2; exit 1 ;; \
     esac; \
-    echo "${machine}" > /etc/target-machine; \
     echo "${machine}-unknown-linux-musl" > /etc/target-triple
-# Install sentry-cli
-RUN set -eu; \
-    machine=$(cat /etc/target-machine); \
-    latest_version=$(curl -sSf https://api.github.com/repos/getsentry/sentry-cli/releases/latest | jq -r .tag_name); \
-    wget -qO /usr/local/bin/sentry-cli "https://downloads.sentry-cdn.com/sentry-cli/${latest_version}/sentry-cli-Linux-${machine}"; \
-    chmod +x /usr/local/bin/sentry-cli
+# Copied from Sentry's image, pinned by digest, which Renovate bumps like the base images. The
+# download it replaces asked the GitHub API for `releases/latest` without authentication: a
+# rate-limited answer failed the build, and two builds of one commit could ship different CLIs.
+# The index is multi-platform, so BuildKit picks the binary for the architecture being built.
+COPY --from=getsentry/sentry-cli:3.8.0@sha256:973a77ecc96852081f946e36a8f090ed74a02249009594aff51575e593871427 \
+    /bin/sentry-cli /usr/local/bin/sentry-cli
+# The upload runs only when a token is supplied, which CI never does. Without this, a CLI that
+# cannot start on the build architecture would surface only in the release job.
+RUN sentry-cli --version
 WORKDIR /app
 
 # The compiler `rust-toolchain.toml` pins, installed before any stage forks. Without it the
@@ -38,13 +40,18 @@ RUN cargo chef prepare --recipe-path recipe.json
 FROM chef AS builder
 ARG BINARY_PATH
 COPY --from=planner /app/recipe.json recipe.json
+# `--locked` on both: the recipe carries `Cargo.lock`, and a manifest it no longer satisfies fails
+# here instead of being re-resolved into versions nobody reviewed.
 RUN set -eu; \
-    cargo chef cook --release --target "$(cat /etc/target-triple)" --recipe-path recipe.json
+    cargo chef cook --release --locked --target "$(cat /etc/target-triple)" --recipe-path recipe.json
 COPY . .
+# `target/` is removed in the same step, so this layer holds the binary and not the build tree that
+# changes with every commit and would otherwise be exported to the layer cache on every run.
 RUN set -eu; \
     target=$(cat /etc/target-triple); \
-    cargo build --release --target "${target}"; \
-    install -D "target/${target}/release/s3_bucket_perma_link" "${BINARY_PATH}"
+    cargo build --release --locked --target "${target}"; \
+    install -D "target/${target}/release/s3_bucket_perma_link" "${BINARY_PATH}"; \
+    rm -rf target
 
 # Upload debug symbols to Sentry before stripping
 ARG SENTRY_ORG
@@ -67,27 +74,44 @@ RUN strip --strip-all ${BINARY_PATH} && \
 
 # The configuration contract: every key this binary reads, everything it reads outside the
 # loader's namespace, and a JSON Schema for the file an operator mounts. Generated from
-# `src/config.rs` by the toolchain that built the binary, so it cannot describe a different
-# service than the one shipping beside it.
+# `src/config.rs` by the same toolchain and the same source tree as the binary, so it cannot
+# describe a different service than the one shipping beside it.
 #
-# `--format contract` and `--format labels` come out of one invocation of one binary in one
-# layer. That is the whole guarantee: the labels the image carries and the document they point at
-# are two renderings of a single value, and nothing in between can make them disagree.
-FROM builder AS contract-builder
+# `--format contract` and `--format labels` come out of one generator binary in one layer. That is
+# the whole guarantee: the labels the image carries and the document they point at are two
+# renderings of a single value, and nothing in between can make them disagree.
+#
+# `FROM chef`, not `FROM builder`. The generator is an example and links the dev-dependencies,
+# which turn on features the binary does not use (`terrace-config/testing`, `bitflags/std`). On
+# `builder`'s release `target/` that recompiled `terrace-config` and every crate above `bitflags`
+# with fat LTO, 78 to 90 s after the binary had finished. Cooked here in the dev profile, the
+# stage runs beside `builder`.
+FROM chef AS contract-builder
+
+# A debug build whose only output is two text files, so debug info would be dead weight in the
+# cooked layer below.
+ENV CARGO_PROFILE_DEV_DEBUG=0
+
+COPY --from=planner /app/recipe.json recipe.json
+
+# The selection must match the `cargo run` below (profile, features, examples), or the run
+# recompiles what this step cooked.
+RUN cargo chef cook --locked --examples --recipe-path recipe.json
+
+COPY . .
 
 # Deliberately without the default the runtime stage below gives the same name. An unset release
 # is *absent* from the document, where `unknown` would be a claim about which release it
 # describes — and `--version` refuses an empty value rather than publishing one.
 ARG version
 
+# `target/` is removed in the same step, so the layer holds `/out` and not the build tree.
 RUN set -eu; \
-    target=$(cat /etc/target-triple); \
     mkdir -p /out; \
     if [ -n "${version:-}" ]; then set -- --version "${version}"; else set --; fi; \
-    cargo run --quiet --release --target "${target}" --example config-schema \
-        -- --format contract "$@" > /out/contract.json; \
-    cargo run --quiet --release --target "${target}" --example config-schema \
-        -- --format labels > /out/contract.labels
+    cargo run --locked --example config-schema -- --format contract "$@" > /out/contract.json; \
+    cargo run --quiet --locked --example config-schema -- --format labels > /out/contract.labels; \
+    rm -rf target
 
 # The two generated files and nothing else, so exporting them with `--output type=local` costs a
 # two-file layer rather than an export of the whole builder filesystem. This is what the label
