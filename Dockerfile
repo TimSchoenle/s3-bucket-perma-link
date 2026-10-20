@@ -71,27 +71,44 @@ RUN strip --strip-all ${BINARY_PATH} && \
 
 # The configuration contract: every key this binary reads, everything it reads outside the
 # loader's namespace, and a JSON Schema for the file an operator mounts. Generated from
-# `src/config.rs` by the toolchain that built the binary, so it cannot describe a different
-# service than the one shipping beside it.
+# `src/config.rs` by the same toolchain and the same source tree as the binary, so it cannot
+# describe a different service than the one shipping beside it.
 #
-# `--format contract` and `--format labels` come out of one invocation of one binary in one
-# layer. That is the whole guarantee: the labels the image carries and the document they point at
-# are two renderings of a single value, and nothing in between can make them disagree.
-FROM builder AS contract-builder
+# `--format contract` and `--format labels` come out of one generator binary in one layer. That is
+# the whole guarantee: the labels the image carries and the document they point at are two
+# renderings of a single value, and nothing in between can make them disagree.
+#
+# `FROM chef`, not `FROM builder`. The generator is an example and links the dev-dependencies,
+# which turn on features the binary does not use (`terrace-config/testing`, `bitflags/std`). On
+# `builder`'s release `target/` that recompiled `terrace-config` and every crate above `bitflags`
+# with fat LTO, 78 to 90 s after the binary had finished. Cooked here in the dev profile, the
+# stage runs beside `builder`.
+FROM chef AS contract-builder
+
+# A debug build whose only output is two text files, so debug info would be dead weight in the
+# cooked layer below.
+ENV CARGO_PROFILE_DEV_DEBUG=0
+
+COPY --from=planner /app/recipe.json recipe.json
+
+# The selection must match the `cargo run` below (profile, features, examples), or the run
+# recompiles what this step cooked.
+RUN cargo chef cook --locked --examples --recipe-path recipe.json
+
+COPY . .
 
 # Deliberately without the default the runtime stage below gives the same name. An unset release
 # is *absent* from the document, where `unknown` would be a claim about which release it
 # describes — and `--version` refuses an empty value rather than publishing one.
 ARG version
 
+# `target/` is removed in the same step, so the layer holds `/out` and not the build tree.
 RUN set -eu; \
-    target=$(cat /etc/target-triple); \
     mkdir -p /out; \
     if [ -n "${version:-}" ]; then set -- --version "${version}"; else set --; fi; \
-    cargo run --quiet --release --target "${target}" --example config-schema \
-        -- --format contract "$@" > /out/contract.json; \
-    cargo run --quiet --release --target "${target}" --example config-schema \
-        -- --format labels > /out/contract.labels
+    cargo run --locked --example config-schema -- --format contract "$@" > /out/contract.json; \
+    cargo run --quiet --locked --example config-schema -- --format labels > /out/contract.labels; \
+    rm -rf target
 
 # The two generated files and nothing else, so exporting them with `--output type=local` costs a
 # two-file layer rather than an export of the whole builder filesystem. This is what the label
