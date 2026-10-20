@@ -4,23 +4,25 @@ ARG BINARY_PATH=/out/app
 
 FROM lukemathwalker/cargo-chef:latest-rust-alpine AS chef
 ARG TARGETARCH
-RUN apk add --no-cache musl-dev pkgconfig openssl-dev openssl-libs-static upx curl jq
-# Map the Docker architecture to the machine name used by Rust target triples and
-# by upstream release artifacts. Unsupported architectures fail the build early.
+RUN apk add --no-cache musl-dev pkgconfig openssl-dev openssl-libs-static upx
+# Map the Docker architecture to the Rust target triple. Unsupported architectures fail the build
+# early.
 RUN set -eu; \
     case "${TARGETARCH}" in \
         amd64) machine=x86_64 ;; \
         arm64) machine=aarch64 ;; \
         *) echo "unsupported architecture: ${TARGETARCH}" >&2; exit 1 ;; \
     esac; \
-    echo "${machine}" > /etc/target-machine; \
     echo "${machine}-unknown-linux-musl" > /etc/target-triple
-# Install sentry-cli
-RUN set -eu; \
-    machine=$(cat /etc/target-machine); \
-    latest_version=$(curl -sSf https://api.github.com/repos/getsentry/sentry-cli/releases/latest | jq -r .tag_name); \
-    wget -qO /usr/local/bin/sentry-cli "https://downloads.sentry-cdn.com/sentry-cli/${latest_version}/sentry-cli-Linux-${machine}"; \
-    chmod +x /usr/local/bin/sentry-cli
+# Copied from Sentry's image, pinned by digest, which Renovate bumps like the base images. The
+# download it replaces asked the GitHub API for `releases/latest` without authentication: a
+# rate-limited answer failed the build, and two builds of one commit could ship different CLIs.
+# The index is multi-platform, so BuildKit picks the binary for the architecture being built.
+COPY --from=getsentry/sentry-cli:3.8.0@sha256:973a77ecc96852081f946e36a8f090ed74a02249009594aff51575e593871427 \
+    /bin/sentry-cli /usr/local/bin/sentry-cli
+# The upload runs only when a token is supplied, which CI never does. Without this, a CLI that
+# cannot start on the build architecture would surface only in the release job.
+RUN sentry-cli --version
 WORKDIR /app
 
 # The compiler `rust-toolchain.toml` pins, installed before any stage forks. Without it the
