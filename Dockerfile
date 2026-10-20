@@ -40,12 +40,14 @@ RUN cargo chef prepare --recipe-path recipe.json
 FROM chef AS builder
 ARG BINARY_PATH
 COPY --from=planner /app/recipe.json recipe.json
+# `--locked` on both: the recipe carries `Cargo.lock`, and a manifest it no longer satisfies fails
+# here instead of being re-resolved into versions nobody reviewed.
 RUN set -eu; \
-    cargo chef cook --release --target "$(cat /etc/target-triple)" --recipe-path recipe.json
+    cargo chef cook --release --locked --target "$(cat /etc/target-triple)" --recipe-path recipe.json
 COPY . .
 RUN set -eu; \
     target=$(cat /etc/target-triple); \
-    cargo build --release --target "${target}"; \
+    cargo build --release --locked --target "${target}"; \
     install -D "target/${target}/release/s3_bucket_perma_link" "${BINARY_PATH}"
 
 # Upload debug symbols to Sentry before stripping
