@@ -101,7 +101,7 @@ jobs:
 
       - name: Commit the configuration contract
         id: contract
-        uses: TimSchoenle/actions/actions/common/commit-changes@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-common-commit-changes-v1.5.8
+        uses: TimSchoenle/actions/actions/common/commit-changes@8da2713994ba2b5f542e7e3334db287b1e22854a # tag=actions-common-commit-changes-v1.5.9
         with:
           # Named rather than left to default to `.`, so nothing else a step left dirty in the
           # workspace can ride along in a commit that claims to be about the contract.
@@ -129,14 +129,14 @@ jobs:
       # fail the gate for a reason that is not in its diff.
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-common-readme-variables-v1.2.8
+        uses: TimSchoenle/actions/actions/common/readme-variables@8da2713994ba2b5f542e7e3334db287b1e22854a # tag=actions-common-readme-variables-v1.2.9
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
       - name: Render and commit the README
         id: readme
-        uses: TimSchoenle/actions/actions/common/render-template-and-commit@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-common-render-template-and-commit-v1.1.15
+        uses: TimSchoenle/actions/actions/common/render-template-and-commit@ea4465fbe2bec98efad19b63849f8d1ac67b5c88 # tag=actions-common-render-template-and-commit-v1.1.18
         with:
           template: .github/templates/README.md.hbs
           output: README.md
@@ -198,14 +198,14 @@ jobs:
 
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-common-readme-variables-v1.2.8
+        uses: TimSchoenle/actions/actions/common/readme-variables@8da2713994ba2b5f542e7e3334db287b1e22854a # tag=actions-common-readme-variables-v1.2.9
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
       # Writes nothing; fails with the first differing line when README.md is stale.
       - name: Verify README.md is current
-        uses: TimSchoenle/actions/actions/common/render-template@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-common-render-template-v1.2.8
+        uses: TimSchoenle/actions/actions/common/render-template@8da2713994ba2b5f542e7e3334db287b1e22854a # tag=actions-common-render-template-v1.2.9
         with:
           template: .github/templates/README.md.hbs
           output: README.md
@@ -221,6 +221,6 @@ jobs:
       # cheap half: it reports a renamed key in the pull request that renamed it, without
       # waiting for a build.
       - name: Verify the configuration contract is current
-        uses: TimSchoenle/actions/actions/rust/config-contract@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-rust-config-contract-v1.3.8
+        uses: TimSchoenle/actions/actions/rust/config-contract@ea4465fbe2bec98efad19b63849f8d1ac67b5c88 # tag=actions-rust-config-contract-v1.4.0
         with:
           image: ''

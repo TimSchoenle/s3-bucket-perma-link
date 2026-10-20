@@ -181,7 +181,7 @@ jobs:
       # build, which is why the action checks that it is there and a contract rather than
       # diffing it against a fresh, versionless render.
       - name: Verify the pushed image's configuration contract
-        uses: TimSchoenle/actions/actions/rust/config-contract@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-rust-config-contract-v1.3.8
+        uses: TimSchoenle/actions/actions/rust/config-contract@ea4465fbe2bec98efad19b63849f8d1ac67b5c88 # tag=actions-rust-config-contract-v1.4.0
         with:
           image: ${{ env.DOCKER_REPO }}@${{ steps.build.outputs.digest }}
 
@@ -460,7 +460,7 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: TimSchoenle/actions/actions/helm/update-chart-version@eaf935674fec7116856ca5e138e1a2dca3f8146d # tag=actions-helm-update-chart-version-v1.6.19
+      - uses: TimSchoenle/actions/actions/helm/update-chart-version@ea4465fbe2bec98efad19b63849f8d1ac67b5c88 # tag=actions-helm-update-chart-version-v1.7.1
         with:
           app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
           private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
