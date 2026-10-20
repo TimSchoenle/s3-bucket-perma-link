@@ -101,3 +101,17 @@ config.toml
 # Generated documentation. Nothing in the build reads it, and leaving it in the context would
 # have a docs-only change invalidate every cached Rust layer.
 /docs/
+
+# Files that change without changing what the build compiles. Each of them is under `COPY . .`, so
+# leaving one in the context reran the final release build and the contract stage on a commit that
+# touched nothing else: `.git` differs on every checkout, which made even a re-run of an unchanged
+# commit rebuild, and `.github` changes in every Renovate CI update.
+.git
+.github
+.dockerignore
+Dockerfile
+*.md
+justfile
+renovate.json
+release-please-config.json
+.release-please-manifest.json
