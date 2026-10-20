@@ -45,10 +45,13 @@ COPY --from=planner /app/recipe.json recipe.json
 RUN set -eu; \
     cargo chef cook --release --locked --target "$(cat /etc/target-triple)" --recipe-path recipe.json
 COPY . .
+# `target/` is removed in the same step, so this layer holds the binary and not the build tree that
+# changes with every commit and would otherwise be exported to the layer cache on every run.
 RUN set -eu; \
     target=$(cat /etc/target-triple); \
     cargo build --release --locked --target "${target}"; \
-    install -D "target/${target}/release/s3_bucket_perma_link" "${BINARY_PATH}"
+    install -D "target/${target}/release/s3_bucket_perma_link" "${BINARY_PATH}"; \
+    rm -rf target
 
 # Upload debug symbols to Sentry before stripping
 ARG SENTRY_ORG
