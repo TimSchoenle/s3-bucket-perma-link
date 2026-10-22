@@ -2,7 +2,7 @@
 # need to know the Rust target triple it was built for.
 ARG BINARY_PATH=/out/app
 
-FROM lukemathwalker/cargo-chef:latest-rust-alpine AS chef
+FROM lukemathwalker/cargo-chef:latest-rust-alpine@sha256:2c27e67049f17e8b67d882a2cf2f5e1a1d4d71c206ec97f91edf278254688e95 AS chef
 ARG TARGETARCH
 RUN apk add --no-cache musl-dev pkgconfig openssl-dev openssl-libs-static upx
 # Map the Docker architecture to the Rust target triple. Unsupported architectures fail the build
