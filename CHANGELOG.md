@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.2.6](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.5...v2.2.6) (2026-10-22)
+
+
+### Build System
+
+* **renovate:** extend the shared rust-application preset ([#611](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/611)) ([db42d4d](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/db42d4dc553a23f7fff521cce8ac6957f8acca61))
+* **toolchain:** pin Rust 1.99.1 in rust-toolchain.toml ([#606](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/606)) ([fe0c5b1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/fe0c5b12db42de8ba2a7c2e17c89248206284468))
+
+
+### Dependencies
+
+* **deps:** lock file maintenance ([#605](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/605)) ([cc0be37](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/cc0be37f24eb4eed3041f8e470bd8d7a47e28149))
+* **deps:** update rust crate actix-web to v4.17.0 ([#603](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/603)) ([976eb76](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/976eb76d402b8a543042900426dde8cb2cff3eb4))
+* **deps:** update rust crate terrace-config to v0.15.2 ([#609](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/609)) ([b680424](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b6804242220a37f61807e67c58dc2a0eaad9f854))
+
 ## [2.2.5](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.4...v2.2.5) (2026-10-17)
 
 
