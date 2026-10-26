@@ -26,7 +26,7 @@ on:
   push:
     branches: [master]
 
-# Not scoped to this workflow: the auto-format job in build.yaml also commits to the pull request
+# Not scoped to this workflow: the `fmt-commit` job in build.yaml also commits to the pull request
 # branch, and the API call that makes a verified commit rejects one whose parent has moved. Two
 # writers racing would leave one of them failing for no reason a reader could act on, so they
 # queue instead. `cancel-in-progress: false` for the same reason — a cancelled run here means a
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # Where ACTIONS_MAINTENANCE_APP_ID and ACTIONS_MAINTENANCE_PRIVATE_KEY live, as in the
-    # auto-format job of build.yaml.
+    # `fmt-commit` job of build.yaml.
     environment:
       name: ci
       deployment: false
