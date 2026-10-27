@@ -1,21 +1,24 @@
 name: Docs
 
-# Three artefacts in this repository are generated from `src/config.rs` and then committed, and
+# Two artefacts in this repository are generated from `src/config.rs` and then committed, and
 # this workflow is what makes that claim true in both directions:
 #
 #   README.md                   rendered from `.github/templates/README.md.hbs`
 #   docs/config.contract.json   the contract the image publishes and a chart validates against
-#   Dockerfile                  the LABEL block that makes that contract discoverable
 #
-# On a pull request it regenerates all three and commits the result to the branch, so none of
-# them is ever edited by hand. The case that matters is a pull request that adds or renames a
-# configuration key: it arrives with the documentation and the contract for that key already
-# written, because both are read off the type in the same commit that changes it.
+# On a pull request it regenerates both and commits the result to the branch, so neither is ever
+# edited by hand. The case that matters is a pull request that adds or renames a configuration
+# key: it arrives with the documentation and the contract for that key already written, because
+# both are read off the type in the same commit that changes it.
 #
-# That half is two jobs. `render` runs the generators, which means running the pull request's
-# code, so it holds no secret and only uploads what they wrote as a patch. `render-commit` holds
-# the App token, executes nothing from the branch, and commits that patch only when every path in
-# it is one of the three files above.
+# The Dockerfile's `terrace-config:labels` region is generated too, but never by this workflow:
+# the Dockerfile is the image's build recipe, so no bot commits to it. `just regenerate` writes it
+# on a developer's machine, and `check` below and `build.yaml` fail when it has drifted.
+#
+# The commit half is two jobs. `render` runs the generators, which means running the pull
+# request's code, so it holds no secret and only uploads what they wrote as a patch.
+# `render-commit` holds the App token, executes nothing from the branch, and commits that patch
+# only when every path in it is one of the two files above.
 #
 # Everywhere it cannot commit — a push to `master`, a pull request from a fork — it runs the same
 # generators in `check` mode instead, writing nothing and failing if what is committed is stale.
@@ -54,8 +57,8 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # This half runs the pull request's code — `just regenerate` and the payload example — so it
-    # holds no secret and no write token. It writes the regenerated files into its own checkout
+    # This half runs the pull request's code — `just contract-json` and the payload example — so
+    # it holds no secret and no write token. It writes the regenerated files into its own checkout
     # and uploads them as a patch; `render-commit` below commits that patch without running
     # anything from the branch.
     permissions:
@@ -81,17 +84,16 @@ jobs:
       - name: Install pinned toolchain
         uses: actions-rust-lang/setup-rust-toolchain@ecabd13d1c56bd1345c230e542e9144811ad706f # v2.0.0
 
-      # The other two artefacts generated from `src/config.rs`: the contract the image publishes,
-      # and the LABEL block in the Dockerfile that makes it discoverable. Regenerated for the same
-      # reason the README is — a pull request that renames a key or changes the loader's prefix
-      # arrives with the document for it already written, in the commit that caused it.
+      # The contract the image publishes, regenerated for the same reason the README is: a pull
+      # request that renames a key arrives with the document for it already written. Only the
+      # document; the Dockerfile's LABEL region is `just regenerate`'s, run by a developer.
       - name: Install just
         uses: taiki-e/install-action@288e746965032cfcc232e09af2daf5f23c14d780 # v2.86.1
         with:
           tool: just
 
       - name: Regenerate the configuration contract
-        run: just regenerate
+        run: just contract-json
 
       # The half of the payload only this crate can produce: the two configuration tables and the
       # loader's own spellings. It deliberately emits no `repo`, `branch`, `release` or `docs` —
@@ -134,7 +136,7 @@ jobs:
         uses: TimSchoenle/actions/actions/common/create-patch@bbc2c5e2a0f9345cb2e84946846736f047a6eae3 # tag=actions-common-create-patch-v1.1.0
         with:
           artifact_name: docs-render
-          paths: README.md docs/config.contract.json Dockerfile
+          paths: README.md docs/config.contract.json
 
   render-commit:
     name: Commit Render
@@ -174,79 +176,6 @@ jobs:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
-      # A second copy of the patch `commit-patch` downloads below, read only by the check that
-      # follows.
-      - name: Receive the patch for inspection
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: docs-render
-          path: ${{ runner.temp }}/docs-render-inspect
-
-      # `allowed_paths` below can admit the Dockerfile only as a whole, and the Dockerfile is the
-      # build recipe of the published image: a generator that rewrote a `RUN` line would have it
-      # committed by the App, under the App's name. So the patch is applied to a scratch index on
-      # top of the head commit - git plumbing only, nothing from the checkout runs - and the
-      # result has to equal the head's Dockerfile everywhere outside the `terrace-config:labels`
-      # markers, with each marker exactly once and nothing between them but `LABEL key="value"`
-      # lines and their continuations, which is all `--format dockerfile` emits. A region in any
-      # other shape fails here and is committed by nobody; regenerate it locally with
-      # `just regenerate` and push it by hand.
-      - name: Refuse Dockerfile changes outside the LABEL region
-        env:
-          PATCH_FILE: ${{ runner.temp }}/docs-render-inspect/changes.patch
-          METADATA_FILE: ${{ runner.temp }}/docs-render-inspect/metadata.json
-          BEGIN: '# terrace-config:labels:begin'
-          END: '# terrace-config:labels:end'
-        run: |
-          set -euo pipefail
-          # A patch computed against another commit is skipped by `commit-patch`, not committed;
-          # the run for the new head checks its own.
-          if [ "$(jq -r .base_sha "$METADATA_FILE")" != "$(git rev-parse HEAD)" ]; then
-            echo "The patch was computed against another commit; commit-patch will skip it."
-            exit 0
-          fi
-          work="$RUNNER_TEMP/dockerfile-check"
-          mkdir -p "$work"
-          export GIT_INDEX_FILE="$work/index"
-          git read-tree HEAD
-          git apply --cached --whitespace=nowarn --include=Dockerfile "$PATCH_FILE"
-          git show HEAD:Dockerfile > "$work/before"
-          git show :Dockerfile > "$work/after"
-          if cmp -s "$work/before" "$work/after"; then
-            echo "The patch does not change the Dockerfile."
-            exit 0
-          fi
-          for marker in "$BEGIN" "$END"; do
-            if [ "$(grep -cxF -- "$marker" "$work/after")" != 1 ]; then
-              echo "::error file=Dockerfile::'${marker}' must appear exactly once."
-              exit 1
-            fi
-          done
-          if [ "$(grep -nxF -- "$BEGIN" "$work/after" | cut -d: -f1)" -gt "$(grep -nxF -- "$END" "$work/after" | cut -d: -f1)" ]; then
-            echo "::error file=Dockerfile::'${BEGIN}' must come before '${END}'."
-            exit 1
-          fi
-          outside() { awk -v b="$BEGIN" -v e="$END" '$0 == b { skip = 1; print "<region>"; next } $0 == e { skip = 0; next } !skip' "$1"; }
-          if ! diff -u <(outside "$work/before") <(outside "$work/after"); then
-            echo "::error file=Dockerfile::The patch changes the Dockerfile outside the LABEL region; nothing was committed."
-            exit 1
-          fi
-          if ! awk -v b="$BEGIN" -v e="$END" '
-            $0 == e { inside = 0 }
-            inside {
-              if (cont) { ok = $0 ~ /^[ \t]+[A-Za-z0-9._-]+="[^"\\$]*"( \\)?$/ }
-              else { ok = $0 ~ /^LABEL [A-Za-z0-9._-]+="[^"\\$]*"( \\)?$/ }
-              if (!ok) { print "unexpected line in the LABEL region: " $0; bad = 1 }
-              cont = $0 ~ / \\$/
-            }
-            $0 == b { inside = 1; cont = 0 }
-            END { exit (bad || cont) }
-          ' "$work/after"; then
-            echo "::error file=Dockerfile::The LABEL region holds something other than LABEL instructions; nothing was committed."
-            exit 1
-          fi
-          echo "The patch changes only the LABEL region of the Dockerfile."
-
       # An App installation token, so the commit is verified and — unlike one made with
       # `GITHUB_TOKEN` — re-triggers the checks on the branch it lands on.
       - name: Generate Bot Token
@@ -258,7 +187,7 @@ jobs:
           permission-contents: write # Required to commit the patch to the pull request's branch
 
       # The artifact name is a literal, not the render job's output: that job ran the pull
-      # request's code. One commit over all three files, because a second commit would have to
+      # request's code. One commit over both files, because a second commit would have to
       # name the head the first just moved. If `fmt-commit` committed first, the branch has moved
       # past the commit the patch was made from, and commit-patch skips it with
       # `outcome: branch_moved`; the new head starts a new run, which renders again.
@@ -268,9 +197,8 @@ jobs:
         with:
           token: ${{ steps.generate_token.outputs.token }}
           artifact_name: docs-render
-          # Exactly the files `render` writes. The Dockerfile is here only because `just
-          # regenerate` rewrites its `terrace-config:labels` region; any other path fails this job.
-          allowed_paths: 'README.md docs/config.contract.json Dockerfile'
+          # Exactly the files `render` writes; any other path fails this job.
+          allowed_paths: 'README.md docs/config.contract.json'
           commit_message: 'docs: regenerate the README and the configuration contract'
 
       - name: Summarise
@@ -335,9 +263,8 @@ jobs:
           check: true
 
       # The same half for the contract and the Dockerfile's LABEL region: writes nothing, and
-      # fails with the diff when either has drifted from the configuration types. Without it,
-      # editing the committed contract by hand would appear to work right up until the next pull
-      # request silently reverted it — and a stale LABEL region is a contract nothing can find.
+      # fails with the diff when either has drifted from the configuration types. A stale LABEL
+      # region is fixed by running `just regenerate` locally; no bot writes the Dockerfile.
       #
       # `image` is empty, so the two checks that need one are skipped and this job stays the
       # cheap half: it reports a renamed key in the pull request that renamed it, without
