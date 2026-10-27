@@ -4,9 +4,14 @@ on:
     branches:
       - master
 
+# Queued, never cancelled. A run that has reached the publish jobs can be part-way through pushing
+# and signing an image when the next push to the branch arrives; cancelling it there leaves a
+# published tag with no signature or attestation, and the tag is not created again by a later run.
+# Only a run still waiting can be replaced by a newer one, which is harmless: release-please reads
+# the whole branch, so the newer run sees every commit the replaced one would have.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions: { }
 
@@ -342,15 +347,14 @@ jobs:
           echo "path=${RUNNER_TEMP}/contracts/${reference}" >> "$GITHUB_OUTPUT"
           echo "every platform published the same contract ($(wc -c < "${reference}") bytes)"
 
-      # Pinned to the release the chart repository pins, as Cosign is above. Installed by URL
-      # rather than by action for the same reason that repository does it: one fewer third party
-      # in the path that publishes what a chart will trust.
+      # Pinned to the release the chart repository pins, as Cosign is above. Installed by the
+      # action, pinned by commit, as the other services of this estate do: it checks the archive
+      # against the SHA-256 it ships for each release, where a bare download in this job, which
+      # holds the registry credentials and the signing identity, checked nothing.
       - name: Install ORAS
-        run: |
-          set -euo pipefail
-          curl -fsSL "https://github.com/oras-project/oras/releases/download/v${ORAS_VERSION}/oras_${ORAS_VERSION}_linux_amd64.tar.gz" \
-            | sudo tar -xz -C /usr/local/bin oras
-          oras version
+        uses: oras-project/setup-oras@005458ad77f1c8facd38a094e4af2e69e5607ff4 # v2.0.2
+        with:
+          version: ${{ env.ORAS_VERSION }}
 
       # Attached verbatim: the bytes the generator wrote inside the build, checked against the
       # copy inside the image, with nothing added afterwards. The chart repository reads both
