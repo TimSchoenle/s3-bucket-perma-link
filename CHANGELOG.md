@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.2.7](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.6...v2.2.7) (2026-10-29)
+
+
+### Dependencies
+
+* **deps:** update alpine:3.24 docker digest to be26560 ([#622](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/622)) ([e92380e](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/e92380ee7a602a910f2fa46145b97b95679f5d9b))
+* **deps:** update getsentry/sentry-cli docker tag to v3.8.2 ([#615](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/615)) ([0e6f6b8](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0e6f6b817dfdb556da85f1acd101a50a8c31b241))
+* **deps:** update rust crate actix-web to v4.18.1 ([#624](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/624)) ([3d062b1](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/3d062b17ff998990c8bb7e3f4f50bdd7a64a28bc))
+* **deps:** update rust crate terrace-config to v0.17.0 ([#616](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/616)) ([8f8eb11](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/8f8eb11aa0dbdec950ad09e99ebfab76cedd4d3b))
+* **deps:** update rust crate tokio to v1.54.1 ([#617](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/617)) ([661b7da](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/661b7da10746e8fa3b944880e2ba98c73600065a))
+
 ## [2.2.6](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.5...v2.2.6) (2026-10-22)
 
 
