@@ -22,6 +22,7 @@ jobs:
   check:
     name: Check
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read # Required to checkout the code
     steps:
@@ -57,6 +58,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read # Required to checkout the code
     steps:
@@ -78,6 +80,7 @@ jobs:
     name: Auto Format
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       contents: read # Required to checkout the code
     outputs:
@@ -115,6 +118,7 @@ jobs:
       name: ci
       deployment: false
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     # Shared with docs.yml, which renders README.md onto the same branch. Both make verified
     # commits through the API, and that call rejects a commit whose parent has moved — so two of
     # them racing would leave one failing for no reason a reader could act on. They queue instead.
@@ -143,7 +147,7 @@ jobs:
         id: token
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
-          app-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
+          client-id: ${{ secrets.ACTIONS_MAINTENANCE_APP_ID }}
           private-key: ${{ secrets.ACTIONS_MAINTENANCE_PRIVATE_KEY }}
           permission-contents: write # Required to commit the formatted files
 
@@ -161,6 +165,7 @@ jobs:
   clippy:
     name: Clippy
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read # Required to checkout the code
       checks: write # Required to annotate the commit with clippy warnings
@@ -183,6 +188,7 @@ jobs:
   doc:
     name: Doc
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read # Required to checkout the code
     env:
@@ -212,6 +218,7 @@ jobs:
   docker-build-test:
     name: Docker Build and Test (${{ matrix.platform }})
     runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
     # `doc` as well as `check`: this job publishes the image and its configuration contract, and
     # the contract is generated from the same doc comments the documentation job renders. An
     # image whose contract came out of a crate that will not document is not one to build.
@@ -236,7 +243,7 @@ jobs:
       - name: Prepare platform slug
         env:
           PLATFORM: ${{ matrix.platform }}
-        run: echo "PLATFORM_SLUG=${PLATFORM//\//-}" >> $GITHUB_ENV
+        run: echo "PLATFORM_SLUG=${PLATFORM//\//-}" >> "$GITHUB_ENV"
 
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -374,6 +381,7 @@ jobs:
   image-size-report:
     name: Image Size Report
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     needs: docker-build-test
     if: always() && github.event_name == 'pull_request'
     permissions:
@@ -395,6 +403,7 @@ jobs:
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     needs: check
     if: github.event_name == 'pull_request'
     steps:
