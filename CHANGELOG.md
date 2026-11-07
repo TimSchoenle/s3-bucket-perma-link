@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.8](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.7...v2.2.8) (2026-11-06)
+
+
+### Dependencies
+
+* **deps:** update rust crate actix-web to v4.18.2 [security] ([#636](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/636)) ([ee72d09](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/ee72d0938672faf731291858bc6cf64128aea68a))
+* **deps:** update rust crate sentry to v0.49.5 ([#627](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/627)) ([b0d0dd7](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b0d0dd77651a01ceac806be498e7fed1d1338f1c))
+
 ## [2.2.7](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.6...v2.2.7) (2026-11-02)
 
 
