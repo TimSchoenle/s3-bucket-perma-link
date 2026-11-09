@@ -1,42 +1,17 @@
 name: Docs
 
-# Two artefacts in this repository are generated from `src/config.rs` and then committed, and
-# this workflow is what makes that claim true in both directions:
-#
-#   README.md                   rendered from `.github/templates/README.md.hbs`
-#   docs/config.contract.json   the contract the image publishes and a chart validates against
-#
-# On a pull request it regenerates both and commits the result to the branch, so neither is ever
-# edited by hand. The case that matters is a pull request that adds or renames a configuration
-# key: it arrives with the documentation and the contract for that key already written, because
-# both are read off the type in the same commit that changes it.
-#
-# The Dockerfile's `terrace-config:labels` region is generated too, but never by this workflow:
-# the Dockerfile is the image's build recipe, so no bot commits to it. `just regenerate` writes it
-# on a developer's machine, and `check` below and `build.yaml` fail when it has drifted.
-#
-# The commit half is two jobs. `render` runs the generators, which means running the pull request's
-# code, so it holds no secret and only uploads what they wrote as a patch. `render-commit` in
-# docs-commit.yml (a workflow_run workflow the pull request cannot edit) holds the App token,
-# executes nothing from the branch, and commits that patch only when every path in it is one of the
-# two files above.
-#
-# Everywhere it cannot commit — a push to `master`, a pull request from a fork — it runs the same
-# generators in `check` mode instead, writing nothing and failing if what is committed is stale.
-# Without that half, editing one of them directly would appear to work right up until the next
-# pull request silently reverted it.
-#
-# The contract has a second, stronger gate that lives elsewhere: `build.yaml` checks the labels
-# the *built image* carries, which is the only check that can see a base image overriding a label
-# or a build argument that failed to interpolate. This one is cheaper and one step earlier.
+# The generated documents are rendered and committed on a pull request by the `render` job in
+# generate.yaml and by generate-commit.yaml. This workflow is the other direction: wherever
+# nothing commits (a push to the default branch, a pull request from a fork) it renders in
+# `check` mode, writing nothing and failing when a committed file is stale. Without it, editing
+# a generated page directly would appear to work right up until the next pull request silently
+# reverted it.
 
 on:
   pull_request:
   push:
     branches: [master]
 
-# A newer push supersedes the run on the older head. Nothing here writes to the branch: the
-# commit happens in docs-commit.yml, which queues with the other writers to this branch.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -47,103 +22,10 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  render:
-    name: Render
-    # Forks get no secrets, so docs-commit.yml could not mint a token and their branch is not
-    # in this repository anyway. `check` below picks those pull requests up instead.
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    # This half runs the pull request's code — `just contract-json` and the payload example — so
-    # it holds no secret and no write token. It writes the regenerated files into its own checkout
-    # and uploads them as a patch; `render-commit` in docs-commit.yml commits that patch without
-    # running anything from the branch.
-    permissions:
-      contents: read # Required to checkout the code
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
-        with:
-          egress-policy: audit
-
-      # The head of the pull request, not the merge commit: the render has to read the `Config`
-      # the pull request proposes, and the patch is committed to the branch, so it has to be
-      # computed against the commit the branch points at. The SHA rather than the branch name, so
-      # the patch's base is the commit `render-commit` in docs-commit.yml checks the branch against.
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          persist-credentials: false
-
-      - name: Install pinned toolchain
-        uses: actions-rust-lang/setup-rust-toolchain@a188e68d0fd2bd36ad51dccb2b07ba6e75105f30 # v2.0.1
-
-      # The contract the image publishes, regenerated for the same reason the README is: a pull
-      # request that renames a key arrives with the document for it already written. Only the
-      # document; the Dockerfile's LABEL region is `just regenerate`'s, run by a developer.
-      - name: Install just
-        uses: taiki-e/install-action@288e746965032cfcc232e09af2daf5f23c14d780 # v2.86.1
-        with:
-          tool: just
-
-      - name: Regenerate the configuration contract
-        run: just contract-json
-
-      # The half of the payload only this crate can produce: the two configuration tables and the
-      # loader's own spellings. It deliberately emits no `repo`, `branch`, `release` or `docs` —
-      # `extra` is deep-merged over the derived payload, so a key spelled the same way there
-      # would replace what the action worked out.
-      - name: Generate the configuration payload
-        id: config
-        run: |
-          set -euo pipefail
-          json="$(cargo run --quiet --example readme-variables)"
-          echo "json=${json}" >> "$GITHUB_OUTPUT"
-
-      # The other half, read off the files in the checkout: the repository coordinates, the
-      # release from Cargo.toml, and the table of documents walked out of docs/.
-      #
-      # `branch` is the repository's default branch and not `github.ref_name`, which on a pull
-      # request is `<number>/merge`. Rendering that into the badge and permalink URLs would make
-      # this job and the `check` job below disagree by construction, and every merge would then
-      # fail the gate for a reason that is not in its diff.
-      - name: Collect the README payload
-        id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-common-readme-variables-v2.1.1
-        with:
-          branch: ${{ github.event.repository.default_branch }}
-          extra: ${{ steps.config.outputs.json }}
-
-      # Written, not committed: the commit is docs-commit.yml's, over every generated file at once.
-      - name: Render the README
-        uses: TimSchoenle/actions/actions/common/render-template@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-common-render-template-v3.0.1
-        with:
-          template: .github/templates/README.md.hbs
-          output: README.md
-          variables: ${{ steps.variables.outputs.variables }}
-
-      # Named rather than left to default to `.`, so nothing else a step left dirty in the workspace
-      # can ride along. `render-commit` in docs-commit.yml holds the same list as its allowlist and
-      # refuses a patch touching anything outside it.
-      - name: Create Patch
-        id: patch
-        uses: TimSchoenle/actions/actions/common/create-patch@dc5b395636dc1954383f11af4062a08814e9b15a # tag=actions-common-create-patch-v1.1.1
-        with:
-          artifact_name: docs-render
-          paths: README.md docs/config.contract.json
-
-      # The patch is committed by docs-commit.yml after this run has finished. While it is
-      # non-empty this head is not the one to merge: the run on the bot commit decides.
-      - name: Fail while the patch is uncommitted
-        if: steps.patch.outputs.has_changes == 'true'
-        run: |
-          echo "::error::README.md docs/config.contract.json changed; docs-commit.yml commits the patch and the run on that commit decides. If no bot commit appears, regenerate the files locally and push."
-          exit 1
 
   check:
     name: README
-    # The complement of `render`: the pushes to `master` that no pull request rendered, and the
+    # The complement of `render` in generate.yaml: the pushes to `master` that no pull request rendered, and the
     # fork pull requests that could not be committed to. Between the two conditions, every event
     # this workflow sees is handled by exactly one job.
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
@@ -165,7 +47,7 @@ jobs:
       - name: Install pinned toolchain
         uses: actions-rust-lang/setup-rust-toolchain@a188e68d0fd2bd36ad51dccb2b07ba6e75105f30 # v2.0.1
 
-      # The same two steps as `render`, in the same order and with the same inputs. They have to
+      # The same two steps as `render` in generate.yaml, in the same order and with the same inputs. They have to
       # be: this job's whole job is to reproduce that render and compare, so a difference between
       # the two step lists here would be a gate that passes on a stale file.
       - name: Generate the configuration payload
