@@ -46,7 +46,7 @@ use terrace_config::schema::Column;
 const BUILD_WORKFLOW: &str = "build.yaml";
 
 /// The published image. Not derivable from the manifest: nothing in `Cargo.toml` names it.
-const DOCKER_IMAGE: &str = "timmi6790/s3-bucket-perma-link";
+const DOCKER_IMAGE: &str = "timschoenle/s3-bucket-perma-link";
 
 fn main() -> ExitCode {
     match variables() {

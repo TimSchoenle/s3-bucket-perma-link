@@ -180,7 +180,7 @@ jobs:
           build-args: |
             version=test
             release=test
-            vendor=Timmi6790
+            vendor=TimSchoenle
             VERSION=test
           cache-from: type=gha,scope=${{ env.PLATFORM_SLUG }}
           cache-to: ${{ github.event_name == 'push' && format('type=gha,mode=max,scope={0}', env.PLATFORM_SLUG) || '' }}
@@ -215,7 +215,7 @@ jobs:
           build-args: |
             version=test
             release=test
-            vendor=Timmi6790
+            vendor=TimSchoenle
             VERSION=test
           cache-from: type=gha,scope=${{ env.PLATFORM_SLUG }}
 
