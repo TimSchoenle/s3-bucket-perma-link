@@ -16,7 +16,7 @@ concurrency:
 permissions: { }
 
 env:
-  DOCKER_REPO: timmi6790/s3-bucket-perma-link
+  DOCKER_REPO: timschoenle/s3-bucket-perma-link
   HELM_REPO: TimSchoenle/helm-charts
   CHART_PATH: charts/s3-bucket-perma-link
   # The artifact type the configuration contract is attached under. The chart repository
@@ -142,7 +142,7 @@ jobs:
           build-args: |
             version=${{ needs.release-please.outputs.tag_name }}
             release=${{ needs.release-please.outputs.tag_name }}
-            vendor=Timmi6790
+            vendor=TimSchoenle
             SENTRY_ORG=${{ secrets.SENTRY_ORG }}
             SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}
             VERSION=${{ needs.release-please.outputs.tag_name }}
@@ -164,7 +164,7 @@ jobs:
             --platform "${PLATFORM}" \
             --build-arg "version=${TAG_NAME}" \
             --build-arg "release=${TAG_NAME}" \
-            --build-arg vendor=Timmi6790 \
+            --build-arg vendor=TimSchoenle \
             --build-arg "VERSION=${TAG_NAME}" \
             --output "type=local,dest=contract-out" \
             .
