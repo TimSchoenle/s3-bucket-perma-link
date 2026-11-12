@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.9](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.8...v2.2.9) (2026-11-12)
+
+
+### Dependencies
+
+* **deps:** update alpine:3.24 docker digest to f59abe6 ([#646](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/646)) ([322c9c2](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/322c9c23ff202b8d2ae19ed3f3f379b31a334a39))
+* **deps:** update rust crate terrace-config to v0.18.1 ([#641](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/641)) ([6f5af31](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/6f5af31cf5cf6369b8f2edf21339b46544c4330d))
+
 ## [2.2.8](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.7...v2.2.8) (2026-11-06)
 
 
