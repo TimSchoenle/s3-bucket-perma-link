@@ -4,7 +4,7 @@ ARG BINARY_PATH=/out/app
 
 # Pinned by digest, which Renovate bumps like the other base images. The floating tag alone let two
 # builds of one commit compile with different toolchain images and cargo-chef releases.
-FROM lukemathwalker/cargo-chef:latest-rust-alpine@sha256:c48fa69aff194617af79ddc9473a58b946068012721979a9aef9c3e1466ccbd8 AS chef
+FROM lukemathwalker/cargo-chef:latest-rust-alpine@sha256:3dc65f92f830cadaa78d29ddcc8e23a22c5d6785f7758afdf50eba4e88238966 AS chef
 ARG TARGETARCH
 RUN apk add --no-cache musl-dev pkgconfig openssl-dev openssl-libs-static upx
 # Map the Docker architecture to the Rust target triple. Unsupported architectures fail the build
