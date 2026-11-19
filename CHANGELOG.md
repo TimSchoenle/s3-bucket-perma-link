@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.10](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.9...v2.2.10) (2026-11-19)
+
+
+### Dependencies
+
+* **deps:** update lukemathwalker/cargo-chef:latest-rust-alpine docker digest to 3dc65f9 ([#658](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/658)) ([0d4b30c](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/0d4b30c6f908cdbf28174b563f797261ea311755))
+* **deps:** update rust crate actix-web to v4.19.0 ([#656](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/656)) ([2891e39](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/2891e39e271889b8301e564d42cb9c00cde80dee))
+* **deps:** update rust crate actix-web to v4.20.0 ([#660](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/660)) ([9c1a303](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/9c1a303c7a96b82e1ca43aaf1a1fdd2509e5f705))
+* **deps:** update rust crate sentry to v0.49.6 ([#659](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/659)) ([a8c18ca](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/a8c18ca4725d10eaa222d500b3e9d9479174b2bb))
+* **deps:** update rust crate tracing-actix-web to v0.7.26 ([#654](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/654)) ([b9c227b](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/b9c227b0beb7a9ce08f873b12dbfc33e487f5964))
+* **deps:** update rust to v1.100.0 ([#657](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/657)) ([d71aae5](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/d71aae55194464c4fd436d255413683e2e7a42d6))
+
 ## [2.2.9](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.8...v2.2.9) (2026-11-12)
 
 
