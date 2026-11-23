@@ -39,6 +39,8 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
+      # `tag_name` carries the `v` and `version` does not: image tags are `vX.Y.Z`, appVersion is `X.Y.Z`.
+      version: ${{ steps.release.outputs.version }}
       body: ${{ steps.release.outputs.body }}
     steps:
       - name: Harden Runner
@@ -484,7 +486,8 @@ jobs:
           private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
           helm-repo: ${{ env.HELM_REPO }}
           chart-path: ${{ env.CHART_PATH }}
-          app-version: ${{ needs.release-please.outputs.tag_name }}
+          # `Chart.yaml` records `appVersion` without the `v` its image tag carries.
+          app-version: ${{ needs.release-please.outputs.version }}
           images: |
             {
               "image.tag": {
