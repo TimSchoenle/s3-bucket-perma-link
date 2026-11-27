@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.11](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.10...v2.2.11) (2026-11-27)
+
+
+### Dependencies
+
+* **deps:** update rust crate anyhow to v1.0.105 ([#668](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/668)) ([c5badd3](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/c5badd38bbf5c76e4501e00f9a5d22d8e59f091e))
+* **deps:** update rust crate terrace-config to v0.18.3 ([#666](https://github.com/TimSchoenle/s3-bucket-perma-link/issues/666)) ([6386235](https://github.com/TimSchoenle/s3-bucket-perma-link/commit/63862356b4342574704efc102ec6e25f6b9bb3e3))
+
 ## [2.2.10](https://github.com/TimSchoenle/s3-bucket-perma-link/compare/v2.2.9...v2.2.10) (2026-11-22)
 
 
