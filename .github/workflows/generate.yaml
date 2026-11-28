@@ -35,7 +35,7 @@ jobs:
       artifact_name: ${{ steps.format.outputs.artifact_name }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
         with:
           egress-policy: audit
 
@@ -49,7 +49,7 @@ jobs:
 
       - name: Auto Format
         id: format
-        uses: TimSchoenle/actions/actions/rust/auto-format@54a4dc05fd351a9bf9e9638fa3ebbc572b5f2d7f # tag=actions-rust-auto-format-v2.0.6
+        uses: TimSchoenle/actions/actions/rust/auto-format@ded012bb09f11e42381c9b1b7c3ff0dbc09156bf # tag=actions-rust-auto-format-v2.0.7
         with:
           artifact_name: rust-auto-format
 
@@ -68,7 +68,7 @@ jobs:
       artifact_name: ${{ steps.patch.outputs.artifact_name }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
         with:
           egress-policy: audit
 
@@ -116,14 +116,14 @@ jobs:
       # fail the gate for a reason that is not in its diff.
       - name: Collect the README payload
         id: variables
-        uses: TimSchoenle/actions/actions/common/readme-variables@54a4dc05fd351a9bf9e9638fa3ebbc572b5f2d7f # tag=actions-common-readme-variables-v2.1.7
+        uses: TimSchoenle/actions/actions/common/readme-variables@7594d1c64de290a99195e47fc6d7b5699243b951 # tag=actions-common-readme-variables-v2.1.8
         with:
           branch: ${{ github.event.repository.default_branch }}
           extra: ${{ steps.config.outputs.json }}
 
       # Written, not committed: the commit is generate-commit.yaml's, over every generated file at once.
       - name: Render the README
-        uses: TimSchoenle/actions/actions/common/render-template@54a4dc05fd351a9bf9e9638fa3ebbc572b5f2d7f # tag=actions-common-render-template-v3.0.7
+        uses: TimSchoenle/actions/actions/common/render-template@7594d1c64de290a99195e47fc6d7b5699243b951 # tag=actions-common-render-template-v3.0.8
         with:
           template: .github/templates/README.md.hbs
           output: README.md
@@ -151,7 +151,7 @@ jobs:
       contents: read # to check out the commit the merged patch is made from
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
         with:
           egress-policy: block
           allowed-endpoints: >
@@ -161,6 +161,6 @@ jobs:
             *.blob.core.windows.net:443
 
       - name: Generated Files Verdict
-        uses: TimSchoenle/actions/actions/common/generated-files-verdict@54a4dc05fd351a9bf9e9638fa3ebbc572b5f2d7f # tag=actions-common-generated-files-verdict-v1.2.7
+        uses: TimSchoenle/actions/actions/common/generated-files-verdict@ded012bb09f11e42381c9b1b7c3ff0dbc09156bf # tag=actions-common-generated-files-verdict-v1.2.8
         with:
           needs: ${{ toJSON(needs) }}
